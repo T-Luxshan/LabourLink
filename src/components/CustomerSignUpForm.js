@@ -65,6 +65,7 @@ const CustomerSignUpForm = () => {
           />
 
           <View>
+            
               <Text>Password</Text>
               <TextInput
         theme={theme}
