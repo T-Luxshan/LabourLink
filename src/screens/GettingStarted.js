@@ -12,47 +12,36 @@ const GettingStarted = () => {
     navigation.setOptions({ headerShown: false });
   }, [navigation]);
 
+  // Called when get start button is pressed.
   const handleGetStartPress = () => {
-    navigation.navigate('Login');
-    console.log("get start button pressed")
+    navigation.navigate('Login'); // Navigate to login page.
+    console.log("get start button pressed"); // Need to remove this.
   };
 
   return (
     <View style={styles.container}>
         <View style={styles.logoContainer}>
             <Appbar.Header>
-            <Appbar.Content
-            title={<Image source={require('../assets/Images/app-logo3.png')} style={styles.logo} />}
-            
-            />
+              <Appbar.Content
+                // App logo image to add in the get start page
+                title={<Image source={require('../assets/Images/app-logo3.png')} style={styles.logo} />}
+              />
             </Appbar.Header>
         </View>
+
+        {/* Page main text */}
       <View style={styles.homeContainer}>
         <Text style={styles.homeTitle}>Hello, Waiting for you!</Text>
         <Text style={styles.homeText}>Join us, find your fit, and feel appreciated!</Text>
       </View>
-         
-      
-
-
-{/* 
-      <View style={styles.getStartButtonContainer}>
-        <Button style={styles.getStartButton} buttonColor="#01214A" mode="contained"  onPress={() => console.log('Pressed') }>
-            Get Start
-            <MaterialCommunityIcons name="arrow-right-bold-circle-outline" size={20} color="white" style={{ padding: 60 ,}} />
-        </Button>
-      </View>
-       */}
-
-
-        {/*  */}
-
             <View style={styles.getStartButtonContainer}>
+              {/* Get Start button.*/}
             <Button
                 style={styles.getStartButton}
                 mode="contained"
                 onPress={handleGetStartPress}>
-                <Text style={styles.buttonText}>Get Start</Text> {/* Text */}
+                <Text style={styles.buttonText}>Get Start</Text> {/* Text to get start button*/}
+                {/* Arrow icon in the get start button. */}
                 <MaterialCommunityIcons
                 name="arrow-right-bold-circle-outline"
                 size={20}
@@ -61,9 +50,8 @@ const GettingStarted = () => {
                 />
             </Button>
             </View>
-
-
             <View style={styles.bgImgContainer}>
+                {/* Background image of the get start page. */}
                 <Image
                     source={require('../assets/Images/bg-home-ellipse.png')}
                     style={styles.bottomImage}
@@ -71,16 +59,13 @@ const GettingStarted = () => {
                 />
             </View>
             <View style={styles.bgImgOverlayContainer}>
+                {/* Background overlay image of the get start page. */}
                 <Image
                     source={require('../assets/Images/bg-home-people.png')}
                     style={styles.bottomOverlayImage}
                     resizeMode="cover"
                 />
             </View>
-
-
-        {/*  */}
-
     </View>
   );
 };

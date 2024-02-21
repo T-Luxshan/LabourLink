@@ -1,5 +1,8 @@
 # Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
 
+# There are some  unused components but might be used later. 
+NotUsingComponents/
+
 # dependencies
 node_modules/
 

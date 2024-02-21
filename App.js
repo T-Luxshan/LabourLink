@@ -4,12 +4,11 @@ import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import 'react-native-gesture-handler';
-import Login from './src/screens/Login';
+import Login from './src/screens/authentication/Login';
 import ChooseRole from './src/screens/ChooseRole';
-import SignUp from './src/screens/SignUp'
-import CustomerSignUpform from './src/components/CustomerSignUpForm'
 import GettingStarted from './src/screens/GettingStarted'
-import LabourSignUp from './src/components/LabourSignUpForm';
+import LabourSignUp from './src/screens/authentication/LabourSignUpForm';
+import CustomerSignUpform from './src/screens/authentication/CustomerSignUpForm'
 import SignInWithGoogle from './src/components/SignInWithGoogle';
 
 const Stack = createStackNavigator();

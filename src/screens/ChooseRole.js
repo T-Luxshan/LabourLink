@@ -5,65 +5,55 @@ import { useNavigation } from '@react-navigation/native';
 import { Button } from 'react-native-paper';
 
 
-
 const ChooseRole = () => {
     const navigation = useNavigation();
-    const [role, setRole] = useState(null);
-    const [buttonTxt, setButtonTxt] = useState('Start!!');
-
+    const [role, setRole] = useState(null); // state for toggle user role.
+    const [buttonTxt, setButtonTxt] = useState('Start!!'); // state for toggle button text according to the role.
+    
     React.useLayoutEffect(() => {
       navigation.setOptions({ headerShown: false });
     }, [navigation]);
 
-    // const handleCustomerSignup = () => {
-    //   navigation.navigate('CustomerSignUpForm');
-    // };
-    // const handleLabourSignup = () => {
-    //   navigation.navigate('LabourSignUp');
-    // };
-
-    // const handSignUp = () => {
-    //   // navigation.navigate('CustomerSignUpForm');
-    // };
-
+    // This Function will be called when the role toggling button is pressed. 
     const handleRoleSelection = (selectedRole) => {
-      setRole(selectedRole);
+      setRole(selectedRole); // Set the appropriate role when the respected button in selected.
+      // Set the button text according to the role.
       if (selectedRole === 'customer') {
-          setButtonTxt('Hire!!');
+          setButtonTxt('Hire!!'); // Set button text when customer btn is pressed.
       } else if (selectedRole === 'labour') {
-          setButtonTxt('Work!!');
+          setButtonTxt('Work!!'); // Set button text when labour btn is pressed.
       }
   };
 
+    // This Function will be called when the sign up button is pressed. 
     const handleSignUp = () => {
       if (role === 'customer') {
-          navigation.navigate('CustomerSignUpForm');
+          navigation.navigate('CustomerSignUpForm'); // Navigate to customer signup form
           
       } else if (role === 'labour') {
-          navigation.navigate('LabourSignUp');
+          navigation.navigate('LabourSignUp'); // Navigate to labour signup form
       } else {
-          console.log('Please select a role');
+          console.log('Please select a role'); // Future use, remove if it doesn't needed.
       }
   };
-
-
-     
 
     return(
         <View style={styles.toggleHeadContainer}>
-            
             <View >
+                {/* Tittle of the page */}
                   <Text  style={{ fontWeight: '600',
                          fontSize: 28, 
                          textAlign:'center', marginTop:300}}>Choose your role</Text>
             </View>
             
             <View style={styles.toggleButtonContainer}>
+              {/* Customer button */}
                   <TouchableOpacity
                     style={[styles.toggleButton, styles.cButton, role === 'customer' && styles.activeButton]}
                     onPress={() => handleRoleSelection('customer')}>
                     <Text style={[styles.toggleButtonText, styles.cButton, role === 'customer' && styles.activeButtonText]}>Customer</Text>
                   </TouchableOpacity>
+                {/* Labour button */}
                   <TouchableOpacity
                     style={[styles.toggleButton, styles.lButton, role === 'labour' && styles.activeButton]}
                     onPress={() => handleRoleSelection('labour')}>
@@ -71,12 +61,11 @@ const ChooseRole = () => {
                   </TouchableOpacity>
             </View>
             <View>
+              {/* Button for navigate to the appropriate sign up page based on selected role */}
                 <Button mode="contained" fontSize='24' buttonColor="#01214A" onPress={handleSignUp} style={styles.nextButton}>
-                  Let's {buttonTxt}
+                  Let's {buttonTxt} 
                 </Button>
             </View>
-                
-               
         </View>
 )};
 

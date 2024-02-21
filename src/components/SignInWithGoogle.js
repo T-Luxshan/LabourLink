@@ -5,28 +5,36 @@ import { useNavigation } from '@react-navigation/native';
 
 
 const SignInWithGoogle = (props) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation(); //  to navigate between pages.  
+
+  // Function for when google icon is pressed
   const handleImageButtonPress = () => {
       console.log('Image button pressed');
       // Add your logic here
       };
 
-      const handleSignUp = () => {
+      // Funtion to navigate to appropriate screens.
+      const handleSignUp_In = () => {
+        // If the text is signup, it should redirect to "ChooseRole" screen.
         if(props.signState === "Sign up")
           {
           navigation.navigate('ChooseRole')
-        }else
+        // If the text is Login, it should redirect to "Login" screen.
+        }else 
         {
           navigation.navigate('Login')
         }
-        console.log('signup pressed');
-        // Add your logic here
+        console.log('signup pressed'); // remove this after completing the logic.
         };
+
   return (
     <View style={styles.signInContainer}>
+        {/* Text tittle for sign in/sign up */}
         <Text style={styles.signInText }>{props.signText1}</Text>
+        {/* Make the image as a pressable button. */}
         <TouchableRipple onPress={handleImageButtonPress} style={styles.signInButton}>
           <View style={styles.imageContainer}>
+            {/* Google logo png */}
             <Image
               source={require('../assets/Images/google-logo3.png')}
 
@@ -35,8 +43,11 @@ const SignInWithGoogle = (props) => {
         </View>
       </TouchableRipple>
       <View style={styles.signUpContainer}>
+        {/* bottom txt for sign in/sign up */}
           <Text style={styles.dontHaveAccountText}>{props.signText2}</Text>
-          <TouchableRipple onPress={handleSignUp}>
+          {/* Pressable text to navigate to appropriate screen */}
+          <TouchableRipple onPress={handleSignUp_In}>
+            {/* sign up/ sing in text */}
               <Text style={styles.signUpLink}>{props.signState}</Text>
           </TouchableRipple>
       </View> 
@@ -60,20 +71,16 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     overflow: 'hidden',
     marginVertical: 10,
-
-
   },
   imageContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     
-    
   },
   image: {
     width: '80%',
     height: '80%',
-    // padding: '180',
     
   },
   signUpContainer: {
@@ -81,7 +88,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   dontHaveAccountText: {
-    marginRight: 5, // Adjust spacing between text and link
+    marginRight: 5, // Adjust spacing between text and link.
   },
   signUpLink: {
     fontWeight: '600',
