@@ -4,7 +4,7 @@ import { Button, Surface, Icon, Searchbar, Avatar } from "react-native-paper";
 import { LinearGradient } from "expo-linear-gradient";
 
 // Functional component definition
-const Customer = () => {
+const Notification_customer_page = () => {
   // State for search query
   const [searchQuery, setSearchQuery] = React.useState("");
 
@@ -252,7 +252,7 @@ const Customer = () => {
 };
 
 // Exporting the component as default
-export default Customer;
+export default Notification_customer_page;
 
 // Styles for the component
 const styles = StyleSheet.create({

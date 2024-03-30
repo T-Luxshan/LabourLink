@@ -9,7 +9,7 @@ import {
 import { Button, Surface, Icon, Avatar } from "react-native-paper";
 
 // Functional component definition
-const Labour = () => {
+const Labour_page = () => {
   // State for search query
   const [searchQuery, setSearchQuery] = React.useState("");
 
@@ -372,7 +372,7 @@ const Labour = () => {
 };
 
 // Exporting the component as default
-export default Labour;
+export default Labour_page;
 
 // Styles for the component
 const styles = StyleSheet.create({

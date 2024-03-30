@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { Button, Surface, Icon, Avatar } from "react-native-paper";
 
 // Functional component definition
-const Worker = () => {
+const Appointment_page = () => {
   // State for search query
   const [searchQuery, setSearchQuery] = React.useState("");
 
@@ -218,7 +218,7 @@ const Worker = () => {
 };
 
 // Exporting the component as default
-export default Worker;
+export default Appointment_page;
 
 // Styles for the component
 const styles = StyleSheet.create({

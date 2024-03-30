@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { Button, Surface, Icon, Switch, Avatar } from "react-native-paper";
 
-const HomeScreen = () => {
+const Labour_profile_page = () => {
   // State for managing the switch toggle
   const [isSwitchOn, setIsSwitchOn] = useState(false);
 
@@ -340,7 +340,7 @@ const HomeScreen = () => {
   );
 };
 
-export default HomeScreen;
+export default Labour_profile_page;
 
 // Styles for different surfaces
 const styles = StyleSheet.create({

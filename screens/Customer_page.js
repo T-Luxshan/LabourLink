@@ -11,7 +11,7 @@ import { Surface, Icon, Searchbar, Avatar } from "react-native-paper";
 import { LinearGradient } from "expo-linear-gradient";
 
 // Functional component definition
-const User = () => {
+const Customer_page = () => {
   // State for search query
   const [searchQuery, setSearchQuery] = React.useState("");
 
@@ -323,7 +323,7 @@ const User = () => {
   );
 };
 
-export default User;
+export default Customer_page;
 
 // Function to render individual category images
 const renderImage = (text, source) => (
