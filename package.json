@@ -12,12 +12,15 @@
     "@expo/webpack-config": "~19.0.1",
     "@react-navigation/bottom-tabs": "^6.5.12",
     "expo": "~50.0.6",
+    "expo-linear-gradient": "^12.7.2",
     "expo-status-bar": "~1.11.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.73.4",
+    "react-native-linear-gradient": "^2.8.3",
     "react-native-paper": "^5.12.3",
-    "react-native-web": "~0.19.6"
+    "react-native-web": "~0.19.6",
+    "typescript": "^5.4.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
