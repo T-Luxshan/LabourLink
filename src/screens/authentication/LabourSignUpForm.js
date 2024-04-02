@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform} from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SignInWithGoogle from '../../components/SignInWithGoogle' // signInWithGoogle component importerd.
 import SignupHead from '../../components/SignUpHead';
 
-//  NOT COMPLETED YET. THIS IS COPY OF 'CustomerSignUpForm'.
-
 const CustomerSignUpForm = () => {
-  const [username, setUsername] = useState(''); // Need to change the state named for email.
+  const [username, setUsername] = useState(''); // state for name field.
+  const [email, setEmail] = useState(''); // state for email field.
   const [password, setPassword] = useState(''); // state for password field.
   const [confirmPassword, setconfirmPassword] = useState(''); // state for confirm password field.
   const [passwordVisibility, setPasswordVisibility] = useState(true); // state for Toggle pasword visibility. 
@@ -38,25 +37,42 @@ const CustomerSignUpForm = () => {
   return(
     <View style={styles.registerContainer}>
             <SignupHead userRole="labour"/>
-
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : null} // Adjust behavior for iOS and Android
+      keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0} // Adjust vertical offset for iOS
+    >
+    <ScrollView>
       <View style={styles.innerContainer}>
+
+          {/* Name field */}
+          <Text>Name</Text>
+                <TextInput
+                  theme={theme}
+                  outlineColor='transparent'
+                  underlineColor="transparent"
+                  placeholder="Luxshan huraisingam"
+                  value={username}
+                  onChangeText={setUsername}
+                  style={styles.input}
+          />
+
           <Text>Email</Text>
+
           <TextInput
-          
-        theme={theme}
-          outlineColor='transparent'
+            theme={theme}
+            outlineColor='transparent'
             underlineColor="transparent"
             placeholder="example@gmail.com"
-            value={username}
-            onChangeText={setUsername}
+            value={email}
+            onChangeText={setEmail}
             style={styles.input}
           />
 
           <View>
               <Text>Password</Text>
               <TextInput
-        theme={theme}
-              
+                theme={theme}     
                 underlineColor="transparent"
                 placeholder="Enter password"
                 autoCapitalize="none"
@@ -80,8 +96,7 @@ const CustomerSignUpForm = () => {
             <View style={styles.confirmPassword}>
               <Text>Confirm password</Text>
               <TextInput
-        theme={theme}
-
+                theme={theme}
                 underlineColor="transparent"
                 placeholder="Enter password"
                 autoCapitalize="none"
@@ -105,19 +120,17 @@ const CustomerSignUpForm = () => {
             <View>
               <Text>Mobile Number</Text>
               <TextInput
-            
+                theme={theme}
                 outlineColor='transparent'
                 underlineColor="transparent"
                 placeholder="0763443542"
-                
-              
                 style={styles.input}
               />
             </View>
             <View>
               <Text>NIC</Text>
               <TextInput
-            // theme={theme}
+                theme={theme}
                 outlineColor='transparent'
                 underlineColor="transparent"
                 placeholder="2000344335343"
@@ -133,7 +146,8 @@ const CustomerSignUpForm = () => {
             <SignInWithGoogle signText1="_or Sign up with_" signText2="Have an account?" signState="Log in" />
                 
           </View>
-      
+          </ScrollView>
+        </KeyboardAvoidingView>
     </View>
   )
 }
@@ -143,13 +157,20 @@ export default CustomerSignUpForm;
 const styles = StyleSheet.create({
   registerContainer: {
     flex: 1,
-    marginBottom:10,
+    // marginBottom:10,
     backgroundColor:'white',
     width: '100%'
   },
   innerContainer:{
+    // marginTop:20,
+    paddingBottom:40,
+
     marginLeft: 40 ,
-    width: '80%'
+    width: '80%',
+    // height:'70%'
+  },
+   scrollContainer: {
+    flexGrow: 1,
   },
   input: {
     

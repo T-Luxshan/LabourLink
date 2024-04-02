@@ -39,11 +39,12 @@ export default function App() {
         <Stack.Screen 
             name="CustomerSignUpForm" 
             component={CustomerSignUpform}
-            options={{ title: 'back' }} />
+            options={{ title: '' } } />
         <Stack.Screen 
             name="LabourSignUp" 
             component={LabourSignUp} 
-            options={{ title: 'back' }} />
+            options={{ title: '' }} 
+        />
         
 
       </Stack.Navigator>

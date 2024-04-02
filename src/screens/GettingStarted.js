@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
       height: 120,
     },
     logoContainer: {
-        paddingLeft: 120,
+        paddingLeft: 0,
     },
     homeContainer:{
         marginRight:10,
