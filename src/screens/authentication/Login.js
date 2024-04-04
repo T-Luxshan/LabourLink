@@ -13,11 +13,10 @@ const Login = () => {
 
     const navigation = useNavigation();
 
-    const [username, setUsername] = useState(''); // Need to change the state named for email.
+    const [email, setEmail] = useState(''); // Need to change the state named for email.
     const [password, setPassword] = useState(''); // state for password field.
     const [role, setRole] = useState(null); // state for save selected role.
     const [rememberMe, setRememberMe] = useState(false); // state for remember me button.
-
     const [errors, setErrors] = useState({});
 
     // const [secureTextEntry, setSecureTextEntry] = useState(true);
@@ -28,32 +27,35 @@ const Login = () => {
     
 
     const schema = yup.object().shape({
-      role: yup.string().required("Please select your role"),
-      username: yup.string().email("This is not a valid email").required('Email is required'),
-      password: yup.string().min(5, "Password can't be less than 5 letters").required("Password can't be empty"),
+      role: yup
+        .string()
+        .required("Please select your role"),
+      email: yup
+        .string()
+        .email("This is not a valid email")
+        .required('Email is required'),
+      password: yup
+        .string()
+        .min(5, "Password can't be less than 5 letters")
+        .required("Password can't be empty"),
     });
 
 
 
     const handleLogin = async () => {
       try {
-        // Check if role is selected
-        // if (!role) {
-        //   throw new Error('Please select a role');
-        // }
-        
-        await schema.validate({ username, password, role }, { abortEarly: false });
+        await schema.validate({ email, password, role }, { abortEarly: false });
         // Validation succeeded, proceed with login
         console.log('Role:', role);
-        console.log('Username:', username);
+        console.log('Email:', email);
         console.log('Password:', password);
-        navigation.navigate('AuthTest', {
+        navigation.navigate('AuthTestLogin', {
           role: role,
-          email: username,
+          email: email,
           password: password
         });
 
-        <AuthTest></AuthTest>
+        // <AuthTest></AuthTest>
       } catch (error) {
         // Validation failed, set errors state
         const validationErrors = {};
@@ -74,22 +76,6 @@ const Login = () => {
           setPasswordVisibility(!passwordVisibility);
       }
   };
-
-
-    // const handleLogin = () => {
-    //   // Implement login logic here
-    //   if (role) {
-    //     // Proceed with login based on selected role
-    //     console.log('Selected role:', role);
-    //   } else {
-    //     // Display an error message indicating that a role must be selected
-    //     console.log('Please select a role');
-    //   }
-    
-    
-    //   console.log('Username:', username);
-    //   console.log('Password:', password);
-    // };
 
     const handleGoogleSignIn = () => {
       // Handle Google sign-in logic here
@@ -148,12 +134,11 @@ const Login = () => {
                     outlineColor='transparent'
                     underlineColor="transparent"
                     placeholder="example@gmail.com"
-                    value={username}
-                    onChangeText={setUsername} // this function name needed to change later.
-                    // error={errors.username}
+                    value={email}
+                    onChangeText={setEmail} // this function name needed to change later.
                     style={styles.input}
                   />
-                   {errors.username && <Text style={styles.error}>{errors.username}</Text>}
+                   {errors.email && <Text style={styles.error}>{errors.email}</Text>}
               </View>
               <View>
                 <Text>Password</Text>
