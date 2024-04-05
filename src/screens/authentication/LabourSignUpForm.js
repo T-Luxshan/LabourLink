@@ -46,7 +46,8 @@ const CustomerSignUpForm = () => {
       .required("Mobile number is required"),
     nic: yup
       .string()
-      .required('Address is required')
+      .matches(/^[0-9]{12}$|^[0-9]{9}[v|V]$/, 'Pleace enter valid NIC number')
+      .required('Your NIC number is required')
     
   });
 
@@ -100,128 +101,135 @@ const CustomerSignUpForm = () => {
     };
   return(
     <View style={styles.registerContainer}>
-            <SignupHead userRole="labour"/>
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : null} // Adjust behavior for iOS and Android
-      keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0} // Adjust vertical offset for iOS
-    >
-    <ScrollView>
-      <View style={styles.innerContainer}>
+      <SignupHead userRole="labour"/>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : null} // Adjust behavior for iOS and Android
+        keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0} // Adjust vertical offset for iOS
+      >
+      <ScrollView>
+        <View style={styles.innerContainer}>
 
-          {/* Name field */}
-          <Text>Name</Text>
+            {/* Name field */}
+          <View style={styles.inputContainer}>
+
+            <Text>Name</Text>
+                  <TextInput
+                    theme={theme}
+                    outlineColor='transparent'
+                    underlineColor="transparent"
+                    placeholder="Luxshan huraisingam"
+                    value={name}
+                    onChangeText={setName}
+                    style={styles.input}
+            />
+            {errors.name && <Text style={styles.error}>{errors.name}</Text>}
+          </View>
+
+          <View style={styles.inputContainer}>
+            <Text>Email</Text>
+            <TextInput
+              theme={theme}
+              outlineColor='transparent'
+              underlineColor="transparent"
+              placeholder="example@gmail.com"
+              value={email}
+              onChangeText={setEmail}
+              style={styles.input}
+            />
+            {errors.email && <Text style={styles.error}>{errors.email}</Text>}
+          </View>
+          <View style={styles.inputContainer}>
+              <View style={styles.password}>
+                <Text>Password</Text>
+                <TextInput
+                  theme={theme}     
+                  underlineColor="transparent"
+                  placeholder="Enter password"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry={passwordVisibility}
+                  style={styles.input}
+                />
+                  <TouchableOpacity
+                    style={{
+                        marginTop: -45,
+                        marginLeft: 270,
+                    }}
+                    onPress={handlePasswordVisibility}
+                  >
+                  <Icon name={rightIcon} size={20} color="black" />
+                  </TouchableOpacity>   
+              </View>
+              {errors.password && <Text style={styles.error}>{errors.password}</Text>}
+            </View>
+            
+            <View style={styles.inputContainer}>
+              <View style={styles.password}>
+                <Text>Confirm password</Text>
+                <TextInput
+                  theme={theme}
+                  underlineColor="transparent"
+                  placeholder="Enter password"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  value={confirmPassword}
+                  onChangeText={setconfirmPassword}
+                  secureTextEntry={passwordVisibility}
+                  style={styles.input}
+                />
+                 <TouchableOpacity
+                    style={{
+                        marginTop: -45,
+                        marginLeft: 270,
+                    }}
+                    onPress={handlePasswordVisibility}
+                >
+                  {/* eye icon  */}
+                <Icon name={rightIcon} size={20} color="black" />
+                </TouchableOpacity> 
+              </View>
+              {errors.confirmPassword && <Text style={styles.error}>{errors.confirmPassword}</Text>}
+            </View>
+            <View style={styles.inputContainer}>
+                <Text>Mobile Number</Text>
                 <TextInput
                   theme={theme}
                   outlineColor='transparent'
                   underlineColor="transparent"
-                  placeholder="Luxshan huraisingam"
-                  value={name}
-                  onChangeText={setName}
+                  placeholder="0763443542"
+                  value={mobileNumber}
+                  onChangeText={setMobileNumber}
                   style={styles.input}
-          />
-         {errors.name && <Text style={styles.error}>{errors.name}</Text>}
-          <Text>Email</Text>
-
-          <TextInput
-            theme={theme}
-            outlineColor='transparent'
-            underlineColor="transparent"
-            placeholder="example@gmail.com"
-            value={email}
-            onChangeText={setEmail}
-            style={styles.input}
-          />
-                   {errors.email && <Text style={styles.error}>{errors.email}</Text>}
-
-          <View>
-              <Text>Password</Text>
-              <TextInput
-                theme={theme}     
-                underlineColor="transparent"
-                placeholder="Enter password"
-                autoCapitalize="none"
-                autoCorrect={false}
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry={passwordVisibility}
-                style={styles.input}
-                      />
-                    <TouchableOpacity
-                  style={{
-                      marginTop: -45,
-                      marginLeft: 270,
-                  }}
-                  onPress={handlePasswordVisibility}
-              >
-                  <Icon name={rightIcon} size={20} color="black" />
-              </TouchableOpacity>   
-            </View>
-            {errors.password && <Text style={styles.error}>{errors.password}</Text>}
-
-            <View style={styles.confirmPassword}>
-              <Text>Confirm password</Text>
-              <TextInput
-                theme={theme}
-                underlineColor="transparent"
-                placeholder="Enter password"
-                autoCapitalize="none"
-                autoCorrect={false}
-                value={confirmPassword}
-                onChangeText={setconfirmPassword}
-                secureTextEntry={passwordVisibility}
-                style={styles.input}
-                      />
-                    <TouchableOpacity
-                  style={{
-                      marginTop: -45,
-                      marginLeft: 270,
-                  }}
-                  onPress={handlePasswordVisibility}
-              >
-                 {/* eye icon  */}
-                  <Icon name={rightIcon} size={20} color="black" />
-              </TouchableOpacity> 
-              {errors.confirmPassword && <Text style={styles.error}>{errors.confirmPassword}</Text>}
+                />
+                {errors.mobileNumber && <Text style={styles.error}>{errors.mobileNumber}</Text>}
 
             </View>
-            <View>
-              <Text>Mobile Number</Text>
-              <TextInput
-                theme={theme}
-                outlineColor='transparent'
-                underlineColor="transparent"
-                placeholder="0763443542"
-                value={mobileNumber}
-                onChangeText={setMobileNumber}
-                style={styles.input}
-              />
-                   {errors.mobileNumber && <Text style={styles.error}>{errors.mobileNumber}</Text>}
-
-            </View>
-            <View>
-              <Text>NIC</Text>
-              <TextInput
-                theme={theme}
-                outlineColor='transparent'
-                underlineColor="transparent"
-                placeholder="2000344335343"
-                value={nic}
-                onChangeText={setNic}
-                style={styles.input}
-              />
-                   {errors.nic && <Text style={styles.error}>{errors.nic}</Text>}
+            <View style={styles.inputContainer}>
+                <Text>NIC</Text>
+                <TextInput
+                  theme={theme}
+                  outlineColor='transparent'
+                  underlineColor="transparent"
+                  placeholder="2000344335343"
+                  value={nic}
+                  onChangeText={setNic}
+                  style={styles.input}
+                />
+                {errors.nic && <Text style={styles.error}>{errors.nic}</Text>}
 
             </View>
             <Button mode="contained" buttonColor="#FB9741" onPress={handleSignUp} style={styles.button}>
-              Sign Up
+                Sign Up
             </Button>
-             {/* Props pass to Sign in with google component */}
-            <SignInWithGoogle signText1="_or Sign up with_" signText2="Have an account?" signState="Log in" />
-                
-          </View>
-          </ScrollView>
-        </KeyboardAvoidingView>
+              {/* Props pass to Sign in with google component */}
+              <SignInWithGoogle signText1="_or Sign up with_" signText2="Have an account?" signState="Log in" />
+                  
+        </View>
+      </ScrollView>
+      </KeyboardAvoidingView>
     </View>
   )
 }
@@ -246,11 +254,14 @@ const styles = StyleSheet.create({
    scrollContainer: {
     flexGrow: 1,
   },
+  inputContainer:{
+    marginVertical: 8,
+  },
   input: {
     
     width: '100%',
     height: 50,
-    marginVertical: 8,
+    // marginVertical: 8,
     backgroundColor: '#EDEDEC',
     borderRadius: 20, 
     borderTopLeftRadius: 20, 
@@ -258,8 +269,8 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 20, 
     borderBottomRightRadius: 20
   },
-  confirmPassword:{
-    marginVertical: 30
+  password:{
+    marginBottom: 20
   },
   error: {
     color: 'red',

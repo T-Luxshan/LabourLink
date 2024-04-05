@@ -44,7 +44,7 @@ const CustomerSignUpForm = () => {
       .required("Please confirm your password"),
     mobileNumber: yup
       .string()
-      .matches(/^[0-9]{10}$/, 'Pleace enter valid mobile number')
+      .matches(/^[0-9]{10}$/, 'Please enter valid mobile number')
       .required("Mobile number is required"),
     address: yup
       .string()
@@ -112,6 +112,7 @@ const CustomerSignUpForm = () => {
           
           
                 {/* Name field */}
+            <View style={styles.inputContainer}>
             <Text>Name</Text>
                 <TextInput
                   theme={theme}
@@ -122,10 +123,12 @@ const CustomerSignUpForm = () => {
                   onChangeText={setName}
                   style={styles.input}
                 />
-                   {errors.name && <Text style={styles.error}>{errors.name}</Text>}
+              {errors.name && <Text style={styles.error}>{errors.name}</Text>}
+            </View>
 
 
           {/* Email field */}
+          <View style={styles.inputContainer}>
             <Text>Email</Text>
               <TextInput
                 theme={theme}
@@ -137,10 +140,12 @@ const CustomerSignUpForm = () => {
                 style={styles.input}
               />
                    {errors.email && <Text style={styles.error}>{errors.email}</Text>}
+          </View>
 
-
-            <View>
+            
           {/* Password field */}
+          <View style={styles.inputContainer}>
+            <View style={styles.password}>
                 <Text>Password</Text>
                 <TextInput
                   theme={theme}
@@ -164,23 +169,26 @@ const CustomerSignUpForm = () => {
                     onPress={handlePasswordVisibility}
                   >
                   <Icon name={rightIcon} size={20} color="black" />
-                </TouchableOpacity>   
+                </TouchableOpacity>  
+                </View>
+                {errors.password && <Text style={styles.error}>{errors.password}</Text>}  
               </View>
-                   {errors.password && <Text style={styles.error}>{errors.password}</Text>}
 
-              <View style={styles.confirmPassword}>
-                <Text>Confirm password</Text>
-                <TextInput
-                    theme={theme}
-                    underlineColor="transparent"
-                    placeholder="Enter password"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    value={confirmPassword}
-                    onChangeText={setconfirmPassword}
-                    secureTextEntry={passwordVisibility}
-                    style={styles.input}
-                />
+              <View style={styles.inputContainer}>
+                <View style={styles.password}>
+                
+                  <Text>Confirm password</Text>
+                  <TextInput
+                      theme={theme}
+                      underlineColor="transparent"
+                      placeholder="Enter password"
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      value={confirmPassword}
+                      onChangeText={setconfirmPassword}
+                      secureTextEntry={passwordVisibility}
+                      style={styles.input}
+                  />
                     <TouchableOpacity
                       style={{
                           marginTop: -45,
@@ -191,10 +199,10 @@ const CustomerSignUpForm = () => {
                       {/* eye icon  */}
                       <Icon name={rightIcon} size={20} color="black" />
                   </TouchableOpacity>
+                </View>
                   {errors.confirmPassword && <Text style={styles.error}>{errors.confirmPassword}</Text>}
-
               </View>
-              <View>
+              <View style={styles.inputContainer}>
                 <Text>Mobile Number</Text>
                 <TextInput
                   theme={theme}
@@ -208,7 +216,7 @@ const CustomerSignUpForm = () => {
                    {errors.mobileNumber && <Text style={styles.error}>{errors.mobileNumber}</Text>}
 
               </View> 
-              <View>
+              <View style={styles.inputContainer}>
                 <Text>Address</Text>
                 <TextInput
                   theme={theme}
@@ -262,11 +270,14 @@ const styles = StyleSheet.create({
     width: '80%', // Width set to make space for both sides.
     // height:'90%'
   },
+  inputContainer:{
+    marginVertical: 8,
+  },
   input: {
     
     width: '100%',
     height: 50,
-    marginVertical: 8,
+   
     backgroundColor: '#EDEDEC',
     // Set border radius 20 to all corners.
     borderRadius: 20, 
@@ -275,8 +286,8 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 20, 
     borderBottomRightRadius: 20
   },
-  confirmPassword:{
-    marginVertical: 30
+  password:{
+    marginBottom: 20
   },
   error: {
     color: 'red',

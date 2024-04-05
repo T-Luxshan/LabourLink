@@ -10,6 +10,8 @@ import GettingStarted from './src/screens/GettingStarted'
 import LabourSignUp from './src/screens/authentication/LabourSignUpForm';
 import CustomerSignUpform from './src/screens/authentication/CustomerSignUpForm'
 import SignInWithGoogle from './src/components/SignInWithGoogle';
+import AuthTestSignup from './NotUsingComponents/AuthTestSignup'; // For testing. Remove later.
+import AuthTestLogin from './NotUsingComponents/AuthTestLogin'; // For testing. Remove later.
 
 const Stack = createStackNavigator();
 
@@ -28,6 +30,19 @@ export default function App() {
             name="Login" 
             component={Login}
             options={{ headerShown: false }} />
+
+        {/* For Validation testing purpose, remove later */}
+        <Stack.Screen 
+            name="AuthTestSignup" 
+            component={AuthTestSignup}
+            options={{ headerShown: false }} />
+
+        <Stack.Screen 
+            name="AuthTestLogin" 
+            component={AuthTestLogin}
+            options={{ headerShown: false }} />
+            
+          {/* TODO : remove above block  */}
         <Stack.Screen 
             name="SignInWithGoogle" 
             component={SignInWithGoogle}
