@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
 
 import * as yup from 'yup';
+import { loginCustomer, loginLabour } from '../../services/AuthService';
 
 
 const Login = () => {
@@ -18,6 +19,7 @@ const Login = () => {
     const [role, setRole] = useState(null); // state for save selected role.
     const [rememberMe, setRememberMe] = useState(false); // state for remember me button.
     const [errors, setErrors] = useState({});
+    const [logError, setLogError] = useState('');
 
     // const [secureTextEntry, setSecureTextEntry] = useState(true);
     // const [hidePassword, setHidePassword] = useState(true); 
@@ -45,17 +47,37 @@ const Login = () => {
     const handleLogin = async () => {
       try {
         await schema.validate({ email, password, role }, { abortEarly: false });
-        // Validation succeeded, proceed with login
-        console.log('Role:', role);
-        console.log('Email:', email);
-        console.log('Password:', password);
-        navigation.navigate('AuthTestLogin', {
-          role: role,
-          email: email,
-          password: password
-        });
+        setErrors({});
+       
 
-        // <AuthTest></AuthTest>
+        try {
+          let response = null;
+          if(role == "customer"){
+             response = await loginCustomer(email, password);
+          }
+          else{
+             response = await loginLabour(email, password);
+          }
+          
+          setLogError("");
+          console.log(response);
+          console.log(response.data.accessToken);
+          
+
+          // Store the tokens in localStorage or secure cookie for later use
+          localStorage.setItem('token', response.data.accessToken);
+          localStorage.setItem('refreshToken', response.data.refreshToken);
+       
+       
+          navigation.navigate('AuthTestSignup')
+
+
+        } catch (e) {
+          console.log("The error is ", e);
+          setLogError("Login failed.");
+        }
+
+       
       } catch (error) {
         // Validation failed, set errors state
         const validationErrors = {};

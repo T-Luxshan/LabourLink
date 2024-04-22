@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform  } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SignInWithGoogle from '../../components/SignInWithGoogle' // signInWithGoogle component importerd.
 import SignupHead from '../../components/SignUpHead';
 import { useNavigation } from '@react-navigation/native';
 
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as yup from 'yup';
+
+import { registerCustomer } from '../../services/AuthService';
 
 const CustomerSignUpForm = () => {
 
@@ -22,6 +26,7 @@ const CustomerSignUpForm = () => {
   const [address, setAddress] = useState(''); // state for address field. 
   const [rightIcon, setRightIcon] = useState('eye-slash'); // Toggle eye icon.
   const [errors, setErrors] = useState({});
+  const [regError, setRegError] = useState();
 
 
 
@@ -70,26 +75,32 @@ const CustomerSignUpForm = () => {
     };
 
     const handleSignUp = async () => {
-      // Implement login logic here
+      // Try block for validate the user inputs.
       try {
         await schema.validate({ email, password, confirmPassword, name, mobileNumber, address }, { abortEarly: false });
-        // Validation succeeded, proceed with login
-        console.log('Email:', email); //TODO : need to remove later.
-        console.log('Password:', password); //TODO : need to remove lated.
+        setErrors({});
+        
+        try {
+          const response = await registerCustomer(name, email, password, mobileNumber, address);
+          
+          setRegError("");
+          console.log(response);
+          console.log(response.data.accessToken);
+          
 
-        //TODO : for testing purpose need to remove this block from here
-        navigation.navigate('AuthTestSignup', {
-          name: name,
-          email: email,
-          password: password,
-          confirmPassword: confirmPassword,
-          mobileNumber: mobileNumber,
-          address: address,
+          // Store the tokens in localStorage or secure cookie for later use
+          localStorage.setItem('token', response.data.accessToken);
+          localStorage.setItem('refreshToken', response.data.refreshToken);
+       
+       
+          navigation.navigate('AuthTestSignup')
 
-          // to here.
 
-        });
-
+        } catch (e) {
+          console.log("The error is ", e);
+          setRegError("An account with this email or mobile number already exist.");
+        }
+       
       } catch (error) {
         // Validation failed, set errors state
         const validationErrors = {};
@@ -110,6 +121,7 @@ const CustomerSignUpForm = () => {
       <ScrollView>     
         <View style={styles.innerContainer}>
           
+        {regError && <Text style={styles.error}>{regError}</Text>}
           
                 {/* Name field */}
             <View style={styles.inputContainer}>
@@ -118,7 +130,7 @@ const CustomerSignUpForm = () => {
                   theme={theme}
                   outlineColor='transparent'
                   underlineColor="transparent"
-                  placeholder="Luxshan huraisingam"
+                  placeholder="Luxshan Thuraisingam"
                   value={name}
                   onChangeText={setName}
                   style={styles.input}

@@ -12,6 +12,7 @@ import CustomerSignUpform from './src/screens/authentication/CustomerSignUpForm'
 import SignInWithGoogle from './src/components/SignInWithGoogle';
 import AuthTestSignup from './NotUsingComponents/AuthTestSignup'; // For testing. Remove later.
 import AuthTestLogin from './NotUsingComponents/AuthTestLogin'; // For testing. Remove later.
+import Home from './NotUsingComponents/Home';
 
 const Stack = createStackNavigator();
 
@@ -31,6 +32,10 @@ export default function App() {
             component={Login}
             options={{ headerShown: false }} />
 
+         <Stack.Screen 
+            name="Home" 
+            component={Home}
+            options={{ headerShown: false }} />
         {/* For Validation testing purpose, remove later */}
         <Stack.Screen 
             name="AuthTestSignup" 

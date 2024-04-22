@@ -7,6 +7,7 @@ import SignupHead from '../../components/SignUpHead';
 import { useNavigation } from '@react-navigation/native';
 
 import * as yup from 'yup';
+import { registerLabour } from '../../services/AuthService';
 
 const CustomerSignUpForm = () => {
 
@@ -21,7 +22,7 @@ const CustomerSignUpForm = () => {
   const [passwordVisibility, setPasswordVisibility] = useState(true); // state for Toggle pasword visibility. 
   const [rightIcon, setRightIcon] = useState('eye-slash'); // Toggle eye icon.
   const [errors, setErrors] = useState({});
-
+  const [regError, setRegError] = useState();
 
   const schema = yup.object().shape({
     name: yup
@@ -71,24 +72,30 @@ const CustomerSignUpForm = () => {
       // Implement login logic here
       try {
         await schema.validate({ email, password, confirmPassword, name, mobileNumber, nic }, { abortEarly: false });
-        // Validation succeeded, proceed with login
-        console.log('Email:', email); //TODO : remove this later.
-        console.log('Password:', password); //TODO : remove this later.
+        setErrors({});
+        
+        try {
+          const response = await registerLabour(name, email, password, mobileNumber, nic);
+          
+          setRegError("");
+          console.log(response);
+          console.log(response.data.accessToken);
+          
 
-        //TODO : for testing purpose need to remove this block from here
-        navigation.navigate('AuthTestSignup', {
-          name: name,
-          email: email,
-          password: password,
-          confirmPassword: confirmPassword,
-          mobileNumber: mobileNumber,
-          nic: nic,
+          // Store the tokens in localStorage or secure cookie for later use
+          localStorage.setItem('token', response.data.accessToken);
+          localStorage.setItem('refreshToken', response.data.refreshToken);
+       
+       
+          navigation.navigate('AuthTestSignup')
 
-          // to here
 
-        });
+        } catch (e) {
+          console.log("The error is ", e);
+          setRegError("An account with this email or mobile number already exist.");
+        }
 
-        // <AuthTest></AuthTest>
+        
       } catch (error) {
         // Validation failed, set errors state
         const validationErrors = {};
@@ -109,8 +116,9 @@ const CustomerSignUpForm = () => {
       >
       <ScrollView>
         <View style={styles.innerContainer}>
+        {regError && <Text style={styles.error}>{regError}</Text>}
 
-            {/* Name field */}
+           
           <View style={styles.inputContainer}>
 
             <Text>Name</Text>
@@ -118,7 +126,7 @@ const CustomerSignUpForm = () => {
                     theme={theme}
                     outlineColor='transparent'
                     underlineColor="transparent"
-                    placeholder="Luxshan huraisingam"
+                    placeholder="Luxshan Thuraisingam"
                     value={name}
                     onChangeText={setName}
                     style={styles.input}
