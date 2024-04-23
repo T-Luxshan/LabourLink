@@ -10,9 +10,11 @@ import GettingStarted from './src/screens/GettingStarted'
 import LabourSignUp from './src/screens/authentication/LabourSignUpForm';
 import CustomerSignUpform from './src/screens/authentication/CustomerSignUpForm'
 import SignInWithGoogle from './src/components/SignInWithGoogle';
-import SearchBar from './src/components/SearchBar';
-
-// const Stack = createStackNavigator();
+//import SearchBar from './src/components/SearchBar';
+import MapViewScreen from './src/screens/MapViewScreen';
+import  BookAppointment from './src/screens/BookAppointment';
+import LabourInfo from './src/screens/LabourInfo';
+ //const Stack = createStackNavigator();
 
 export default function App() {
 
@@ -49,6 +51,7 @@ export default function App() {
 
     //   </Stack.Navigator>
     // </NavigationContainer>
+    
 
     <SafeAreaProvider>
       <View style={styles.container}>
@@ -58,7 +61,11 @@ export default function App() {
          {/* <Login /> */}
         {/* <LabourSignUp /> */}
         {/* <CustomerSignUpform />   */}
-        <SearchBar/>
+        {/* <SearchBar/> */}
+        <MapViewScreen /> 
+         {/* <BookAppointment /> */}
+          {/* <LabourInfo /> */}
+       
           
         </View>  
         <StatusBar style="auto" />
