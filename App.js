@@ -62,9 +62,9 @@ export default function App() {
         {/* <LabourSignUp /> */}
         {/* <CustomerSignUpform />   */}
         {/* <SearchBar/> */}
-        <MapViewScreen /> 
+        {/* <MapViewScreen />  */}
          {/* <BookAppointment /> */}
-          {/* <LabourInfo /> */}
+          <LabourInfo />
        
           
         </View>  
