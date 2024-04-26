@@ -5,9 +5,10 @@ import { TouchableRipple, IconButton } from 'react-native-paper';
 import SignInWithGoogle from '../../components/SignInWithGoogle'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import * as yup from 'yup';
-import { loginCustomer, loginLabour } from '../../services/AuthService';
+import { getUserRole, loginCustomer, loginLabour } from '../../services/AuthService';
 
 
 const Login = () => {
@@ -52,29 +53,26 @@ const Login = () => {
 
         try {
           let response = null;
-          if(role == "customer"){
-             response = await loginCustomer(email, password);
-          }
-          else{
-             response = await loginLabour(email, password);
-          }
+          let userRole = await (await getUserRole(email)).data;
+      
+          if(role != userRole )
+            throw new Error('Invalid email or password.');
+
+          if(role == "CUSTOMER" )
+             response = await loginCustomer(role, email, password); 
+          else
+            response = await loginLabour(role, email, password);   
+
+          AsyncStorage.setItem("token", response.data.accessToken);
+          AsyncStorage.setItem("refreshToken", response.data.refreshToken);
           
           setLogError("");
           console.log(response);
           console.log(response.data.accessToken);
           
-
-          // Store the tokens in localStorage or secure cookie for later use
-          localStorage.setItem('token', response.data.accessToken);
-          localStorage.setItem('refreshToken', response.data.refreshToken);
-       
-       
           navigation.navigate('AuthTestSignup')
-
-
         } catch (e) {
-          console.log("The error is ", e);
-          setLogError("Login failed.");
+          setLogError("Invalid email or password.");
         }
 
        
@@ -134,16 +132,16 @@ const Login = () => {
                   <View style={styles.innerToggleButtonContainer}>
                   {/* Button customer */}
                   <TouchableOpacity
-                    style={[styles.toggleButton, styles.cButton, role === 'customer' && styles.activeButton]}
-                    onPress={() => setRole('customer')}>
-                    <Text style={[styles.toggleButtonText, styles.cButton, role === 'customer' && styles.activeButtonText]}>Customer</Text>
+                    style={[styles.toggleButton, styles.cButton, role === 'CUSTOMER' && styles.activeButton]}
+                    onPress={() => setRole('CUSTOMER')}>
+                    <Text style={[styles.toggleButtonText, styles.cButton, role === 'CUSTOMER' && styles.activeButtonText]}>Customer</Text>
                   </TouchableOpacity>
                   {/* Button labour */}
                   {/* this button for handle when labour click the button neede to edit this commment later */}
                   <TouchableOpacity
-                    style={[styles.toggleButton, styles.lButton, role === 'labour' && styles.activeButton]}
-                    onPress={() => setRole('labour')}>
-                    <Text style={[styles.toggleButtonText, role === 'labour' && styles.activeButtonText]}>Labour</Text>
+                    style={[styles.toggleButton, styles.lButton, role === 'LABOUR' && styles.activeButton]}
+                    onPress={() => setRole('LABOUR')}>
+                    <Text style={[styles.toggleButtonText, role === 'LABOUR' && styles.activeButtonText]}>Labour</Text>
                   </TouchableOpacity>
                 </View>
                   {errors.role && <Text style={[styles.error, {marginLeft: 80, marginTop:5}]}>{errors.role}</Text>}
@@ -206,7 +204,7 @@ const Login = () => {
                 </View>
                 {/* Login button */}
                 {/* {errors.general && <Text style={styles.error}>{errors.general}</Text>}   */}
-
+                {logError && <Text style={styles.error}>{logError}</Text>}
                 <Button mode="contained" buttonColor="#FB9741" onPress={handleLogin} style={styles.button}>
                   Login
                 </Button>

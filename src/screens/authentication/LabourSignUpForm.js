@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import SignInWithGoogle from '../../components/SignInWithGoogle' // signInWithGoogle component importerd.
 import SignupHead from '../../components/SignUpHead';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import * as yup from 'yup';
 import { registerLabour } from '../../services/AuthService';
@@ -83,8 +84,10 @@ const CustomerSignUpForm = () => {
           
 
           // Store the tokens in localStorage or secure cookie for later use
-          localStorage.setItem('token', response.data.accessToken);
-          localStorage.setItem('refreshToken', response.data.refreshToken);
+          // localStorage.setItem('token', response.data.accessToken);
+          // localStorage.setItem('refreshToken', response.data.refreshToken);
+          AsyncStorage.setItem("token", response.data.accessToken);
+          AsyncStorage.setItem("refreshToken", response.data.refreshToken);
        
        
           navigation.navigate('AuthTestSignup')
