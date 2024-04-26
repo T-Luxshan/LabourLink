@@ -1,76 +1,65 @@
-import { StatusBar } from 'expo-status-bar';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { StyleSheet, Text, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import 'react-native-gesture-handler';
-import Login from './src/screens/authentication/Login';
-import ChooseRole from './src/screens/ChooseRole';
-import GettingStarted from './src/screens/GettingStarted'
-import LabourSignUp from './src/screens/authentication/LabourSignUpForm';
-import CustomerSignUpform from './src/screens/authentication/CustomerSignUpForm'
-import SignInWithGoogle from './src/components/SignInWithGoogle';
+import { StatusBar } from "expo-status-bar";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { StyleSheet, Text, View } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import "react-native-gesture-handler";
+import Login from "./src/screens/authentication/Login";
+import ChooseRole from "./src/screens/ChooseRole";
+import GettingStarted from "./src/screens/GettingStarted";
+import LabourSignUp from "./src/screens/authentication/LabourSignUpForm";
+import CustomerSignUpform from "./src/screens/authentication/CustomerSignUpForm";
+import SignInWithGoogle from "./src/components/SignInWithGoogle";
+import ChatApplication from "./src/screens/ChatApplication";
+import ChatScreen from "./src/screens/ChatScreen";
 
 const Stack = createStackNavigator();
 
 export default function App() {
-
-  
-
   return (
-    
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen 
-            name="GettingStarted" 
-            component={GettingStarted} />
-        <Stack.Screen 
-            name="Login" 
-            component={Login}
-            options={{ headerShown: false }} />
-        <Stack.Screen 
-            name="SignInWithGoogle" 
-            component={SignInWithGoogle}
-            options={{ headerShown: false }} />
-        <Stack.Screen 
-            name="ChooseRole" 
-            component={ChooseRole} 
-            options={{ headerShown: false }} />
-        <Stack.Screen 
-            name="CustomerSignUpForm" 
-            component={CustomerSignUpform}
-            options={{ title: 'back' }} />
-        <Stack.Screen 
-            name="LabourSignUp" 
-            component={LabourSignUp} 
-            options={{ title: 'back' }} />
-        
+    // <NavigationContainer>
+    //   <Stack.Navigator>
+    //     <Stack.Screen
+    //         name="GettingStarted"
+    //         component={GettingStarted} />
+    //     <Stack.Screen
+    //         name="Login"
+    //         component={Login}
+    //         options={{ headerShown: false }} />
+    //     <Stack.Screen
+    //         name="SignInWithGoogle"
+    //         component={SignInWithGoogle}
+    //         options={{ headerShown: false }} />
+    //     <Stack.Screen
+    //         name="ChooseRole"
+    //         component={ChooseRole}
+    //         options={{ headerShown: false }} />
+    //     <Stack.Screen
+    //         name="CustomerSignUpForm"
+    //         component={CustomerSignUpform}
+    //         options={{ title: 'back' }} />
+    //     <Stack.Screen
+    //         name="LabourSignUp"
+    //         component={LabourSignUp}
+    //         options={{ title: 'back' }} />
 
-      </Stack.Navigator>
-    </NavigationContainer>
+    //   </Stack.Navigator>
+    // </NavigationContainer>
 
-    // <SafeAreaProvider>
-    //   <View style={styles.container}>
-    //     <View style={{ flex: 1 }}>
-    //       {/* <SignUp />  */}
-    //     <ChooseRole />
-    //      {/* <Login /> */}
-    //     {/* <LabourSignUp /> */}
-    //     {/* <CustomerSignUpform />   */}
-          
-    //     </View>  
-    //     <StatusBar style="auto" />
-    //   </View>
-    // </SafeAreaProvider>
-
-
-    
+    <SafeAreaProvider>
+      <View style={styles.container}>
+        <View style={{ flex: 1 }}>
+          <ChatApplication />
+        </View>
+        <StatusBar style="auto" />
+      </View>
+    </SafeAreaProvider>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor:'white',
+    backgroundColor: "white",
     flex: 1,
     // alignItems: 'center',
     // justifyContent: 'center',
