@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
     },
     logoContainer: {
         paddingLeft: 120,
+        // paddingLeft: 0,
     },
     homeContainer:{
         marginRight:10,
