@@ -8,17 +8,6 @@ import {
   findChatMessages,
 } from "../service/userService";
 
-// import { WebSocket } from '@expo/websocket';
-// import WebSocket from 'react-native-websocket';
-// import { WebSocket } from 'react-native';
-
-// import { Stomp } from '@stomp/stompjs';
-// import SockJS from 'expo-websocket';
-
-// import { WebSocket } from 'react-native-websocket';
-
-// import { w3cwebsocket as W3CWebSocket } from "websocket";
-
 const ChatApplication = () => {
   const [user, setUser] = useState({
     email: "",
@@ -42,78 +31,21 @@ const ChatApplication = () => {
     }
   }, [user.email, user.status]);
 
- //Getting User details with email
- useEffect(() => {
-  const fetchUserData = async () => {
-    try {
-      const response = await getUserByEmail(user.email);
-      setUser(response.data);
-    } catch (error) {
-      console.log("Error fetching customer data:", error);
-    }
-  };
-  fetchUserData();
-  }, [user.email]); // Use `email` as the dependency here when email changes refreshes
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await getUserByEmail(user.email);
+        setUser(response.data);
+      } catch (error) {
+        console.log("Error fetching customer data:", error);
+      }
+    };
+    fetchUserData();
+  }, [user.email]);
 
   useEffect(() => {
     setReceivedMessagesCount(messages.length);
   }, [messages]);
-
-  // const connect = () => {
-  //   console.log("connect function called");
-  //   // Create a SockJS instance and connect with STOMP over WebSocket
-  //   const socket = new SockJS("http://localhost:8080/ws");
-  //   const stompClient = Stomp.over(socket);
-
-  //   stompClient.connect({}, onConnected, onError);
-  // };
-
-  // const connect =() => {
-  //   const ws = new WebSocket('http://localhost:8080/ws');
-  //   ws.onopen = () => {
-  //     // Connection opened
-  //     console.log('WebSocket connection opened');
-  //     ws.send('Hello, server!'); // Send a message to the server
-  //   };
-  //   ws.onmessage = (e) => {
-  //     // Receive a message from the server
-  //     console.log(e.data);
-  //   };
-  //   ws.onerror = (e) => {
-  //     // An error occurred
-  //     console.log(e.message);
-  //   };
-  //   ws.onclose = (e) => {
-  //     // Connection closed
-  //     console.log(e.code, e.reason);
-  //   };
-  // };
-
-  // const connect = () =>{
-  //   var client = new W3CWebSocket('ws://localhost:8080/ws', 'echo-protocol');
-  //   client.onopen = function() {
-  //     console.log('WebSocket Client Connected');
-
-  //       function sendNumber() {
-  //          if (client.readyState === client.OPEN) {
-  //             var number = Math.round(Math.random() * 0xFFFFFF);
-  //             client.send(number.toString());
-  //             setTimeout(sendNumber, 1000);
-  //          }
-  //       }
-  //       sendNumber();
-  //      };
-
-  //      client.onclose = function() {
-  //        console.log('echo-protocol Client Closed');
-  //      };
-
-  //      client.onmessage = function(e) {
-  //         if (typeof e.data === 'string') {
-  //           console.log("Received: '" + e.data + "'");
-  //         }
-  //     };
-  // }
 
   const connect = () => {
     console.log("connect function called");
@@ -123,13 +55,6 @@ const ChatApplication = () => {
       console.log("WebSocket connection opened.");
       onConnected();
     };
-
-    // ws.onerror = (e) => {
-    //   console.log("error occured");
-    // };
-    // ws.onclose = (e) => {
-    //   console.log("connection closed");
-    // };
 
     webSocketRef.current = ws;
   };
@@ -160,13 +85,6 @@ const ChatApplication = () => {
     }
   };
 
-  const onMessageReceived = (message) => {
-    const parsedMessage = JSON.parse(message);
-    if (parsedMessage.type === "CHAT") {
-      setMessages((prevMessages) => [...prevMessages, parsedMessage]);
-    }
-  };
-
   const sendMessage = () => {
     if (messageInput.trim() && selectedUser) {
       const chatMessage = {
@@ -176,36 +94,10 @@ const ChatApplication = () => {
         content: messageInput.trim(),
         timestamp: new Date().toISOString(),
       };
-      console.log(chatMessage);
-      // webSocketRef.current.send(JSON.stringify(chatMessage));
-      // ws.send("/app/chat", {}, JSON.stringify(chatMessage));
 
-      // Send message over WebSocket
-      ws.send(JSON.stringify(chatMessage));
-
+      webSocketRef.current.send(JSON.stringify(chatMessage));
       setMessageInput("");
-      
-
-    //   fetch("http://localhost:8080/app/chat", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(chatMessage),
-    // })
-    //   .then(response => {
-    //     if (!response.ok) {
-    //       throw new Error("Failed to send message.");
-    //     }
-    //     console.log("Message sent successfully.");
-    //     setMessageInput(""); // Clear message input after successful send
-    //   })
-    //   .catch(error => {
-    //     console.error("Error sending message:", error);
-    //     // Handle error if needed
-    //   });
-
-    // }
+    }
   };
 
   const handleUserClick = (selectedUserEmail) => {
@@ -371,4 +263,5 @@ const ChatApplication = () => {
     </View>
   );
 };
+
 export default ChatApplication;
