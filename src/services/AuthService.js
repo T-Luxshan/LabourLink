@@ -3,7 +3,11 @@ import { useNavigation } from '@react-navigation/native';
 // import jwt_decode from 'jwt-decode';
 import { jwtDecode } from "jwt-decode";
 import dayjs from 'dayjs';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
+// const REST_API_BASE_URL_AUTH = "http://172.20.10.2:8080/api/v1/auth";
+// const  baseURL = 'http://172.20.10.2:8080/api';
 
 const REST_API_BASE_URL_AUTH = "http://localhost:8080/api/v1/auth";
 const  baseURL = 'http://localhost:8080/api';
@@ -23,17 +27,22 @@ export const registerLabour = (name, email, password, mobileNumber, nic) => {
 };
 
 
+  // API for get user role 
+ export const getUserRole = (email) => {
+   return axios.get(`${REST_API_BASE_URL_AUTH}/getRole/${email}`)
+ }
+
   // API for login customer
-  export const loginCustomer = (email, password) => {
+  export const loginCustomer = (role, email, password) => {
     return axios.post(`${REST_API_BASE_URL_AUTH}/login/customer`, {
-        email, password
+        role, email, password
     });
   };
 
    // API for login customer
-   export const loginLabour = (email, password) => {
+   export const loginLabour = (role, email, password) => {
     return axios.post(`${REST_API_BASE_URL_AUTH}/login/labour`, {
-        email, password
+        role, email, password
     });
   };
 
@@ -47,8 +56,8 @@ const axiosAuthInstance = axios.create({
 
 axiosAuthInstance.interceptors.request.use(
   async (config) => {
-    // Get the token from localStorage (or wherever you store it)
-    const token = localStorage.getItem('token');
+    // Get the token from AsyncStorage (or wherever you store it)
+     token = await AsyncStorage.getItem('token');
     // Set the authorization header if a token exists
     if (token) {
       const user = jwtDecode(token);
@@ -60,16 +69,16 @@ axiosAuthInstance.interceptors.request.use(
       }else {
         
         // console.log("Access token expired");
-        const refreshToken = localStorage.getItem('refreshToken');
+        const refreshToken = AsyncStorage.getItem('refreshToken');
         const response = await axios.post(`${REST_API_BASE_URL_AUTH}/refresh`, {refreshToken})
         console.log(response);
 
         console.log("Token updated.")
         // console.log(response.data.accessToken);
-        localStorage.setItem('token', response.data.accessToken);
-        localStorage.setItem('refreshToken', response.data.refreshToken);
+        AsyncStorage.setItem('token', response.data.accessToken);
+        AsyncStorage.setItem('refreshToken', response.data.refreshToken);
 
-        const token = localStorage.getItem('token');
+        const token = AsyncStorage.getItem('token');
 
         config.headers.Authorization = `Bearer ${token}`;
         return config;
@@ -91,8 +100,8 @@ export default axiosAuthInstance;
 export const logoutUser = () => {
   const navigation = useNavigation();
 
-  localStorage.removeItem('token');
-  localStorage.removeItem('refreshToken');
+  AsyncStorage.removeItem('token');
+  AsyncStorage.removeItem('refreshToken');
 
   navigation.navigate('Login'); // Navigate to login page.
 
