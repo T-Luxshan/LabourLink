@@ -12,48 +12,74 @@ import CustomerSignUpform from "./src/screens/authentication/CustomerSignUpForm"
 import SignInWithGoogle from "./src/components/SignInWithGoogle";
 import ChatApplication from "./src/screens/ChatApplication";
 import ChatScreen from "./src/screens/ChatScreen";
+import OnlineUsersScreen from "./src/screens/OnlineUsersScreen";
+import { useMemo } from "react";
+import ChatAreaScreen from "./src/screens/ChatAreaScreen";
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    // <NavigationContainer>
-    //   <Stack.Navigator>
-    //     <Stack.Screen
-    //         name="GettingStarted"
-    //         component={GettingStarted} />
-    //     <Stack.Screen
-    //         name="Login"
-    //         component={Login}
-    //         options={{ headerShown: false }} />
-    //     <Stack.Screen
-    //         name="SignInWithGoogle"
-    //         component={SignInWithGoogle}
-    //         options={{ headerShown: false }} />
-    //     <Stack.Screen
-    //         name="ChooseRole"
-    //         component={ChooseRole}
-    //         options={{ headerShown: false }} />
-    //     <Stack.Screen
-    //         name="CustomerSignUpForm"
-    //         component={CustomerSignUpform}
-    //         options={{ title: 'back' }} />
-    //     <Stack.Screen
-    //         name="LabourSignUp"
-    //         component={LabourSignUp}
-    //         options={{ title: 'back' }} />
+    <NavigationContainer>
+      <Stack.Navigator>
+        {/* <Stack.Screen name="GettingStarted" component={GettingStarted} />
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SignInWithGoogle"
+          component={SignInWithGoogle}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ChooseRole"
+          component={ChooseRole}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="CustomerSignUpForm"
+          component={CustomerSignUpform}
+          options={{ title: "back" }}
+        />
+        <Stack.Screen
+          name="LabourSignUp"
+          component={LabourSignUp}
+          options={{ title: "back" }}
+        />
 
-    //   </Stack.Navigator>
-    // </NavigationContainer>
+        <Stack.Screen
+          name="Chat"
+          component={pastUsers}
+          options={{ title: "back" }}
+        /> */}
 
-    <SafeAreaProvider>
-      <View style={styles.container}>
-        <View style={{ flex: 1 }}>
-          <ChatApplication />
-        </View>
-        <StatusBar style="auto" />
-      </View>
-    </SafeAreaProvider>
+        <Stack.Screen
+          name="OnlineUsersScreen"
+          component={OnlineUsersScreen}
+          // options={{ title: "back" }}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ChatAreaScreen"
+          component={ChatAreaScreen}
+          options={{ title: "back" }}
+        />
+
+
+      </Stack.Navigator>
+    </NavigationContainer>
+
+    // <SafeAreaProvider>
+    //   <View style={styles.container}>
+    //     <View style={{ flex: 1 }}>
+    //       {/* <ChatApplication /> */}
+    //       <PastUsers/>
+    //     </View>
+    //     <StatusBar style="auto" />
+    //   </View>
+    // </SafeAreaProvider>
   );
 }
 
