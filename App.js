@@ -14,13 +14,16 @@ import SignInWithGoogle from './src/components/SignInWithGoogle';
 import MapViewScreen from './src/screens/MapViewScreen';
 import  BookAppointment from './src/screens/BookAppointment';
 import LabourInfo from './src/screens/LabourInfo';
- //const Stack = createStackNavigator();
+import PageButton from './src/components/PageButton';
+ const Stack = createStackNavigator();
+ 
 
 export default function App() {
 
   
 
   return (
+    
     
     // <NavigationContainer>
     //   <Stack.Navigator>
@@ -62,9 +65,16 @@ export default function App() {
         {/* <LabourSignUp /> */}
         {/* <CustomerSignUpform />   */}
         {/* <SearchBar/> */}
-        {/* <MapViewScreen />  */}
-         {/* <BookAppointment /> */}
-          <LabourInfo />
+         {/* <MapViewScreen />  */}
+         {/* <BookAppointment />  */}
+          {/* <LabourInfo /> */}
+          <NavigationContainer>
+      <Stack.Navigator initialRouteName="MapViewScreen" headerMode="none">
+        <Stack.Screen name="MapViewScreen" component={MapViewScreen} />
+        <Stack.Screen name="LabourInfo" component={LabourInfo} />
+        <Stack.Screen name="BookAppointment" component={BookAppointment} />
+      </Stack.Navigator>
+    </NavigationContainer>
        
           
         </View>  

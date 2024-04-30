@@ -10,9 +10,10 @@ import { ScrollView, TouchableOpacity } from "react-native";
 import LabourProfileComponent from "../components/LabourProfileComponent";
 import BookAppointment from "../screens/BookAppointment";
 // import { useNavigation } from '@react-navigation/native'; // Importing useNavigation hook (commented out)
+//import { useNavigation } from '@react-navigation/native'; 
 
 // MapViewScreen component definition
-const MapViewScreen = () => {
+const MapViewScreen = ({navigation}) => {
   // Initial region for the map
   const initialRegion = {
     latitude: 6.79503, // Latitude of the initial map center
@@ -66,6 +67,13 @@ const MapViewScreen = () => {
     setSelectedMarker(defaultWorker);
     setSelectedWorkerType(workerType);
   };
+  const handleProfileClick = () => {
+    // Navigate to LabourInfo screen
+    navigation.navigate('LabourInfo', {
+      // Pass any necessary parameters to LabourInfo screen
+      // For example, you can pass worker details here
+    });
+  };
 
   // JSX rendering
   return (
@@ -94,37 +102,46 @@ const MapViewScreen = () => {
         </MapView>
         {/* ScrollView for displaying profiles of workers */}
         <ScrollView>
-          {/* LabourProfileComponent instances */}
-          <LabourProfileComponent
-            profileImage={require("../assets/Images/profile_photo3.png")}
-            name="John Smith"
-            jobTitle="Electrician"
-            rating={4}
-          />
-          <LabourProfileComponent
-            profileImage={require("../assets/Images/profile_photo2.png")}
-            name="Thanakaran"
-            jobTitle="Plumber"
-            rating={4}
-          />
-          <LabourProfileComponent
-            profileImage={require("../assets/Images/profile_photo2.png")}
-            name="Thanakaran"
-            jobTitle="Plumber"
-            rating={4}
-          />
-          <LabourProfileComponent
-            profileImage={require("../assets/Images/profile_photo2.png")}
-            name="Thanakaran"
-            jobTitle="Plumber"
-            rating={4}
-          />
-          <LabourProfileComponent
-            profileImage={require("../assets/Images/profile_photo2.png")}
-            name="Thanakaran"
-            jobTitle="Plumber"
-            rating={4}
-          />
+        <TouchableOpacity onPress={handleProfileClick}>
+            <LabourProfileComponent
+              profileImage={require("../assets/Images/profile_photo3.png")}
+              name="John Smith"
+              jobTitle="Electrician"
+              rating={4}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleProfileClick}>
+            <LabourProfileComponent
+              profileImage={require("../assets/Images/profile_photo3.png")}
+              name="John Smith"
+              jobTitle="Electrician"
+              rating={4}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleProfileClick}>
+            <LabourProfileComponent
+              profileImage={require("../assets/Images/profile_photo3.png")}
+              name="John Smith"
+              jobTitle="Electrician"
+              rating={4}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleProfileClick}>
+            <LabourProfileComponent
+              profileImage={require("../assets/Images/profile_photo3.png")}
+              name="John Smith"
+              jobTitle="Electrician"
+              rating={4}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleProfileClick}>
+            <LabourProfileComponent
+              profileImage={require("../assets/Images/profile_photo3.png")}
+              name="John Smith"
+              jobTitle="Electrician"
+              rating={4}
+            />
+          </TouchableOpacity>
           {/* Additional LabourProfileComponent instances can be added here */}
         </ScrollView>
       </View>

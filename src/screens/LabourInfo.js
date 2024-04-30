@@ -1,8 +1,7 @@
 // Importing necessary modules from React and React Native
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-
-// Importing custom components
+import { View, Text, StyleSheet, Button } from "react-native";
+import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
 import AppBar from "../components/AppBar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import LabourProfileComponent from "../components/LabourProfileComponent";
@@ -12,6 +11,15 @@ import PageButton from "../components/PageButton";
 
 // LabourInfo component definition
 const LabourInfo = () => {
+  // console.props(props);
+   const navigation = useNavigation(); // Get navigation object using useNavigation hook
+
+
+  // Function to handle navigation to BookAppointment screen
+  // const handleBookNow = () => {
+  //   navigation.navigate('BookAppointment'); // Navigate to BookAppointment screen
+  // };
+
   // Rendering JSX
   return (
     // Wrapping the entire component with SafeAreaProvider to handle safe areas for different devices
@@ -19,7 +27,7 @@ const LabourInfo = () => {
       {/* Main container view */}
       <View style={styles.container}>
         {/* AppBar component with title */}
-        <AppBar Title="         Willeam smith"/>
+        <AppBar Title="Willeam Smith"/>
 
         {/* Labour profile component */}
         <LabourProfileComponent
@@ -31,7 +39,6 @@ const LabourInfo = () => {
         
         {/* Container for displaying service information */}
         <View style={styles.infoContainer}>
-         
           <ServiceBoxBar Cardtext="Total Services" Cardno="210" /> 
           <ServiceBoxBar Cardtext="Experience" Cardno="10Y+" /> 
           <ServiceBoxBar Cardtext="Rating" Cardno="4.8" /> 
@@ -61,8 +68,11 @@ const LabourInfo = () => {
           {/* ScrollReviewer component for displaying reviews */}
           <ScrollReviewer />
           {/* PageButton component for navigating to different pages */}
-          <PageButton />
+          <PageButton screen="BookAppointment"/>
         </View>
+
+        {/* Button to navigate to BookAppointment screen */}
+        
       </View>
     </SafeAreaProvider>
   );

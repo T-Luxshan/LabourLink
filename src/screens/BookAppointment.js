@@ -3,10 +3,14 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Calendar } from 'react-native-calendars'; 
 import LabourProfileComponent from '../components/LabourProfileComponent'; 
 import AppBar from '../components/AppBar'; 
-//import CardContainer from '../components/CardContainer'; 
+import CardContainer from '../components/CardContainer'; 
+import PageButton from '../components/PageButton';
 
 // BookAppointment component definition
-const BookAppointment = () => {
+const BookAppointment = (navigation ) => {
+  const handleBack = () => {
+    navigation.goBack(); // Go back to the previous screen
+  };
   // State variable for storing selected date
   const [selectedDate, setSelectedDate] = useState('');
 
@@ -42,13 +46,30 @@ const BookAppointment = () => {
         }}
       />
       {/* Text for selecting hour */}
+     
       <Text style={styles.lebel2}>Select Hour:</Text>
+      <View style={styles.rowContainer}>
       {/* Text for selecting 'From' hour */}
       <Text style={styles.lebel3}>From:</Text>
       {/* CardContainer component for displaying hour selection */}
-      {/* <CardContainer content="10.30"/> */}
+      <View Style={styles.S1}>
+      <CardContainer content="10.30" /> 
+      </View>
       {/* Text for selecting 'To' hour */}
       <Text style={styles.lebel3}>To</Text>
+      <View Style={styles.S1}>
+      <CardContainer content="11.30" /> 
+      </View>
+      </View>
+      <View style={styles.p1}>
+      <Text>Address</Text>
+      <TouchableOpacity style={styles.seeAllButton}>
+          <Text style={styles.seeAllButtonText}>Tap View map</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.S2}>
+      <PageButton screen="MapViewScreen" />
+      </View>
     </View>
   );
 };
@@ -73,9 +94,46 @@ const styles = StyleSheet.create({
     borderRadius: 5, 
     marginTop: 20, 
   },
+  rowContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap:10,
+  },
   buttonText: {
     color: 'white', 
     fontWeight: 'bold', 
   },
+  S1: {
+   height:10,
+   margin:10,
+   backgroundColor:"red"
+  },
+  seeAllButton: {
+    backgroundColor: 'white',
+    // padding: 10,
+    borderRadius: 5,
+  },
+  seeAllButtonText: {
+    color: 'blue',
+    fontWeight: 'bold',
+  },
+  p1:{
+    marginTop:20,
+    flexDirection: 'row',
+    gap:10,
+  },
+  S2:{
+     marginTop:35,
+   
+  },
+  lebel2: {
+    fontSize: 18, 
+    marginTop: 10,
+    marginBottom:15, 
+  },
+  S1:{
+    height:100,
+    backgroundColor:"red"
+}
 });
 

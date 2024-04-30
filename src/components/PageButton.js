@@ -1,19 +1,30 @@
 import * as React from 'react';
 import { Button } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native'; 
 
-const PageButton = () => (
-  <View style={styles.container}>
-    <Button
-      mode="contained"
-      onPress={() => console.log('Pressed')}
-      style={styles.button}
+const PageButton = (props) => {
+  const navigation = useNavigation();
+  const handlePress = () => {
+    // Navigate to 'BookAppointment' screen
+    navigation.navigate(props.screen);
+  };
+
+  return (
+    <View style={styles.container}>
       
-    >
-      Book Now
-    </Button>
-  </View>
-);
+      <Button
+        mode="contained"
+        onPress={handlePress}
+        style={styles.button}
+      >
+        Book Now
+      </Button>
+    </View>
+  );
+};
+
+
 
 const styles = StyleSheet.create({
   container: {
