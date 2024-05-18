@@ -4,17 +4,88 @@ import { TextInput, Button, Title, ToggleButton, Checkbox, Image } from 'react-n
 import { TouchableRipple, IconButton } from 'react-native-paper';
 import SignInWithGoogle from '../../components/SignInWithGoogle'
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import * as yup from 'yup';
+import { getUserRole, loginCustomer, loginLabour } from '../../services/AuthService';
+
 
 const Login = () => {
-    const [username, setUsername] = useState(''); // Need to change the state named for email.
+
+    const navigation = useNavigation();
+
+    const [email, setEmail] = useState(''); // Need to change the state named for email.
     const [password, setPassword] = useState(''); // state for password field.
     const [role, setRole] = useState(null); // state for save selected role.
     const [rememberMe, setRememberMe] = useState(false); // state for remember me button.
+    const [errors, setErrors] = useState({});
+    const [logError, setLogError] = useState('');
+
     // const [secureTextEntry, setSecureTextEntry] = useState(true);
     // const [hidePassword, setHidePassword] = useState(true); 
 
     const [passwordVisibility, setPasswordVisibility] = useState(true);
     const [rightIcon, setRightIcon] = useState('eye-slash');
+    
+
+    const schema = yup.object().shape({
+      role: yup
+        .string()
+        .required("Please select your role"),
+      email: yup
+        .string()
+        .email("This is not a valid email")
+        .required('Email is required'),
+      password: yup
+        .string()
+        .min(5, "Password can't be less than 5 letters")
+        .required("Password can't be empty"),
+    });
+
+
+
+    const handleLogin = async () => {
+      try {
+        await schema.validate({ email, password, role }, { abortEarly: false });
+        setErrors({});
+       
+
+        try {
+          let response = null;
+          let userRole = await (await getUserRole(email)).data;
+      
+          if(role != userRole )
+            throw new Error('Invalid email or password.');
+
+          if(role == "CUSTOMER" )
+             response = await loginCustomer(role, email, password); 
+          else
+            response = await loginLabour(role, email, password);   
+
+          AsyncStorage.setItem("token", response.data.accessToken);
+          AsyncStorage.setItem("refreshToken", response.data.refreshToken);
+          
+          setLogError("");
+          console.log(response);
+          console.log(response.data.accessToken);
+          
+          navigation.navigate('AuthTestSignup')
+        } catch (e) {
+          setLogError("Invalid email or password.");
+        }
+
+       
+      } catch (error) {
+        // Validation failed, set errors state
+        const validationErrors = {};
+        error.inner.forEach(err => {
+          validationErrors[err.path] = err.message;
+        });
+        setErrors(validationErrors);
+      }
+    };
+
     
     const handlePasswordVisibility = () => {
       if (rightIcon === 'eye') {
@@ -25,22 +96,6 @@ const Login = () => {
           setPasswordVisibility(!passwordVisibility);
       }
   };
-
-
-    const handleLogin = () => {
-      // Implement login logic here
-      if (role) {
-        // Proceed with login based on selected role
-        console.log('Selected role:', role);
-      } else {
-        // Display an error message indicating that a role must be selected
-        console.log('Please select a role');
-      }
-    
-    
-      console.log('Username:', username);
-      console.log('Password:', password);
-    };
 
     const handleGoogleSignIn = () => {
       // Handle Google sign-in logic here
@@ -74,19 +129,22 @@ const Login = () => {
 
                 {/* <ToggleRole /> */}
                 <View style={styles.toggleButtonContainer}>
+                  <View style={styles.innerToggleButtonContainer}>
                   {/* Button customer */}
                   <TouchableOpacity
-                    style={[styles.toggleButton, styles.cButton, role === 'customer' && styles.activeButton]}
-                    onPress={() => setRole('customer')}>
-                    <Text style={[styles.toggleButtonText, styles.cButton, role === 'customer' && styles.activeButtonText]}>Customer</Text>
+                    style={[styles.toggleButton, styles.cButton, role === 'CUSTOMER' && styles.activeButton]}
+                    onPress={() => setRole('CUSTOMER')}>
+                    <Text style={[styles.toggleButtonText, styles.cButton, role === 'CUSTOMER' && styles.activeButtonText]}>Customer</Text>
                   </TouchableOpacity>
                   {/* Button labour */}
                   {/* this button for handle when labour click the button neede to edit this commment later */}
                   <TouchableOpacity
-                    style={[styles.toggleButton, styles.lButton, role === 'labour' && styles.activeButton]}
-                    onPress={() => setRole('labour')}>
-                    <Text style={[styles.toggleButtonText, role === 'labour' && styles.activeButtonText]}>Labour</Text>
+                    style={[styles.toggleButton, styles.lButton, role === 'LABOUR' && styles.activeButton]}
+                    onPress={() => setRole('LABOUR')}>
+                    <Text style={[styles.toggleButtonText, role === 'LABOUR' && styles.activeButtonText]}>Labour</Text>
                   </TouchableOpacity>
+                </View>
+                  {errors.role && <Text style={[styles.error, {marginLeft: 80, marginTop:5}]}>{errors.role}</Text>}
                 </View>
               <View>
                 {/* Login email field */}
@@ -96,10 +154,11 @@ const Login = () => {
                     outlineColor='transparent'
                     underlineColor="transparent"
                     placeholder="example@gmail.com"
-                    value={username}
-                    onChangeText={setUsername} // this function name needed to change later.
+                    value={email}
+                    onChangeText={setEmail} // this function name needed to change later.
                     style={styles.input}
                   />
+                   {errors.email && <Text style={styles.error}>{errors.email}</Text>}
               </View>
               <View>
                 <Text>Password</Text>
@@ -114,6 +173,7 @@ const Login = () => {
                   onChangeText={setPassword}
                   secureTextEntry={passwordVisibility}
                   style={styles.input}
+                  // error={errors.password}
                 />
 
               {/* eye icon button */}
@@ -125,7 +185,8 @@ const Login = () => {
                     onPress={handlePasswordVisibility}
                 >
                     <Icon name={rightIcon} size={20} color="black" />
-                </TouchableOpacity>   
+                </TouchableOpacity> 
+                {errors.password && <Text style={[styles.error, {marginTop: 25}]}>{errors.password}</Text>}
               </View>
                 <View style={styles.linksContainer}>
                   {/* Forget password text button */}
@@ -142,6 +203,8 @@ const Login = () => {
                   <Text>Remember me</Text>
                 </View>
                 {/* Login button */}
+                {/* {errors.general && <Text style={styles.error}>{errors.general}</Text>}   */}
+                {logError && <Text style={styles.error}>{logError}</Text>}
                 <Button mode="contained" buttonColor="#FB9741" onPress={handleLogin} style={styles.button}>
                   Login
                 </Button>
@@ -165,6 +228,7 @@ const Login = () => {
       width: '100%'
     },
     innerContainer:{
+      marginTop:90,
       width: '90%'
     },
     input: {
@@ -200,11 +264,14 @@ const Login = () => {
       alignItems: 'center',
       
     },   
-    toggleButtonContainer: {
+    innerToggleButtonContainer: {
       flexDirection: 'row',
-      marginBottom: 20,
+      // marginBottom: 20,
       marginTop: 20,
       marginLeft: 30
+    },
+    toggleButtonContainer: {
+      marginBottom:20
     },
     toggleButton: {
       paddingHorizontal: 20,
@@ -236,13 +303,6 @@ const Login = () => {
     activeButtonText: {
       color: '#fff',
     },
-  
-   
-
-
-
-
-
 
     forgotPsw: {
       // fontWeight: '600',
@@ -264,6 +324,10 @@ const Login = () => {
     link: {
       // marginBottom: 10 ,
       color: 'blue', // Change color to match hyperlink style
+    },
+    error: {
+      color: 'red',
+      
     },
   });
   
