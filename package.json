@@ -30,7 +30,7 @@
     "react-native-paper": "^5.12.3",
     "react-native-stompjs": "^0.0.7",
     "react-native-web": "~0.19.6",
-    "react-native-websocket": "^1.0.2"
+    "react-native-websocket": "^1.0.2",
     "yup": "^1.4.0"
   },
   "devDependencies": {

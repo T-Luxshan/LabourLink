@@ -10,6 +10,8 @@ import GettingStarted from './src/screens/GettingStarted'
 import LabourSignUp from './src/screens/authentication/LabourSignUpForm';
 import CustomerSignUpform from './src/screens/authentication/CustomerSignUpForm'
 import SignInWithGoogle from './src/components/SignInWithGoogle';
+import ChatAreaScreen from './src/screens/ChatAreaScreen';
+import OnlineUsersScreen from './src/screens/OnlineUsersScreen';
 
 const Stack = createStackNavigator();
 
@@ -62,7 +64,7 @@ export default function App() {
           options={{ title: "back" }}
         />
 
-        <Stack.Screen 
+        {/* <Stack.Screen 
             name="GettingStarted" 
             component={GettingStarted} />
         <Stack.Screen 
@@ -74,7 +76,6 @@ export default function App() {
             name="Home" 
             component={Home}
             options={{ headerShown: false }} />
-        {/* For Validation testing purpose, remove later */}
         <Stack.Screen 
             name="AuthTestSignup" 
             component={AuthTestSignup}
@@ -85,7 +86,7 @@ export default function App() {
             component={AuthTestLogin}
             options={{ headerShown: false }} />
             
-          {/* TODO : remove above block  */}
+          
         <Stack.Screen 
             name="SignInWithGoogle" 
             component={SignInWithGoogle}
@@ -102,7 +103,7 @@ export default function App() {
             name="LabourSignUp" 
             component={LabourSignUp} 
             options={{ title: '' }} 
-        />
+        /> */}
         
 
       </Stack.Navigator>
