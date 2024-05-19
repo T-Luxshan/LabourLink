@@ -5,16 +5,8 @@ import { findConnectedUsers } from "../service/userService";
 
 const OnlineUsersScreen = ({ navigation }) => {
   const [connectedUsers, setConnectedUsers] = useState([]);
-  const [selectedUsers, setSelectedUsers] = useState();
-  const [user, setUser] = useState({
-    email: "",
-    receiverEmail: "",
-    status: "OFFLINE",
-    message: "",
-  });
-  const webSocketRef = useRef(null); // Create a ref for the WebSocket instance
+  const [selectedUser, setSelectedUser] = useState(null);
 
-  // Fetch connected users on component mount
   useEffect(() => {
     const fetchConnectedUsers = async () => {
       try {
@@ -32,12 +24,9 @@ const OnlineUsersScreen = ({ navigation }) => {
       SelectedUserName: user.name,
       SelectedUserEmail: user.email,
     });
-    console.log("user selected : " + user.name);
-    setSelectedUsers(user);
-    console.log(selectedUsers);
+    console.log("user selected: " + user.name);
+    setSelectedUser(user);
   };
-
-  
 
   return (
     <View style={styles.container}>
@@ -52,7 +41,7 @@ const OnlineUsersScreen = ({ navigation }) => {
             titleStyle={styles.userItemTitle}
             left={() => (
               <Avatar.Icon size={40} icon="account" style={styles.avatar} />
-            )} // Add styles.avatar
+            )}
           />
         ))}
       </ScrollView>
@@ -70,7 +59,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 24,
     marginBottom: 20,
-    color: "#00204A", // Text color
+    color: "#00204A",
   },
   userItem: {
     backgroundColor: "#f0f0f0",
@@ -78,10 +67,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   userItemTitle: {
-    color: "#00204A", // Text color
+    color: "#00204A",
   },
   avatar: {
-    marginLeft: 10, // Add left padding to the avatar
+    marginLeft: 10,
   },
 });
 

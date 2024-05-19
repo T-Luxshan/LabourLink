@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import { GiftedChat } from 'react-native-gifted-chat';
-import findChatMessages from '../service/userService'; // Make sure this function is properly imported
-import findConnectedUsers from '../service/userService'; // Assuming there's a function to find connected users
+import { findChatMessages } from '../service/userService';
 
 const ChatAreaScreen = ({ route }) => {
   const { SelectedUserName, SelectedUserEmail } = route.params;
@@ -12,12 +11,9 @@ const ChatAreaScreen = ({ route }) => {
   const chatAreaRef = useRef(null);
   const webSocketRef = useRef(null);
 
-  const [user, setUser] = useState({
-    email: "johndoe@example.com",
-    receiverEmail: "",
-    status: "OFFLINE",
-    message: "",
-  });
+  const user = {
+    email: "johndoe@example.com", // Replace with actual logged-in user's email
+  };
 
   const connect = () => {
     console.log("connect function called");
@@ -31,7 +27,7 @@ const ChatAreaScreen = ({ route }) => {
     ws.onmessage = (event) => {
       const receivedMessage = JSON.parse(event.data);
       if (receivedMessage.type === "CHAT") {
-        setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+        setMessages((prevMessages) => GiftedChat.append(prevMessages, receivedMessage));
       }
     };
 
@@ -47,7 +43,7 @@ const ChatAreaScreen = ({ route }) => {
   };
 
   const onConnected = () => {
-    if (!user || !user.email) {
+    if (!user.email) {
       console.error("User information is incomplete.");
       return;
     }
@@ -56,20 +52,6 @@ const ChatAreaScreen = ({ route }) => {
     webSocketRef.current.send(
       JSON.stringify({ type: "JOIN", email: user.email })
     );
-    findAndDisplayConnectedUsers();
-  };
-
-  const findAndDisplayConnectedUsers = async () => {
-    try {
-      const connectedUserResponse = await findConnectedUsers();
-      const connectedUsersData = connectedUserResponse.data;
-      const filteredUsers = connectedUsersData.filter(
-        (u) => u.email !== user.email
-      );
-      setConnectedUsers(filteredUsers); // Assuming you have a state to hold connected users
-    } catch (error) {
-      console.log("Error fetching connected users:", error);
-    }
   };
 
   useEffect(() => {
@@ -86,8 +68,7 @@ const ChatAreaScreen = ({ route }) => {
   const fetchAndDisplayUserChat = async (SelectedUserEmail) => {
     try {
       const userChatResponse = await findChatMessages(user.email, SelectedUserEmail);
-      const chatHistory = userChatResponse.data;
-      setMessages(chatHistory);
+      setMessages(userChatResponse.data);
     } catch (error) {
       console.log("Error fetching chat history:", error);
     }
@@ -105,7 +86,7 @@ const ChatAreaScreen = ({ route }) => {
 
       webSocketRef.current.send(JSON.stringify(chatMessage));
       console.log('message sent');
-      setMessages((prevMessages) => GiftedChat.append(prevMessages, chatMessage)); // Update messages state to include the new message
+      setMessages((prevMessages) => GiftedChat.append(prevMessages, chatMessage));
       setMessageInput("");
     }
   };
@@ -117,45 +98,79 @@ const ChatAreaScreen = ({ route }) => {
   }, [messages]);
 
   return (
-    <View style={{ flex: 1, marginTop: 70 }}>
-      <Text style={{ textAlign: "center", fontSize: 24, marginBottom: 20 }}>
-        Chat with {SelectedUserName}
-      </Text>
-      <ScrollView ref={chatAreaRef}>
+    <View style={styles.container}>
+      <Text style={styles.title}>Chat with {SelectedUserName}</Text>
+      <ScrollView ref={chatAreaRef} style={styles.messagesContainer}>
         {messages.map((message, index) => (
           <View
             key={index}
-            style={{
-              backgroundColor: message.senderId === user.email ? "#3498db" : "#ecf0f1",
-              borderRadius: 5,
-              padding: 8,
-              alignSelf: message.senderId === user.email ? "flex-end" : "flex-start",
-              marginBottom: 10,
-            }}
+            style={[
+              styles.messageBubble,
+              message.senderId === user.email ? styles.myMessage : styles.theirMessage,
+            ]}
           >
-            <Text
-              style={{
-                color: message.senderId === user.email ? "#fff" : "#333",
-              }}
-            >
-              {message.content}
-            </Text>
+            <Text style={styles.messageText}>{message.content}</Text>
           </View>
         ))}
       </ScrollView>
-      <View style={{ flexDirection: "row", marginTop: "auto" }}>
+      <View style={styles.inputContainer}>
         <TextInput
           label="Type your message..."
-          style={{ flex: 1, marginRight: 10 }}
+          style={styles.textInput}
           value={messageInput}
-          onChangeText={(text) => setMessageInput(text)}
+          onChangeText={setMessageInput}
         />
-        <Button mode="contained" onPress={sendMessage}>
+        <Button mode="contained" onPress={sendMessage} style={styles.sendButton}>
           Send
         </Button>
       </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop: 70,
+    paddingHorizontal: 20,
+  },
+  title: {
+    textAlign: "center",
+    fontSize: 24,
+    marginBottom: 20,
+  },
+  messagesContainer: {
+    flex: 1,
+    marginBottom: 10,
+  },
+  messageBubble: {
+    borderRadius: 5,
+    padding: 8,
+    marginBottom: 10,
+  },
+  myMessage: {
+    backgroundColor: "#3498db",
+    alignSelf: "flex-end",
+  },
+  theirMessage: {
+    backgroundColor: "#ecf0f1",
+    alignSelf: "flex-start",
+  },
+  messageText: {
+    color: "#fff",
+  },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  textInput: {
+    flex: 1,
+    marginRight: 10,
+  },
+  sendButton: {
+    alignSelf: "center",
+  },
+});
 
 export default ChatAreaScreen;
