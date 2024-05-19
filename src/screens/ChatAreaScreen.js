@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { TextInput, Button } from "react-native-paper";
-import { GiftedChat } from 'react-native-gifted-chat';
-import { findChatMessages } from '../service/userService';
+import { findChatMessages, saveChatMessage } from '../service/userService'; // Ensure saveChatMessage is defined in your userService
 
 const ChatAreaScreen = ({ route }) => {
   const { SelectedUserName, SelectedUserEmail } = route.params;
@@ -27,7 +26,7 @@ const ChatAreaScreen = ({ route }) => {
     ws.onmessage = (event) => {
       const receivedMessage = JSON.parse(event.data);
       if (receivedMessage.type === "CHAT") {
-        setMessages((prevMessages) => GiftedChat.append(prevMessages, receivedMessage));
+        setMessages((prevMessages) => [...prevMessages, receivedMessage]);
       }
     };
 
@@ -74,7 +73,7 @@ const ChatAreaScreen = ({ route }) => {
     }
   };
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (messageInput.trim() && SelectedUserEmail) {
       const chatMessage = {
         type: "CHAT",
@@ -84,10 +83,20 @@ const ChatAreaScreen = ({ route }) => {
         timestamp: new Date().toISOString(),
       };
 
-      webSocketRef.current.send(JSON.stringify(chatMessage));
-      console.log('message sent');
-      setMessages((prevMessages) => GiftedChat.append(prevMessages, chatMessage));
-      setMessageInput("");
+      try {
+        // Save the chat message to the database
+        await saveChatMessage(chatMessage);
+
+        // Send the chat message over WebSocket
+        webSocketRef.current.send(JSON.stringify(chatMessage));
+        console.log('Message sent');
+
+        // Update the local state to include the new message
+        setMessages((prevMessages) => [...prevMessages, chatMessage]);
+        setMessageInput("");
+      } catch (error) {
+        console.log("Error sending chat message:", error);
+      }
     }
   };
 

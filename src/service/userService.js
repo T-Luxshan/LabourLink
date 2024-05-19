@@ -19,3 +19,13 @@ export const findChatMessages = (senderEmail, recipientEmail) => {
     return axios.get(`http://localhost:8080/messages/${senderEmail}/${recipientEmail}`);
 };
 
+export const saveChatMessage = async (message) => {
+  try {
+    const response = await axios.post('http://localhost:8080/saveMessage', message);
+    return response.data;
+  } catch (error) {
+    console.error("Error saving chat message:", error);
+    throw error;
+  }
+};
+
