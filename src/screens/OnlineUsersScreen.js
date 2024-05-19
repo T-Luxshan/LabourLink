@@ -37,48 +37,7 @@ const OnlineUsersScreen = ({ navigation }) => {
     console.log(selectedUsers);
   };
 
-  const connect = () => {
-    console.log("connect function called");
-    const ws = new WebSocket("ws://localhost:8080/ws");
-
-    ws.onopen = () => {
-      console.log("WebSocket connection opened.");
-      onConnected();
-    };
-
-    webSocketRef.current = ws;
-  };
-
-  const onConnected = () => {
-    if (!user || !user.email || !user.name) {
-      console.error("User information is incomplete.");
-      return;
-    }
-    console.log("onConnected called");
-
-    webSocketRef.current.send(
-      JSON.stringify({ type: "JOIN", email: user.email })
-    );
-    findAndDisplayConnectedUsers();
-  };
-
-  const findAndDisplayConnectedUsers = async () => {
-    try {
-      const connectedUserResponse = await findConnectedUsers();
-      const connectedUsersData = await connectedUserResponse.data;
-      const filteredUsers = connectedUsersData.filter(
-        (u) => u.email !== user.email
-      );
-      setConnectedUsers(filteredUsers);
-    } catch (error) {
-      console.log("Error fetching connected users:", error);
-    }
-  };
-
-  // Call the connect function when the component mounts
-  useEffect(() => {
-    connect();
-  }, []);
+  
 
   return (
     <View style={styles.container}>

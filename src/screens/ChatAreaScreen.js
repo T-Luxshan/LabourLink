@@ -1,21 +1,91 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, Text, ScrollView } from "react-native";
 import { TextInput, Button } from "react-native-paper";
+import { GiftedChat } from 'react-native-gifted-chat';
+import findChatMessages from '../service/userService'; // Make sure this function is properly imported
+import findConnectedUsers from '../service/userService'; // Assuming there's a function to find connected users
 
 const ChatAreaScreen = ({ route }) => {
   const { SelectedUserName, SelectedUserEmail } = route.params;
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState("");
   const chatAreaRef = useRef(null);
+  const webSocketRef = useRef(null);
 
-  // Define the function to fetch and display user chat
-  const fetchAndDisplayUserChat = async (userEmail) => {
+  const [user, setUser] = useState({
+    email: "johndoe@example.com",
+    receiverEmail: "",
+    status: "OFFLINE",
+    message: "",
+  });
+
+  const connect = () => {
+    console.log("connect function called");
+    const ws = new WebSocket("ws://localhost:8080/ws");
+
+    ws.onopen = () => {
+      console.log("WebSocket connection opened.");
+      onConnected();
+    };
+
+    ws.onmessage = (event) => {
+      const receivedMessage = JSON.parse(event.data);
+      if (receivedMessage.type === "CHAT") {
+        setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+      }
+    };
+
+    ws.onclose = () => {
+      console.log("WebSocket connection closed.");
+    };
+
+    ws.onerror = (error) => {
+      console.error("WebSocket error:", error);
+    };
+
+    webSocketRef.current = ws;
+  };
+
+  const onConnected = () => {
+    if (!user || !user.email) {
+      console.error("User information is incomplete.");
+      return;
+    }
+    console.log("onConnected called");
+
+    webSocketRef.current.send(
+      JSON.stringify({ type: "JOIN", email: user.email })
+    );
+    findAndDisplayConnectedUsers();
+  };
+
+  const findAndDisplayConnectedUsers = async () => {
     try {
-      // Call the function to fetch chat messages for the selected user using userEmail
-      const userChatResponse = await findChatMessages(
-        user.email, // Assuming user is defined somewhere in the component
-        userEmail
+      const connectedUserResponse = await findConnectedUsers();
+      const connectedUsersData = connectedUserResponse.data;
+      const filteredUsers = connectedUsersData.filter(
+        (u) => u.email !== user.email
       );
+      setConnectedUsers(filteredUsers); // Assuming you have a state to hold connected users
+    } catch (error) {
+      console.log("Error fetching connected users:", error);
+    }
+  };
+
+  useEffect(() => {
+    connect();
+    fetchAndDisplayUserChat(SelectedUserEmail);
+
+    return () => {
+      if (webSocketRef.current) {
+        webSocketRef.current.close();
+      }
+    };
+  }, [SelectedUserEmail]);
+
+  const fetchAndDisplayUserChat = async (SelectedUserEmail) => {
+    try {
+      const userChatResponse = await findChatMessages(user.email, SelectedUserEmail);
       const chatHistory = userChatResponse.data;
       setMessages(chatHistory);
     } catch (error) {
@@ -23,35 +93,28 @@ const ChatAreaScreen = ({ route }) => {
     }
   };
 
-  // Define the function to send a message
   const sendMessage = () => {
-    // Check if the message input is not empty and a selected user is available
     if (messageInput.trim() && SelectedUserEmail) {
       const chatMessage = {
         type: "CHAT",
-        senderId: user.email, // Assuming user is defined somewhere in the component
+        senderId: user.email,
         recipientId: SelectedUserEmail,
         content: messageInput.trim(),
         timestamp: new Date().toISOString(),
       };
 
-      // Assuming webSocketRef.current is the WebSocket instance
       webSocketRef.current.send(JSON.stringify(chatMessage));
+      console.log('message sent');
+      setMessages((prevMessages) => GiftedChat.append(prevMessages, chatMessage)); // Update messages state to include the new message
       setMessageInput("");
     }
   };
 
-  // Scroll to the end of the chat area when messages change
   useEffect(() => {
     if (chatAreaRef.current) {
       chatAreaRef.current.scrollToEnd({ animated: true });
     }
   }, [messages]);
-
-  // Fetch chat messages when the component mounts
-  useEffect(() => {
-    fetchAndDisplayUserChat(SelectedUserEmail);
-  }, []);
 
   return (
     <View style={{ flex: 1, marginTop: 70 }}>
@@ -63,18 +126,16 @@ const ChatAreaScreen = ({ route }) => {
           <View
             key={index}
             style={{
-              backgroundColor:
-                message.senderId === SelectedUserEmail ? "#3498db" : "#ecf0f1",
+              backgroundColor: message.senderId === user.email ? "#3498db" : "#ecf0f1",
               borderRadius: 5,
               padding: 8,
-              alignSelf:
-                message.senderId === SelectedUserEmail ? "flex-end" : "flex-start",
+              alignSelf: message.senderId === user.email ? "flex-end" : "flex-start",
               marginBottom: 10,
             }}
           >
             <Text
               style={{
-                color: message.senderId === SelectedUserEmail ? "#fff" : "#333",
+                color: message.senderId === user.email ? "#fff" : "#333",
               }}
             >
               {message.content}
