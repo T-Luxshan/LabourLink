@@ -347,7 +347,7 @@ const Labour_page = () => {
           icon="bell-badge-outline"
           mode="contained"
           style={{
-            backgroundColor: "#FF7300",
+            backgroundColor: "#FF7600",
             borderRadius: 30,
             height: 60,
             marginTop: 20,
