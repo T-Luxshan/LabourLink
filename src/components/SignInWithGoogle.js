@@ -29,19 +29,23 @@ const SignInWithGoogle = (props) => {
 
   return (
     <View style={styles.signInContainer}>
+
+       {/* TODO: signin with google feature. */}
+
+
         {/* Text tittle for sign in/sign up */}
-        <Text style={styles.signInText }>{props.signText1}</Text>
+        {/* <Text style={styles.signInText }>{props.signText1}</Text> */}
         {/* Make the image as a pressable button. */}
-        <TouchableRipple onPress={handleImageButtonPress} style={styles.signInButton}>
-          <View style={styles.imageContainer}>
+        {/* <TouchableRipple onPress={handleImageButtonPress} style={styles.signInButton}> */}
+          {/* <View style={styles.imageContainer}> */}
             {/* Google logo png */}
-            <Image
+            {/* <Image
               source={require('../assets/Images/google-logo3.png')}
 
               style={styles.image}
-            />
-        </View>
-      </TouchableRipple>
+            /> */}
+        {/* </View> */}
+      {/* </TouchableRipple> */}
       <View style={styles.signUpContainer}>
         {/* bottom txt for sign in/sign up */}
           <Text style={styles.dontHaveAccountText}>{props.signText2}</Text>
