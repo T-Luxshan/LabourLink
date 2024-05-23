@@ -67,16 +67,13 @@ export default function App() {
             component={LabourSignUpForm} 
             options={{ title: '' }} 
         />
-         
-        
-
        </Stack.Navigator>
      </NavigationContainer>
 
     // <SafeAreaProvider>
     //   <View style={styles.container}>
-    //     <LabourSignUpForm />
-    //     {/* <UploadDocument /> */}
+        
+    //     <UploadDocument />
     //     {/* <Test /> */}
     //     <StatusBar style="auto" />
     //   </View>
