@@ -4,15 +4,16 @@ import { TextInput, Button } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SignInWithGoogle from '../../components/SignInWithGoogle' // signInWithGoogle component importerd.
 import SignupHead from '../../components/SignUpHead';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native'; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import * as yup from 'yup';
 import { registerLabour } from '../../services/AuthService';
+import UploadDocument from '../../components/UploadDocument';
 
-const CustomerSignUpForm = () => {
+const LabourSignUpForm = () => {
 
-  const navigation = useNavigation();
+  const navigation = useNavigation(); 
 
   const [name, setName] = useState(''); // state for name field.
   const [email, setEmail] = useState(''); // state for email field.
@@ -24,6 +25,7 @@ const CustomerSignUpForm = () => {
   const [rightIcon, setRightIcon] = useState('eye-slash'); // Toggle eye icon.
   const [errors, setErrors] = useState({});
   const [regError, setRegError] = useState();
+  const [fileURI, setFileURI] = useState(null);
 
   const schema = yup.object().shape({
     name: yup
@@ -69,6 +71,12 @@ const CustomerSignUpForm = () => {
       },
     };
 
+    const handleFileURI = (fileUri) => {
+      
+      setFileURI(fileUri);
+      console.log("File uri retrivied: ", fileUri);
+    }
+
     const handleSignUp = async () => {
       // Implement login logic here
       try {
@@ -90,7 +98,8 @@ const CustomerSignUpForm = () => {
           AsyncStorage.setItem("refreshToken", response.data.refreshToken);
        
        
-          navigation.navigate('AuthTestSignup')
+          //  Navigate to the next page to the sign up.
+          // navigation.navigate('AuthTestSignup')
 
 
         } catch (e) {
@@ -231,10 +240,21 @@ const CustomerSignUpForm = () => {
                 />
                 {errors.nic && <Text style={styles.error}>{errors.nic}</Text>}
 
+                {/* upload document component here */}
+                <View  style={styles.inputContainer}>
+                  <UploadDocument nic={nic} onFileUpload={handleFileURI}/>
+                </View>
+
             </View>
+
+            
+
+
+
             <Button mode="contained" buttonColor="#FB9741" onPress={handleSignUp} style={styles.button}>
                 Sign Up
             </Button>
+            
               {/* Props pass to Sign in with google component */}
               <SignInWithGoogle signText1="_or Sign up with_" signText2="Have an account?" signState="Log in" />
                   
@@ -245,7 +265,7 @@ const CustomerSignUpForm = () => {
   )
 }
 
-export default CustomerSignUpForm;
+export default LabourSignUpForm;
 
 const styles = StyleSheet.create({
   registerContainer: {
@@ -274,7 +294,7 @@ const styles = StyleSheet.create({
     height: 50,
     // marginVertical: 8,
     backgroundColor: '#EDEDEC',
-    borderRadius: 20, 
+     
     borderTopLeftRadius: 20, 
     borderTopRightRadius: 20,
     borderBottomLeftRadius: 20, 
