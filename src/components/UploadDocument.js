@@ -16,8 +16,7 @@ const UploadDocument = ({ nic, onFileUpload }) => {
     setIsLoading(true);
    
     let doc = await DocumentPicker.getDocumentAsync({
-      type: 'application/pdf', // You can specify the type of documents you want to pick, or use '*/*' for all types
-      // copyToCacheDirectory: true // You can set this to true if you want to cache the document
+      type: 'application/pdf', 
     });
     
     if (!doc.canceled) {
@@ -59,7 +58,6 @@ const UploadDocument = ({ nic, onFileUpload }) => {
     });
 
     try {
-      // const storageRef = ref(storage, `LabourDocuments/document-${props.nic}`);
       const storageRef = ref(storage, `LabourDocuments/document-${nic}-${Date.now()}`);
       const result = await uploadBytes(storageRef, blob);
 
@@ -84,6 +82,10 @@ const UploadDocument = ({ nic, onFileUpload }) => {
         }, 2000)
       })
     } catch (error) {
+      setIsLoading(true);
+      setFile(null);setInterval(() => {
+        setIsLoading(false);
+      }, 2000)
       console.log(error)
     }
     
@@ -91,7 +93,7 @@ const UploadDocument = ({ nic, onFileUpload }) => {
 
   return (
     <View>
-        <Text>Please Upload documents to verify</Text>
+        {/* <Text>Please Upload documents to verify</Text> */}
         <View style={styles.uploadContainer}>
           {!file ? (
             isLoading ? (
@@ -99,7 +101,7 @@ const UploadDocument = ({ nic, onFileUpload }) => {
                 <ActivityIndicator color={'#F97300'} animating size={"large"} />
               </View>
             ) : (
-              <Button icon="folder" textColor="#F97300" mode="text" onPress={pickDocument}>
+              <Button icon="file-document-outline" textColor="#F97300" mode="text" onPress={pickDocument}>
                 Select Document
               </Button>
             )
@@ -109,11 +111,9 @@ const UploadDocument = ({ nic, onFileUpload }) => {
               <Button icon="delete" textColor="#F97300" mode="text" onPress={deleteDocument}>
                   Delete Document
               </Button>
-            </View>
-
-            
+            </View>     
           )}
-    </View>
+        </View>
     </View>
   );
 }
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   uploadContainer:{
     width: '100%',
     height: 50,
-    marginVertical: 5,
+    marginVertical: 0,
     borderColor: '#EDEDEC',
     borderWidth: 2,
     borderStyle: 'dashed',
