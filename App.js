@@ -14,7 +14,7 @@ import AuthTestSignup from './NotUsingComponents/AuthTestSignup'; // For testing
 import AuthTestLogin from './NotUsingComponents/AuthTestLogin'; // For testing. Remove later.
 import Home from './NotUsingComponents/Home';
 import UploadDocument from './src/components/UploadDocument';
-import Test from './src/components/Test';
+import Test from './NotUsingComponents/Test';
 
 const Stack = createStackNavigator();
 
