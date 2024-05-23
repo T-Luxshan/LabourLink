@@ -10,6 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as yup from 'yup';
 import { registerLabour } from '../../services/AuthService';
 import UploadDocument from '../../components/UploadDocument';
+import DocumentModel from '../../components/DocumentModel';
 
 const LabourSignUpForm = () => {
 
@@ -242,6 +243,7 @@ const LabourSignUpForm = () => {
 
                 {/* upload document component here */}
                 <View  style={styles.inputContainer}>
+                <DocumentModel />
                   <UploadDocument nic={nic} onFileUpload={handleFileURI}/>
                 </View>
 
