@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, KeyboardAvoidingView, Platform} from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import * as yup from 'yup';
-import { registerLabour } from '../../services/AuthService';
+import { getLabourJobRoles, registerLabour } from '../../services/AuthService';
 import UploadDocument from '../../components/UploadDocument';
 import DocumentModel from '../../components/DocumentModel';
 
@@ -27,6 +27,17 @@ const LabourSignUpForm = () => {
   const [errors, setErrors] = useState({});
   const [regError, setRegError] = useState();
   const [fileURI, setFileURI] = useState(null);
+  const [jobRoles, setJobRoles] = useState([]);
+
+  useEffect(() => {
+    getLabourJobRoles()
+      .then(response => {
+        setJobRoles(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching job roles:', error);
+      });
+  }, []); 
 
   const schema = yup.object().shape({
     name: yup
@@ -75,7 +86,7 @@ const LabourSignUpForm = () => {
     const handleFileURI = (fileUri) => {
       
       setFileURI(fileUri);
-      console.log("File uri retrivied: ", fileUri);
+      // console.log("File uri retrivied: ", fileUri);
     }
 
     const handleSignUp = async () => {
@@ -85,7 +96,9 @@ const LabourSignUpForm = () => {
         setErrors({});
         
         try {
-          const response = await registerLabour(name, email, password, mobileNumber, nic);
+          console.log("Document URI is : ", fileURI);
+          console.log("These are the job roles : ", jobRoles)
+          const response = await registerLabour(name, email, password, mobileNumber, nic, fileURI, jobRoles);
           
           setRegError("");
           console.log(response);
@@ -100,7 +113,7 @@ const LabourSignUpForm = () => {
        
        
           //  Navigate to the next page to the sign up.
-          // navigation.navigate('AuthTestSignup')
+          navigation.navigate('AuthTestSignup')
 
 
         } catch (e) {
