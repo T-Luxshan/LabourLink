@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { Button, Modal, Portal, PaperProvider, Headline, Chip, Card } from 'react-native-paper';
 
 const JobRoleModel = () => {
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
   const [jobList, setJoblist] = useState([]);
   const [selectedJobs, setSelectedJobs] = useState([]);
   const showModal = () => setVisible(true);
@@ -25,7 +25,9 @@ const JobRoleModel = () => {
   return (
     <PaperProvider>
       <Portal>
-        <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={styles.modelContainer}>
+        {/* <Modal visible={visible} onDismiss={hideModal} style={{ backgroundColor: 'white' }} */}
+        <Modal visible={visible} onDismiss={hideModal} 
+                contentContainerStyle={styles.modelContainer} >
           <Headline style={styles.headline}>Select the job/jobs you prefer</Headline>
           <Card style={styles.cardContainer}>
             <Card.Content>
@@ -34,13 +36,13 @@ const JobRoleModel = () => {
                   <Chip
                     key={index}
                     selected={selectedJobs.includes(job)}
-                    onPress={() => toggleChipSelection(job)}
-                    mode={selectedJobs.includes(job) ? "flat" : "outlined"}
+                    onPress={() => toggleChipSelection(job)}                    
+                    showSelectedCheck={false}
                     style={[
                       styles.chipMargin,
-                      selectedJobs.includes(job) && styles.selectedChip
+                      selectedJobs.includes(job) ? styles.selectedChip : styles.deselectedChip
                     ]}
-                    textStyle={selectedJobs.includes(job) && styles.selectedChipText}
+                    textStyle={selectedJobs.includes(job) ? styles.selectedChipText : styles.deselectedChipText}
                   >
                     {job}
                   </Chip>
@@ -48,16 +50,15 @@ const JobRoleModel = () => {
               </View>
             </Card.Content>
           </Card>
-          <Text>{'\n\n'}</Text>
-          <Chip mode='outlined' onPress={() => console.log('Pressed')}>Example Chip</Chip>
+          <Text>{'\n\n'}</Text>        
           <Button mode="outlined" textColor="#F97300" onPress={hideModal} style={{ borderColor: '#F97300' }}>
             Continue
           </Button>
         </Modal>
       </Portal>
       <View style={styles.infoContainer}>
-        <Button mode="contained" onPress={showModal}>
-          Press me
+        <Button mode="contained" onPress={showModal} buttonColor='#EDEDEC' textColor='black'>
+          {selectedJobs.length == 0 ? "Select prefered job" : "Edit selected job"}
         </Button>
       </View>
     </PaperProvider>
@@ -103,9 +104,17 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   selectedChip: {
-    backgroundColor: '#F97300',
+    backgroundColor: '#01214A',    
+  },
+  deselectedChip:{
+    backgroundColor:'#EDEDEC',
+
   },
   selectedChipText: {
     color: 'white',
+    
+  },
+  deselectedChipText: {
+    color: 'black',
   },
 });
