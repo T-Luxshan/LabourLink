@@ -33,9 +33,9 @@ export const registerLabour = (name, email, password, mobileNumber, nic, documen
  }
 
  // API for get the job roles for the labour.
-//  export const getLabourJobRoles = () => {
-//    return axios.get(`${REST_API_BASE_URL_AUTH}/getJobRoles`)
-//  } 
+ export const getLabourJobRoles = () => {
+   return axios.get(`${REST_API_BASE_URL_AUTH}/getJobRoles`)
+ } 
 
   // API for login customer
   export const loginCustomer = (role, email, password) => {
