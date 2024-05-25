@@ -20,9 +20,9 @@ export const registerCustomer = (name, email, password, mobileNumber, address) =
   };
 
   // API for register labour
-export const registerLabour = (name, email, password, mobileNumber, nic) => {
+export const registerLabour = (name, email, password, mobileNumber, nic, documentUri, jobRole) => {
   return axios.post(`${REST_API_BASE_URL_AUTH}/register/labour`, {
-      name, email, password, mobileNumber, nic
+      name, email, password, mobileNumber, nic, documentUri, jobRole
   });
 };
 
@@ -31,6 +31,11 @@ export const registerLabour = (name, email, password, mobileNumber, nic) => {
  export const getUserRole = (email) => {
    return axios.get(`${REST_API_BASE_URL_AUTH}/getRole/${email}`)
  }
+
+ // API for get the job roles for the labour.
+//  export const getLabourJobRoles = () => {
+//    return axios.get(`${REST_API_BASE_URL_AUTH}/getJobRoles`)
+//  } 
 
   // API for login customer
   export const loginCustomer = (role, email, password) => {
