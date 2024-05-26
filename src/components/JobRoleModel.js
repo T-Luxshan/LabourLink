@@ -1,18 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Button, Modal, Portal, PaperProvider, Headline, Chip, Card } from 'react-native-paper';
+import { getLabourJobRoles } from '../services/AuthService';
 
-const JobRoleModel = () => {
+const JobRoleModel = ({onMStateChange, onJobRolesChange, mState}) => {
   const [visible, setVisible] = useState(false);
   const [jobList, setJoblist] = useState([]);
   const [selectedJobs, setSelectedJobs] = useState([]);
-  const showModal = () => setVisible(true);
-  const hideModal = () => setVisible(false);
+  const showModal = () => {
+    setVisible(true);
+    onMStateChange(true);
+  };
+  const hideModal = () => {
+    setVisible(false);
+    onMStateChange(false);
+    onJobRolesChange(selectedJobs);
+  };
   let availableJobRoles = ["CARPENTER", "ELECTRICIAN", "PLUMBER", "PAINTER", "MASON", "WELDER", "DRIVER"];
 
   useEffect(() => {
     setJoblist(availableJobRoles);
   }, []);
+  // useEffect(() => {
+  //   getLabourJobRoles()
+  //     .then(response => {
+  //       setJoblist(response.data);
+  //     })
+  //     .catch(error => {
+  //       console.error('Error fetching job roles:', error);
+  //     });
+  // }, []); 
 
   const toggleChipSelection = (job) => {
     setSelectedJobs((prevSelectedJobs) =>
@@ -25,11 +42,11 @@ const JobRoleModel = () => {
   return (
     <PaperProvider>
       <Portal>
-        {/* <Modal visible={visible} onDismiss={hideModal} style={{ backgroundColor: 'white' }} */}
-        <Modal visible={visible} onDismiss={hideModal} 
+        <Modal visible={visible} onDismiss={hideModal} style={{ backgroundColor: '#797979' }}
+        // <Modal visible={visible} onDismiss={hideModal}  
                 contentContainerStyle={styles.modelContainer} >
           <Headline style={styles.headline}>Select the job/jobs you prefer</Headline>
-          <Card style={styles.cardContainer}>
+          <Card mode='contained' style={styles.cardContainer}>
             <Card.Content>
               <View style={styles.chipContainer}>
                 {jobList.map((job, index) => (
@@ -56,8 +73,8 @@ const JobRoleModel = () => {
           </Button>
         </Modal>
       </Portal>
-      <View style={styles.infoContainer}>
-        <Button mode="contained" onPress={showModal} buttonColor='#EDEDEC' textColor='black'>
+      <View style={styles.jobButtonContainer}>
+        <Button style={styles.jobButton} mode="contained" onPress={showModal} buttonColor= {mState ? '#797979' : '#EDEDEC'} textColor='black'>
           {selectedJobs.length == 0 ? "Select prefered job" : "Edit selected job"}
         </Button>
       </View>
@@ -70,26 +87,36 @@ export default JobRoleModel;
 const styles = StyleSheet.create({
   modelContainer: {
     backgroundColor: 'white',
-    padding: 20,
-    height: 400,
-    width: '90%',
-    marginBottom: 100,
+    padding: 10,
+    height: 300,
+    width: '110%',
+    marginBottom: 250,
     borderRadius: 10,
     alignSelf: 'center',
   },
   headline: {
     color: 'black',
     marginBottom: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  infoContainer: {
+  jobButtonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
+    marginVertical:10
+  },
+  jobButton:{
+    width:'100%',
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    
   },
   cardContainer: {
     backgroundColor: 'white',
-    elevation: 0,
+    elevation: 10,
     shadowColor: 'transparent',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0,

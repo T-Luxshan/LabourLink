@@ -6,7 +6,7 @@ import { storage } from '../firebase.config';
 import { getDownloadURL, uploadBytes, ref, deleteObject } from 'firebase/storage';
 import { async } from '@firebase/util';
 
-const UploadDocument = ({ nic, onFileUpload }) => {
+const UploadDocument = ({ nic, onFileUpload, mState }) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState(null);
@@ -94,21 +94,21 @@ const UploadDocument = ({ nic, onFileUpload }) => {
   return (
     <View>
         {/* <Text>Please Upload documents to verify</Text> */}
-        <View style={styles.uploadContainer}>
+        <View style={[styles.uploadContainer, mState && { borderColor: '#6D6D6D' }]}>
           {!file ? (
             isLoading ? (
               <View style={styles.loadingContainer}>
                 <ActivityIndicator color={'#F97300'} animating size={"large"} />
               </View>
             ) : (
-              <Button icon="file-document-outline" textColor="#F97300" mode="text" onPress={pickDocument}>
+              <Button icon="file-document-outline" textColor={mState ? '#6D6D6D' : "#F97300"} mode="text" onPress={pickDocument}>
                 Select Document
               </Button>
             )
           ) : (
             <View>
               {/* <Text sx={{mt: 20}}>Document uploded sucessfully.</Text> */}
-              <Button icon="delete" textColor="#F97300" mode="text" onPress={deleteDocument}>
+              <Button icon="delete" textColor={mState ? '#9C9C9C' : "#F97300"} mode="text" onPress={deleteDocument}>
                   Delete Document
               </Button>
             </View>     

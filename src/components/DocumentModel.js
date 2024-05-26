@@ -2,15 +2,24 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Button, Modal, Portal, Provider as PaperProvider, Headline, IconButton } from 'react-native-paper';
 
-const DocumentModel = () => {
+const DocumentModel = ({onMStateChange}) => {
   const [visible, setVisible] = React.useState(false);
-  const showModal = () => setVisible(true);
-  const hideModal = () => setVisible(false);
+  const showModal = () => {
+    setVisible(true);
+    onMStateChange(true);
+  };
+  const hideModal = () => {
+    setVisible(false);
+    onMStateChange(false);
+  };
 
   return (
     <PaperProvider>
       <Portal>
-        <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={styles.modelContainer}>
+      {/* <Modal visible={visible} onDismiss={hideModal} style={{ backgroundColor: '#797979' }} */}
+         <Modal visible={visible} onDismiss={hideModal} overlayBackgroundColor="transparent" // Set overlay background color to transparent
+          overlayOpacity={0} 
+                contentContainerStyle={styles.modelContainer} >
           <Headline style={styles.headline}>Hello Friend!!</Headline>
           <Text style={styles.modelText}>
             To finish the sign-up process, you are required to submit a document regarding your job preferences.
@@ -50,7 +59,7 @@ const styles = StyleSheet.create({
     padding: 20,
     height:400,
     width: '100%',
-    marginBottom: 500,
+    marginBottom: 400,
     borderRadius: 10,
   },
   headline: {

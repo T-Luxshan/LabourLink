@@ -50,9 +50,9 @@ const SignInWithGoogle = (props) => {
         {/* bottom txt for sign in/sign up */}
           <Text style={styles.dontHaveAccountText}>{props.signText2}</Text>
           {/* Pressable text to navigate to appropriate screen */}
-          <TouchableRipple onPress={handleSignUp_In}>
+          <TouchableRipple  onPress={handleSignUp_In}>
             {/* sign up/ sing in text */}
-              <Text style={styles.signUpLink}>{props.signState}</Text>
+              <Text style={[styles.signUpLink, ]}>{props.signState}</Text>
           </TouchableRipple>
       </View> 
       <View style={{ marginBottom: 120 }}>
