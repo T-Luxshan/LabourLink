@@ -57,9 +57,9 @@ const styles = StyleSheet.create({
   modelContainer: {
     backgroundColor: 'white',
     padding: 20,
-    height:400,
+    height:380,
     width: '100%',
-    marginBottom: 400,
+    marginBottom: 380,
     borderRadius: 10,
   },
   headline: {
