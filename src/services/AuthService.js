@@ -51,8 +51,13 @@ export const registerLabour = (name, email, password, mobileNumber, nic, documen
     });
   };
 
+  // API to check whether a NIC already exist in the DB or not.
+  export const isNICExist = (nic) => {
+    return axios.get(`${REST_API_BASE_URL_AUTH}/nicExist/${nic}`)
+  }
 
 
+// axios instance and interceptors for get the token and set to headers
 
 const axiosAuthInstance = axios.create({
   baseURL,
