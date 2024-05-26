@@ -12,6 +12,7 @@ import { getLabourJobRoles, registerLabour } from '../../services/AuthService';
 import UploadDocument from '../../components/UploadDocument';
 import DocumentModel from '../../components/DocumentModel';
 import JobRoleModel from '../../components/JobRoleModel';
+import PasswordModel from '../../components/PasswordModel';
 
 const LabourSignUpForm = () => {
 
@@ -52,7 +53,10 @@ const LabourSignUpForm = () => {
       .required('Email is required'),
     password: yup
       .string()
-      .min(5, "Password can't be less than 5 letters")
+      .min(5, "Password must be at least 5 characters long")
+      .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
+      .matches(/[a-z]/, "Password must contain at least one lowercase letter")
+      .matches(/[0-9]/, "Password must contain at least one number")
       .required("Password can't be empty"),
     confirmPassword: yup
       .string()
@@ -182,9 +186,12 @@ const LabourSignUpForm = () => {
             />
             {errors.email && <Text style={styles.error}>{errors.email}</Text>}
           </View>
+          <PasswordModel onMStateChange={handleModel}/>
           <View style={styles.inputContainer}>
+              
               <View style={styles.password}>
-                <Text>Password</Text>
+                {/* <Text>Password</Text> */}
+                
                 <TextInput
                   theme={theme}     
                   underlineColor="transparent"
@@ -273,7 +280,7 @@ const LabourSignUpForm = () => {
                 </View>
 
             </View>
-            <Button mode="contained" buttonColor={mState ? '#6D6D6D' : "#FB9741"} textColor={mState ? '#797979' : "#FB9741"} onPress={handleSignUp} style={styles.button}>
+            <Button mode="contained" buttonColor={mState ? '#6D6D6D' : "#FB9741"} textColor={mState ? '#797979' : "white"} onPress={handleSignUp} style={styles.button}>
                 Sign Up
             </Button>
             
@@ -309,7 +316,9 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   inputContainer:{
+    zIndex: -1,
     marginVertical: 8,
+    gap: 2,
   },
   input: {
     
