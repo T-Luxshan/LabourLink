@@ -11,6 +11,7 @@ import * as yup from 'yup';
 import { getLabourJobRoles, registerLabour } from '../../services/AuthService';
 import UploadDocument from '../../components/UploadDocument';
 import DocumentModel from '../../components/DocumentModel';
+import JobRoleModel from '../../components/JobRoleModel';
 
 const LabourSignUpForm = () => {
 
@@ -28,16 +29,17 @@ const LabourSignUpForm = () => {
   const [regError, setRegError] = useState();
   const [fileURI, setFileURI] = useState(null);
   const [jobRoles, setJobRoles] = useState([]);
+  const [mState, setMState] = useState(false);
 
-  useEffect(() => {
-    getLabourJobRoles()
-      .then(response => {
-        setJobRoles(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching job roles:', error);
-      });
-  }, []); 
+  // useEffect(() => {
+  //   getLabourJobRoles()
+  //     .then(response => {
+  //       setJobRoles(response.data);
+  //     })
+  //     .catch(error => {
+  //       console.error('Error fetching job roles:', error);
+  //     });
+  // }, []); 
 
   const schema = yup.object().shape({
     name: yup
@@ -84,9 +86,16 @@ const LabourSignUpForm = () => {
     };
 
     const handleFileURI = (fileUri) => {
-      
       setFileURI(fileUri);
-      // console.log("File uri retrivied: ", fileUri);
+    }
+
+    const handleModel = (mState) => {
+      setMState(mState);
+    }
+
+    const handleJobRoles = (jobRoles) => {
+      setJobRoles(jobRoles)
+      console.log(jobRoles);
     }
 
     const handleSignUp = async () => {
@@ -133,7 +142,7 @@ const LabourSignUpForm = () => {
       
     };
   return(
-    <View style={styles.registerContainer}>
+    <View style={ [styles.registerContainer, mState && { backgroundColor: 'rgba(0, 0, 0, 0.5)' }] }>
       <SignupHead userRole="labour"/>
       <KeyboardAvoidingView
         style={styles.container}
@@ -155,7 +164,7 @@ const LabourSignUpForm = () => {
                     placeholder="Luxshan Thuraisingam"
                     value={name}
                     onChangeText={setName}
-                    style={styles.input}
+                    style={[styles.input, mState && { backgroundColor: '#797979' }]}
             />
             {errors.name && <Text style={styles.error}>{errors.name}</Text>}
           </View>
@@ -169,7 +178,7 @@ const LabourSignUpForm = () => {
               placeholder="example@gmail.com"
               value={email}
               onChangeText={setEmail}
-              style={styles.input}
+              style={[styles.input, mState && { backgroundColor: '#797979' }]}
             />
             {errors.email && <Text style={styles.error}>{errors.email}</Text>}
           </View>
@@ -185,7 +194,7 @@ const LabourSignUpForm = () => {
                   value={password}
                   onChangeText={setPassword}
                   secureTextEntry={passwordVisibility}
-                  style={styles.input}
+                  style={[styles.input, mState && { backgroundColor: '#797979' }]}
                 />
                   <TouchableOpacity
                     style={{
@@ -212,13 +221,13 @@ const LabourSignUpForm = () => {
                   value={confirmPassword}
                   onChangeText={setconfirmPassword}
                   secureTextEntry={passwordVisibility}
-                  style={styles.input}
+                  style={[styles.input, mState && { backgroundColor: '#797979' }]}
                 />
                  <TouchableOpacity
-                    style={{
+                    style={[{
                         marginTop: -45,
                         marginLeft: 270,
-                    }}
+                    },  mState && { backgroundColor: '#797979' }]}
                     onPress={handlePasswordVisibility}
                 >
                   {/* eye icon  */}
@@ -236,12 +245,12 @@ const LabourSignUpForm = () => {
                   placeholder="0763443542"
                   value={mobileNumber}
                   onChangeText={setMobileNumber}
-                  style={styles.input}
+                  style={[styles.input, mState && { backgroundColor: '#797979' }]}
                 />
                 {errors.mobileNumber && <Text style={styles.error}>{errors.mobileNumber}</Text>}
 
             </View>
-            <View style={styles.inputContainer}>
+            <View style={[styles.inputContainer,  {marginTop:0}]}>
                 <Text>NIC</Text>
                 <TextInput
                   theme={theme}
@@ -250,23 +259,21 @@ const LabourSignUpForm = () => {
                   placeholder="2000344335343"
                   value={nic}
                   onChangeText={setNic}
-                  style={styles.input}
+                  style={[styles.input, mState && { backgroundColor: '#797979' }]}
                 />
                 {errors.nic && <Text style={styles.error}>{errors.nic}</Text>}
-
+                <View  style={[, mState && { backgroundColor: '#797979' }]}>
+                  <JobRoleModel onMStateChange={handleModel} onJobRolesChange={handleJobRoles} mState={mState}/>
+                  <DocumentModel onMStateChange={handleModel}/>
+                </View>
                 {/* upload document component here */}
-                <View  style={styles.inputContainer}>
-                <DocumentModel />
-                  <UploadDocument nic={nic} onFileUpload={handleFileURI}/>
+                <View  style={[, mState && { backgroundColor: '#797979' }]}>
+                  
+                  <UploadDocument nic={nic} onFileUpload={handleFileURI} mState={mState}/>
                 </View>
 
             </View>
-
-            
-
-
-
-            <Button mode="contained" buttonColor="#FB9741" onPress={handleSignUp} style={styles.button}>
+            <Button mode="contained" buttonColor={mState ? '#6D6D6D' : "#FB9741"} textColor={mState ? '#797979' : "#FB9741"} onPress={handleSignUp} style={styles.button}>
                 Sign Up
             </Button>
             
@@ -286,7 +293,8 @@ const styles = StyleSheet.create({
   registerContainer: {
     flex: 1,
     // marginBottom:10,
-    backgroundColor:'white',
+    // mState && {backgroundColor: 'rgba(0, 0, 0, 0.5)'}
+    backgroundColor: 'white',
     width: '100%'
   },
   innerContainer:{
@@ -309,6 +317,8 @@ const styles = StyleSheet.create({
     height: 50,
     // marginVertical: 8,
     backgroundColor: '#EDEDEC',
+    // backgroundColor: mState ? '#797979' : '#EDEDEC',
+    // mState && backgroundColor: 'rgba(0, 0, 0, 0.5)'
      
     borderTopLeftRadius: 20, 
     borderTopRightRadius: 20,
