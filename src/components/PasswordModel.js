@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Button, Modal, Portal, Provider as PaperProvider, Headline, IconButton } from 'react-native-paper';
 
-const PasswordModel = ({onMStateChange}) => {
+const PasswordModel = ({onMStateChange, marginTop}) => {
   const [visible, setVisible] = React.useState(false);
   const showModal = () => {
     setVisible(true);
@@ -18,7 +18,7 @@ const PasswordModel = ({onMStateChange}) => {
       <Portal>
          <Modal visible={visible} onDismiss={hideModal}
           overlayOpacity={0} 
-                contentContainerStyle={styles.modelContainer} >
+                contentContainerStyle={[styles.modelContainer, {marginTop: marginTop,}]} >
           <Headline style={styles.headline}>Hello Friend!!</Headline>
           <Text style={styles.modelText}>
            Please follow these rules to create your password{'\n\n'}
