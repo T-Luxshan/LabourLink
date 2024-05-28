@@ -62,7 +62,6 @@ const ChangePassword = () => {
   };
 
   return (
-    // <PaperProvider>
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : null}
@@ -83,7 +82,7 @@ const ChangePassword = () => {
                   underlineColor="transparent"
                   selectionColor="black"
                   placeholder="Password"
-                  placeholderTextColor="#797979"  // Grey color for placeholder text
+                  placeholderTextColor="#797979"  
                   autoCapitalize="none"
                   autoCorrect={false}
                   value={password}
@@ -107,7 +106,7 @@ const ChangePassword = () => {
                   theme={theme}
                   underlineColor="transparent"
                   placeholder="Confirm password"
-                  placeholderTextColor="#797979"  // Grey color for placeholder text
+                  placeholderTextColor="#797979"  
                   autoCapitalize="none"
                   autoCorrect={false}
                   value={confirmPassword}
@@ -160,7 +159,6 @@ const ChangePassword = () => {
           </PaperProvider>
         </ScrollView>
       </KeyboardAvoidingView>
-    // </PaperProvider>
   );
 };
 
