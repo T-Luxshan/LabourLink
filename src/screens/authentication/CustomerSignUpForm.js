@@ -171,7 +171,7 @@ const CustomerSignUpForm = () => {
             </View>
 
             {/* Password field */}
-            <PasswordModel onMStateChange={handleModel} marginTop={10}/>
+            <PasswordModel onMStateChange={handleModel} marginTop={10} Password={"Password"}/>
             <View style={styles.inputContainer}>
               <View style={styles.password}>
                 {/* <Text>Password</Text> */}

@@ -186,7 +186,7 @@ const LabourSignUpForm = () => {
             />
             {errors.email && <Text style={styles.error}>{errors.email}</Text>}
           </View>
-          <PasswordModel onMStateChange={handleModel} marginTop={10}/>
+          <PasswordModel onMStateChange={handleModel} marginTop={10} Password={"Password"}/>
           <View style={styles.inputContainer}>
               
               <View style={styles.password}>
