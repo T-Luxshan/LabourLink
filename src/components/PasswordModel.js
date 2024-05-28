@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Button, Modal, Portal, Provider as PaperProvider, Headline, IconButton } from 'react-native-paper';
 
-const PasswordModel = ({onMStateChange, marginTop}) => {
+const PasswordModel = ({onMStateChange, marginTop, Password}) => {
   const [visible, setVisible] = React.useState(false);
   const showModal = () => {
     setVisible(true);
@@ -36,7 +36,7 @@ const PasswordModel = ({onMStateChange, marginTop}) => {
       </Portal>
       <View style={styles.uploadContainer}>
         <View style={styles.infoContainer}>
-          <Text style={styles.promptText}>Password</Text>
+          <Text style={styles.promptText}>{Password}</Text>
           <IconButton
             icon="information-outline"
             size={18}
