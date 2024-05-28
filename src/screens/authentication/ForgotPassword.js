@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Image, Text } from 'react-native';
 import { TextInput, Headline, Button } from 'react-native-paper';
 import * as yup from 'yup';
+import { getUserRole, sendOTP } from '../../services/AuthService';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -25,6 +26,12 @@ const ForgotPassword = () => {
     try {
         await schema.validate({ email }, { abortEarly: false });
         setError('');
+        getUserRole(email)
+          .then(response =>{
+            console.log(response.data);
+            sendOTP(response.data, email);
+          })
+        
     } catch (error) {
         setError(error.message);
         console.log(error.message)
@@ -41,7 +48,7 @@ const ForgotPassword = () => {
             style={styles.topImage}
             />
         <View style={styles.foreground}>
-            <Headline style={{fontWeight: 'bold'}}>Forgot Password? {'\n'}</Headline>
+            <Headline style={{fontWeight: 'bold'}}>Forgot Password? {'\n\n'}</Headline>
             
             <Text>No Problem! Enter your email below and we will send you an email 
                 with the OTP to reset your password.</Text>

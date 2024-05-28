@@ -11,6 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const REST_API_BASE_URL_AUTH = "http://localhost:8080/api/v1/auth";
 const  baseURL = 'http://localhost:8080/api';
+const FORGOTPASSWORD_BASE_URL = "http://localhost:8080/forgotPassword";
 
 // API for register customer
 export const registerCustomer = (name, email, password, mobileNumber, address) => {
@@ -56,6 +57,11 @@ export const registerLabour = (name, email, password, mobileNumber, nic, documen
     return axios.get(`${REST_API_BASE_URL_AUTH}/nicExist/${nic}`)
   }
 
+  // API to send email with an OTP when forgot password.
+  export const sendOTP = (role, email) => {
+    return axios.post(`${FORGOTPASSWORD_BASE_URL}/verifyMail/${role}/${email}`)
+  } 
+
 
 // axios instance and interceptors for get the token and set to headers
 
@@ -95,7 +101,8 @@ axiosAuthInstance.interceptors.request.use(
       }
     }
     else{
-      logoutUser();
+      // logoutUser();
+      console.log("I am in else part of if (token) ");
     }
     return config;
   },
@@ -107,13 +114,13 @@ axiosAuthInstance.interceptors.request.use(
 export default axiosAuthInstance;
 
 //  logout the user from the application.
-export const logoutUser = () => {
-  const navigation = useNavigation();
+// export const logoutUser = () => {
+//   const navigation = useNavigation();
 
-  AsyncStorage.removeItem('token');
-  AsyncStorage.removeItem('refreshToken');
+//   AsyncStorage.removeItem('token');
+//   AsyncStorage.removeItem('refreshToken');
 
-  navigation.navigate('Login'); // Navigate to login page.
+//   navigation.navigate('Login'); // Navigate to login page.
 
-}
+// }
 
