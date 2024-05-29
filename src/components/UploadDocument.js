@@ -24,7 +24,7 @@ const UploadDocument = ({ nic, onFileUpload, mState }) => {
       .catch(error => {
         console.error('Error fetching job roles:', error);
       });
-  });
+  }, [nic]);
 
   const pickDocument = async () =>{
 
