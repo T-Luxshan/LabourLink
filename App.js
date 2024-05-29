@@ -15,6 +15,9 @@ import AuthTestLogin from './NotUsingComponents/AuthTestLogin'; // For testing. 
 import Home from './NotUsingComponents/Home';
 import UploadDocument from './src/components/UploadDocument';
 import Test from './NotUsingComponents/Test';
+import ForgotPassword from './src/screens/authentication/ForgotPassword';
+import OTPVerification from './src/screens/authentication/OTPVerification';
+import ChangePassword from './src/screens/authentication/ChangePassword';
 
 const Stack = createStackNavigator();
 
@@ -67,13 +70,31 @@ export default function App() {
             component={LabourSignUpForm} 
             options={{ title: '' }} 
         />
+        <Stack.Screen 
+            name="ForgotPassword" 
+            component={ForgotPassword} 
+            options={{ headerShown: false }} 
+        />
+        <Stack.Screen 
+            name="OTPVerification" 
+            component={OTPVerification} 
+            options={{ headerShown: false }} 
+        />
+        <Stack.Screen 
+            name="ChangePassword" 
+            component={ChangePassword} 
+            options={{ headerShown: false }} 
+        />
        </Stack.Navigator>
      </NavigationContainer>
+   
 
     // <SafeAreaProvider>
     //   <View style={styles.container}>
         
-    //     <UploadDocument />
+    //     {/* <ForgotPassword /> */}
+    //     {/* <OTPVerification /> */}
+    //     <ChangePassword />
     //     {/* <Test /> */}
     //     <StatusBar style="auto" />
     //   </View>
