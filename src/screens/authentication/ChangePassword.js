@@ -4,8 +4,15 @@ import { TextInput, Button, Dialog, Portal, PaperProvider } from 'react-native-p
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as yup from 'yup';
 import PasswordModel from '../../components/PasswordModel';
+import { changePassword } from '../../services/AuthService';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const ChangePassword = () => {
+
+  const navigation = useNavigation();
+  const route = useRoute();
+  const { email, role } = route.params;
+
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordVisibility, setPasswordVisibility] = useState(true); 
@@ -13,6 +20,10 @@ const ChangePassword = () => {
   const [errors, setErrors] = useState({});
   const [mState, setMState] = useState(false);
   const [dialogVisible, setDialogVisible] = useState(false);
+
+  // const email = "luckybraveboys@gmail.com";
+  // const role = "CUSTOMER";  
+
 
   const theme = {
     colors: {
@@ -22,10 +33,10 @@ const ChangePassword = () => {
 
   const handleModel = (mState) => setMState(mState);
   
-  const hideDialogBox = () => {
-    setDialogVisible(false) 
-    setMState(false);
-  }
+  // const hideDialogBox = () => {
+  //   setDialogVisible(false) 
+  //   setMState(false);
+  // }
 
   const schema = yup.object().shape({
     password: yup
@@ -46,12 +57,19 @@ const ChangePassword = () => {
     setPasswordVisibility(!passwordVisibility);
   };
 
-  const handleOTP = async () => {
+  const handleChangePassword = async () => {
     try {
       await schema.validate({ password, confirmPassword }, { abortEarly: false });
       setErrors({});
-      setDialogVisible(true);
-      setMState(true);
+
+      changePassword(role, email, password, confirmPassword)
+        .then(response =>{
+          console.log(response);
+          setDialogVisible(true);
+          setMState(true);
+        })
+      // setDialogVisible(true);
+      // setMState(true);
     } catch (error) {
       const validationErrors = {};
       error.inner.forEach(err => {
@@ -60,6 +78,10 @@ const ChangePassword = () => {
       setErrors(validationErrors);
     }
   };
+
+  const handleOK = () => {
+    navigation.navigate('Login')
+  }
 
   return (
       <KeyboardAvoidingView
@@ -129,7 +151,7 @@ const ChangePassword = () => {
                 mode="contained"
                 buttonColor={mState ? '#6D6D6D' : "#FB9741"}
                 textColor={mState ? '#797979' : "white"}
-                onPress={handleOTP}
+                onPress={handleChangePassword}
                 style={styles.btn}
                 labelStyle={styles.buttonText}
               >
@@ -152,7 +174,7 @@ const ChangePassword = () => {
                 <Text style={{ fontSize: 17, fontWeight:700, marginTop: 15, marginBottom:-10}}>Now you will be redirected to log in.</Text>
               </Dialog.Content>
               <Dialog.Actions>
-                <Button labelStyle={{fontSize:21, fontWeight:'bold'}} textColor='#FB9741' onPress={hideDialogBox}>OK</Button>
+                <Button labelStyle={{fontSize:21, fontWeight:'bold'}} textColor='#FB9741' onPress={handleOK}>OK</Button>
               </Dialog.Actions>
             </Dialog>
           </Portal>
@@ -167,6 +189,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   forgotPasswordContainer: {
+    backgroundColor: 'white',
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',

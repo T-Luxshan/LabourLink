@@ -3,10 +3,16 @@ import { View, StyleSheet, Image, Text } from 'react-native';
 import { TextInput, Headline, Button } from 'react-native-paper';
 import * as yup from 'yup';
 import { getUserRole, sendOTP } from '../../services/AuthService';
+import { useNavigation, useRoute  } from '@react-navigation/native';
+
 
 const ForgotPassword = () => {
+
+  const navigation = useNavigation();
+
   const [email, setEmail] = useState("");
   const [error, setError] = useState('');
+  const [role, setRole] = useState('');
   
   const theme = {
     colors: {
@@ -26,12 +32,28 @@ const ForgotPassword = () => {
     try {
         await schema.validate({ email }, { abortEarly: false });
         setError('');
-        getUserRole(email)
-          .then(response =>{
-            console.log(response.data);
-            sendOTP(response.data, email);
+
+        try {
+          let response = await getUserRole(email);
+
+          sendOTP(response.data, email)
+            .then(res =>{
+              console.log(res);
+            })
+            .catch(error =>{
+              setError("Error sending Email, Please try again in a few minutes")
+              console.log('Error sending Email:', error.message);
+            })
+          navigation.navigate('OTPVerification', {
+            email: email,
+            role: response.data
           })
         
+        } catch (error) {
+          setError("Email does not exist")
+          console.log('Email does not exist:', error.message);
+        }
+         
     } catch (error) {
         setError(error.message);
         console.log(error.message)
@@ -81,6 +103,7 @@ export default ForgotPassword;
 
 const styles = StyleSheet.create({
   forgotPasswordContainer: {
+    backgroundColor: 'white',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

@@ -2,28 +2,57 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Image, Text } from 'react-native';
 import { Button } from 'react-native-paper';
 import OTPInputView from '@twotalltotems/react-native-otp-input';
+import { sendOTP, verifyOTP } from '../../services/AuthService';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
-const OTPVerification = ({ route, navigation }) => {
+
+const OTPVerification = () => {
+
+  const navigation = useNavigation();
+  const route = useRoute();
+  const { email, role } = route.params;
+
   const [error, setError] = useState('');
   const [otp, setOTP] = useState('');
 
-  const email = "example@gmail.com";  // Get email from route params
+  // for testing purpose.
+  // const email = "luckybraveboys@gmail.com";
+  // const role = "CUSTOMER";  
+
+  
 
   const handleOTP = async () => {
-    try {
-      // change the logic to verify the OTP
-      if (otp !== '123456') {
-        throw new Error('Invalid OTP');
-      }
-      setError('');
-      console.log(otp);
-      // If OTP is correct, navigate to the next screen
-      // navigation.navigate('NextScreen');
-    } catch (err) {
-      // Handle error
-      setError('Invalid OTP. Please try again.');
-    }
+
+    verifyOTP(role, otp, email)
+      .then(response =>{
+        setError('');
+        console.log(response);
+        // Navigate
+        navigation.navigate('ChangePassword', {
+          email: email,
+          role: role
+        })
+      })
+      .catch(error =>{
+        setError("Verification failed");
+        console.log(error);
+      })
   };
+
+  const resendOTP = () =>{
+    
+    sendOTP(role, email)
+      .then(response =>{
+        // Navigate
+        console.log(response);
+      })
+      .catch(error =>{
+        console.log(role);
+        console.log(email);
+        setError("Error sending Email, Please try again in few minutes")
+        console.log('Error sending Email:', error.message);
+      })
+  }
 
   return (
     <View style={styles.forgotPasswordContainer}>
@@ -58,7 +87,7 @@ const OTPVerification = ({ route, navigation }) => {
         <View style={styles.resendOTPContainer}>
           <View style={styles.resendOTP}>
             <Text>Didn't receive OTP?</Text>
-            <Button textColor="#FB9741" mode="text" onPress={() => console.log('Pressed')}>
+            <Button textColor="#FB9741" mode="text" onPress={resendOTP}>
               Resend 
             </Button>
           </View>
@@ -77,6 +106,7 @@ export default OTPVerification;
 
 const styles = StyleSheet.create({
   forgotPasswordContainer: {
+    backgroundColor: 'white',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
