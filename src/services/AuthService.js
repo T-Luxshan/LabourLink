@@ -5,13 +5,17 @@ import { jwtDecode } from "jwt-decode";
 import dayjs from 'dayjs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
+//  For mobile, use IP address instead of localhost
+const REST_API_BASE_URL_AUTH = "http://192.168.1.56:8080/api/v1/auth";
+const  baseURL = 'http://192.168.1.56:8080/api';
+const FORGOTPASSWORD_BASE_URL = "http://192.168.1.56:8080/forgotPassword";
 // const REST_API_BASE_URL_AUTH = "http://172.20.10.2:8080/api/v1/auth";
 // const  baseURL = 'http://172.20.10.2:8080/api';
 
-const REST_API_BASE_URL_AUTH = "http://localhost:8080/api/v1/auth";
-const  baseURL = 'http://localhost:8080/api';
-const FORGOTPASSWORD_BASE_URL = "http://localhost:8080/forgotPassword";
+// const REST_API_BASE_URL_AUTH = "http://localhost:8080/api/v1/auth";
+// const  baseURL = 'http://localhost:8080/api';
+// const FORGOTPASSWORD_BASE_URL = "http://localhost:8080/forgotPassword";
+
 
 // API for register customer
 export const registerCustomer = (name, email, password, mobileNumber, address) => {
@@ -61,6 +65,18 @@ export const registerLabour = (name, email, password, mobileNumber, nic, documen
   export const sendOTP = (role, email) => {
     return axios.post(`${FORGOTPASSWORD_BASE_URL}/verifyMail/${role}/${email}`)
   } 
+
+  // API for verify OTP.
+  export const verifyOTP = (role, otp, email) => {
+    return axios.post(`${FORGOTPASSWORD_BASE_URL}/verifyOtp/${role}/${otp}/${email}`)
+  }
+
+  //API for Change password.
+  export const changePassword = (role, email, password, repeatPassword) =>{
+    return axios.post(`${FORGOTPASSWORD_BASE_URL}/changePassword/${role}/${email}`,{
+      password, repeatPassword
+    });
+  };
 
 
 // axios instance and interceptors for get the token and set to headers
