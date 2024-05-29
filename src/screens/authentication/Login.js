@@ -105,9 +105,9 @@ const Login = () => {
       // Handle button press logic here
       console.log('Image button pressed');
     };
-    const handleForgotPassword = () => { // need to implement.
-      // Handle button press logic here
+    const handleForgotPassword = () => { 
       console.log('Forgot Password  pressed');
+      navigation.navigate('ForgotPassword');
     };
     
     // customized default theme, need to finish later.
