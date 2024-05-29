@@ -18,6 +18,7 @@ import Test from './NotUsingComponents/Test';
 import ForgotPassword from './src/screens/authentication/ForgotPassword';
 import OTPVerification from './src/screens/authentication/OTPVerification';
 import ChangePassword from './src/screens/authentication/ChangePassword';
+import WaitingPage from './src/screens/authentication/WaitingPage';
 
 const Stack = createStackNavigator();
 
@@ -83,6 +84,11 @@ export default function App() {
         <Stack.Screen 
             name="ChangePassword" 
             component={ChangePassword} 
+            options={{ headerShown: false }} 
+        />
+        <Stack.Screen 
+            name="WaitingPage" 
+            component={WaitingPage} 
             options={{ headerShown: false }} 
         />
        </Stack.Navigator>

@@ -126,7 +126,7 @@ const LabourSignUpForm = () => {
        
        
           //  Navigate to the next page to the sign up.
-          navigation.navigate('AuthTestSignup')
+          navigation.navigate('WaitingPage')
 
 
         } catch (e) {
