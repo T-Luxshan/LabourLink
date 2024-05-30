@@ -105,13 +105,14 @@ const LabourSignUpForm = () => {
     const handleSignUp = async () => {
       // Implement login logic here
       try {
-        await schema.validate({ email, password, confirmPassword, name, mobileNumber, nic }, { abortEarly: false });
+        const lowercasedEmail = email.toLowerCase();
+        await schema.validate({ lowercasedEmail, password, confirmPassword, name, mobileNumber, nic }, { abortEarly: false });
         setErrors({});
         
         try {
           console.log("Document URI is : ", fileURI);
           console.log("These are the job roles : ", jobRoles)
-          const response = await registerLabour(name, email, password, mobileNumber, nic, fileURI, jobRoles);
+          const response = await registerLabour(name, lowercasedEmail, password, mobileNumber, nic, fileURI, jobRoles);
           
           setRegError("");
           console.log(response);

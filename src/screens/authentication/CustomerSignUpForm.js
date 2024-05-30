@@ -87,9 +87,11 @@ const CustomerSignUpForm = () => {
 
   const handleSignUp = async () => {
     // Try block for validate the user inputs.
+
     try {
+      const lowercasedEmail = email.toLowerCase();
       await schema.validate(
-        { email, password, confirmPassword, name, mobileNumber, address },
+        { lowercasedEmail, password, confirmPassword, name, mobileNumber, address },
         { abortEarly: false }
       );
       setErrors({});
@@ -97,7 +99,7 @@ const CustomerSignUpForm = () => {
       try {
         const response = await registerCustomer(
           name,
-          email,
+          lowercasedEmail,
           password,
           mobileNumber,
           address

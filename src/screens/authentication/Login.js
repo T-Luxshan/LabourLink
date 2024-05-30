@@ -47,21 +47,22 @@ const Login = () => {
 
     const handleLogin = async () => {
       try {
-        await schema.validate({ email, password, role }, { abortEarly: false });
+        const lowercasedEmail = email.toLowerCase();
+        await schema.validate({ lowercasedEmail, password, role }, { abortEarly: false });
         setErrors({});
        
 
         try {
           let response = null;
-          let userRole = await (await getUserRole(email)).data;
+          let userRole = await (await getUserRole(lowercasedEmail)).data;
       
           if(role != userRole )
             throw new Error('Invalid email or password.');
 
           if(role == "CUSTOMER" )
-             response = await loginCustomer(role, email, password); 
+             response = await loginCustomer(role, lowercasedEmail, password); 
           else
-            response = await loginLabour(role, email, password);   
+            response = await loginLabour(role, lowercasedEmail, password);   
 
           AsyncStorage.setItem("token", response.data.accessToken);
           AsyncStorage.setItem("refreshToken", response.data.refreshToken);
