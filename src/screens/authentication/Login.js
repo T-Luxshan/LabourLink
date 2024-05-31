@@ -47,31 +47,45 @@ const Login = () => {
 
     const handleLogin = async () => {
       try {
+        await schema.validate({ email, password, role }, { abortEarly: false });
         const lowercasedEmail = email.toLowerCase();
-        await schema.validate({ lowercasedEmail, password, role }, { abortEarly: false });
         setErrors({});
        
 
         try {
           let response = null;
-          let userRole = await (await getUserRole(lowercasedEmail)).data;
+          let userRoleResponse = await getUserRole(lowercasedEmail);
+          let userRole = userRoleResponse.data.role;
+          let userRoleStatus = userRoleResponse.data.verified;
+          console.log(userRoleResponse);
+          console.log(userRole);
+          console.log(userRoleStatus);
+
       
           if(role != userRole )
             throw new Error('Invalid email or password.');
 
-          if(role == "CUSTOMER" )
+          if(role == "CUSTOMER" ){
              response = await loginCustomer(role, lowercasedEmail, password); 
-          else
+             AsyncStorage.setItem("token", response.data.accessToken);
+             AsyncStorage.setItem("refreshToken", response.data.refreshToken);
+             navigation.navigate('AuthTestSignup');
+             console.log("cus")
+          }
+          else{
             response = await loginLabour(role, lowercasedEmail, password);   
-
-          AsyncStorage.setItem("token", response.data.accessToken);
-          AsyncStorage.setItem("refreshToken", response.data.refreshToken);
+            AsyncStorage.setItem("token", response.data.accessToken);
+            AsyncStorage.setItem("refreshToken", response.data.refreshToken);
+            if(userRoleStatus)
+              navigation.navigate('AuthTestSignup');
+            else
+              navigation.navigate('WaitingPage')
+          }
           
           setLogError("");
           console.log(response);
           console.log(response.data.accessToken);
           
-          navigation.navigate('AuthTestSignup')
         } catch (e) {
           setLogError("Invalid email or password.");
         }

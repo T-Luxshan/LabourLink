@@ -105,8 +105,8 @@ const LabourSignUpForm = () => {
     const handleSignUp = async () => {
       // Implement login logic here
       try {
+        await schema.validate({ email, password, confirmPassword, name, mobileNumber, nic }, { abortEarly: false });
         const lowercasedEmail = email.toLowerCase();
-        await schema.validate({ lowercasedEmail, password, confirmPassword, name, mobileNumber, nic }, { abortEarly: false });
         setErrors({});
         
         try {

@@ -34,7 +34,7 @@ export const registerLabour = (name, email, password, mobileNumber, nic, documen
 
   // API for get user role 
  export const getUserRole = (email) => {
-   return axios.get(`${REST_API_BASE_URL_AUTH}/getRole/${email}`)
+   return axios.get(`${REST_API_BASE_URL_AUTH}/getUserRole/${email}`)
  }
 
  // API for get the job roles for the labour.
