@@ -19,6 +19,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as yup from "yup";
 
 import { registerCustomer } from "../../services/AuthService";
+import PasswordModel from "../../components/PasswordModel";
 
 const CustomerSignUpForm = () => {
   const navigation = useNavigation();
@@ -33,6 +34,7 @@ const CustomerSignUpForm = () => {
   const [rightIcon, setRightIcon] = useState("eye-slash"); // Toggle eye icon.
   const [errors, setErrors] = useState({});
   const [regError, setRegError] = useState();
+  const [mState, setMState] = useState(false);
 
   const schema = yup.object().shape({
     name: yup
@@ -46,6 +48,9 @@ const CustomerSignUpForm = () => {
     password: yup
       .string()
       .min(5, "Password can't be less than 5 letters")
+      .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
+      .matches(/[a-z]/, "Password must contain at least one lowercase letter")
+      .matches(/[0-9]/, "Password must contain at least one number")
       .required("Password can't be empty"),
     confirmPassword: yup
       .string()
@@ -76,11 +81,17 @@ const CustomerSignUpForm = () => {
     },
   };
 
+  const handleModel = (mState) => {
+    setMState(mState);
+  }
+
   const handleSignUp = async () => {
     // Try block for validate the user inputs.
+
     try {
+      const lowercasedEmail = email.toLowerCase();
       await schema.validate(
-        { email, password, confirmPassword, name, mobileNumber, address },
+        { lowercasedEmail, password, confirmPassword, name, mobileNumber, address },
         { abortEarly: false }
       );
       setErrors({});
@@ -88,7 +99,7 @@ const CustomerSignUpForm = () => {
       try {
         const response = await registerCustomer(
           name,
-          email,
+          lowercasedEmail,
           password,
           mobileNumber,
           address
@@ -120,15 +131,15 @@ const CustomerSignUpForm = () => {
     }
   };
   return (
-    <View style={styles.registerContainer}>
+    <View style={ [styles.registerContainer,  mState && { backgroundColor: 'rgba(0, 0, 0, 0.5)' }]}>
       <SignupHead userRole="customer" />
       <KeyboardAvoidingView
-        style={styles.container}
+        style={[styles.container]}
         behavior={Platform.OS === "ios" ? "padding" : null} // Adjust behavior for iOS and Android
         keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0} // Adjust vertical offset for iOS
       >
         <ScrollView>
-          <View style={styles.innerContainer}>
+          <View style={[styles.innerContainer, mState && { backgroundColor: 'rgba(0, 0, 0, 0.008)' } ]}>
             {regError && <Text style={styles.error}>{regError}</Text>}
 
             {/* Name field */}
@@ -141,7 +152,7 @@ const CustomerSignUpForm = () => {
                 placeholder="Luxshan Thuraisingam"
                 value={name}
                 onChangeText={setName}
-                style={styles.input}
+                style={[styles.input,  mState && { backgroundColor: 'rgba(0, 0, 0, 0.1)'  }]}
               />
               {errors.name && <Text style={styles.error}>{errors.name}</Text>}
             </View>
@@ -156,15 +167,16 @@ const CustomerSignUpForm = () => {
                 placeholder="example@gmail.com"
                 value={email} // Need to change into email name.
                 onChangeText={setEmail}
-                style={styles.input}
+                style={[styles.input,  mState && { backgroundColor: 'rgba(0, 0, 0, 0.1)'  }]}
               />
               {errors.email && <Text style={styles.error}>{errors.email}</Text>}
             </View>
 
             {/* Password field */}
+            <PasswordModel onMStateChange={handleModel} marginTop={10} Password={"Password"}/>
             <View style={styles.inputContainer}>
               <View style={styles.password}>
-                <Text>Password</Text>
+                {/* <Text>Password</Text> */}
                 <TextInput
                   theme={theme}
                   underlineColor="transparent"
@@ -174,7 +186,7 @@ const CustomerSignUpForm = () => {
                   value={password}
                   onChangeText={setPassword}
                   secureTextEntry={passwordVisibility}
-                  style={styles.input}
+                  style={[styles.input,  mState && { backgroundColor: 'rgba(0, 0, 0, 0.1)'  }]}
                 />
 
                 {/* Password visibility changing eye button */}
@@ -193,7 +205,7 @@ const CustomerSignUpForm = () => {
               )}
             </View>
 
-            <View style={styles.inputContainer}>
+            <View style={[styles.inputContainer, ]}>
               <View style={styles.password}>
                 <Text>Confirm password</Text>
                 <TextInput
@@ -205,7 +217,7 @@ const CustomerSignUpForm = () => {
                   value={confirmPassword}
                   onChangeText={setconfirmPassword}
                   secureTextEntry={passwordVisibility}
-                  style={styles.input}
+                  style={[styles.input,  mState && { backgroundColor: 'rgba(0, 0, 0, 0.1)'  }]}
                 />
                 <TouchableOpacity
                   style={{
@@ -231,7 +243,7 @@ const CustomerSignUpForm = () => {
                 placeholder="0763443542"
                 value={mobileNumber}
                 onChangeText={setMobileNumber}
-                style={styles.input}
+                style={[styles.input,  mState && { backgroundColor: 'rgba(0, 0, 0, 0.1)'  }]}
               />
               {errors.mobileNumber && (
                 <Text style={styles.error}>{errors.mobileNumber}</Text>
@@ -246,7 +258,7 @@ const CustomerSignUpForm = () => {
                 placeholder="434 Deans Road, 10, Colombo"
                 value={address}
                 onChangeText={setAddress}
-                style={styles.input}
+                style={[styles.input,  mState && { backgroundColor: 'rgba(0, 0, 0, 0.1)'  }]}
               />
               {errors.address && (
                 <Text style={styles.error}>{errors.address}</Text>
@@ -255,7 +267,8 @@ const CustomerSignUpForm = () => {
             <View></View>
             <Button
               mode="contained"
-              buttonColor="#FB9741"
+              buttonColor={ mState ? 'rgba(0, 0, 0, 0.1)' : "#FB9741"}
+              textColor={ mState ? 'rgba(0, 0, 0, 0.5)' : 'white'}
               onPress={handleSignUp}
               style={styles.button}
             >
@@ -291,16 +304,19 @@ const styles = StyleSheet.create({
   innerContainer: {
     marginTop: 10,
     backgroundColor: "white",
-    marginLeft: 40,
+    paddingLeft:40,
+    paddingRight:40,
+    // marginLeft: 40,
     // marginBottom:80,
-    width: "80%", // Width set to make space for both sides.
+    width: "100%", // Width set to make space for both sides.
     // height:'90%'
   },
   inputContainer: {
+    zIndex: -1,
     marginVertical: 8,
   },
   input: {
-    width: "100%",
+    // width: "80%",
     height: 50,
 
     backgroundColor: "#EDEDEC",
@@ -317,4 +333,5 @@ const styles = StyleSheet.create({
   error: {
     color: "red",
   },
+ 
 });

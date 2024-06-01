@@ -31,7 +31,7 @@ const ChooseRole = () => {
           navigation.navigate('CustomerSignUpForm'); // Navigate to customer signup form
           
       } else if (role === 'labour') {
-          navigation.navigate('LabourSignUp'); // Navigate to labour signup form
+          navigation.navigate('LabourSignUpForm'); // Navigate to labour signup form
       } else {
           console.log('Please select a role'); // Future use, remove if it doesn't needed.
       }

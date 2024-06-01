@@ -48,29 +48,44 @@ const Login = () => {
     const handleLogin = async () => {
       try {
         await schema.validate({ email, password, role }, { abortEarly: false });
+        const lowercasedEmail = email.toLowerCase();
         setErrors({});
        
 
         try {
           let response = null;
-          let userRole = await (await getUserRole(email)).data;
+          let userRoleResponse = await getUserRole(lowercasedEmail);
+          let userRole = userRoleResponse.data.role;
+          let userRoleStatus = userRoleResponse.data.verified;
+          console.log(userRoleResponse);
+          console.log(userRole);
+          console.log(userRoleStatus);
+
       
           if(role != userRole )
             throw new Error('Invalid email or password.');
 
-          if(role == "CUSTOMER" )
-             response = await loginCustomer(role, email, password); 
-          else
-            response = await loginLabour(role, email, password);   
-
-          AsyncStorage.setItem("token", response.data.accessToken);
-          AsyncStorage.setItem("refreshToken", response.data.refreshToken);
+          if(role == "CUSTOMER" ){
+             response = await loginCustomer(role, lowercasedEmail, password); 
+             AsyncStorage.setItem("token", response.data.accessToken);
+             AsyncStorage.setItem("refreshToken", response.data.refreshToken);
+             navigation.navigate('AuthTestSignup');
+             console.log("cus")
+          }
+          else{
+            response = await loginLabour(role, lowercasedEmail, password);   
+            AsyncStorage.setItem("token", response.data.accessToken);
+            AsyncStorage.setItem("refreshToken", response.data.refreshToken);
+            if(userRoleStatus)
+              navigation.navigate('AuthTestSignup');
+            else
+              navigation.navigate('WaitingPage')
+          }
           
           setLogError("");
           console.log(response);
           console.log(response.data.accessToken);
           
-          navigation.navigate('AuthTestSignup')
         } catch (e) {
           setLogError("Invalid email or password.");
         }
@@ -105,9 +120,9 @@ const Login = () => {
       // Handle button press logic here
       console.log('Image button pressed');
     };
-    const handleForgotPassword = () => { // need to implement.
-      // Handle button press logic here
+    const handleForgotPassword = () => { 
       console.log('Forgot Password  pressed');
+      navigation.navigate('ForgotPassword');
     };
     
     // customized default theme, need to finish later.

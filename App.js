@@ -7,12 +7,18 @@ import 'react-native-gesture-handler';
 import Login from './src/screens/authentication/Login';
 import ChooseRole from './src/screens/ChooseRole';
 import GettingStarted from './src/screens/GettingStarted'
-import LabourSignUp from './src/screens/authentication/LabourSignUpForm';
+import LabourSignUpForm from './src/screens/authentication/LabourSignUpForm';
 import CustomerSignUpform from './src/screens/authentication/CustomerSignUpForm'
 import SignInWithGoogle from './src/components/SignInWithGoogle';
 import AuthTestSignup from './NotUsingComponents/AuthTestSignup'; // For testing. Remove later.
 import AuthTestLogin from './NotUsingComponents/AuthTestLogin'; // For testing. Remove later.
 import Home from './NotUsingComponents/Home';
+import UploadDocument from './src/components/UploadDocument';
+import Test from './NotUsingComponents/Test';
+import ForgotPassword from './src/screens/authentication/ForgotPassword';
+import OTPVerification from './src/screens/authentication/OTPVerification';
+import ChangePassword from './src/screens/authentication/ChangePassword';
+import WaitingPage from './src/screens/authentication/WaitingPage';
 
 const Stack = createStackNavigator();
 
@@ -61,25 +67,41 @@ export default function App() {
             component={CustomerSignUpform}
             options={{ title: '' } } />
         <Stack.Screen 
-            name="LabourSignUp" 
-            component={LabourSignUp} 
+            name="LabourSignUpForm" 
+            component={LabourSignUpForm} 
             options={{ title: '' }} 
         />
-        
-
-      </Stack.Navigator>
-    </NavigationContainer>
+        <Stack.Screen 
+            name="ForgotPassword" 
+            component={ForgotPassword} 
+            options={{ headerShown: false }} 
+        />
+        <Stack.Screen 
+            name="OTPVerification" 
+            component={OTPVerification} 
+            options={{ headerShown: false }} 
+        />
+        <Stack.Screen 
+            name="ChangePassword" 
+            component={ChangePassword} 
+            options={{ headerShown: false }} 
+        />
+        <Stack.Screen 
+            name="WaitingPage" 
+            component={WaitingPage} 
+            options={{ headerShown: false }} 
+        />
+       </Stack.Navigator>
+     </NavigationContainer>
+   
 
     // <SafeAreaProvider>
     //   <View style={styles.container}>
-    //     <View style={{ flex: 1 }}>
-    //       {/* <SignUp />  */}
-    //     <ChooseRole />
-    //      {/* <Login /> */}
-    //     {/* <LabourSignUp /> */}
-    //     {/* <CustomerSignUpform />   */}
-          
-    //     </View>  
+        
+    //     {/* <ForgotPassword /> */}
+    //     {/* <OTPVerification /> */}
+    //     <ChangePassword />
+    //     {/* <Test /> */}
     //     <StatusBar style="auto" />
     //   </View>
     // </SafeAreaProvider>
