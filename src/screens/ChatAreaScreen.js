@@ -98,6 +98,7 @@ const ChatAreaScreen = ({ route }) => {
         console.log("Error sending chat message:", error);
       }
       fetchAndDisplayUserChat(SelectedUserEmail);
+      
     }
   };
 
