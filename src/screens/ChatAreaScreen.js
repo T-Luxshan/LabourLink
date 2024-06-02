@@ -16,7 +16,7 @@ const ChatAreaScreen = ({ route }) => {
 
   const connect = () => {
     console.log("connect function called");
-    const ws = new WebSocket("ws://localhost:8080/ws");
+    const ws = new WebSocket("ws://172.20.10.7:8080/ws");
 
     ws.onopen = () => {
       console.log("WebSocket connection opened.");
@@ -97,6 +97,7 @@ const ChatAreaScreen = ({ route }) => {
       } catch (error) {
         console.log("Error sending chat message:", error);
       }
+      fetchAndDisplayUserChat(SelectedUserEmail);
     }
   };
 

@@ -12,10 +12,12 @@ import CustomerSignUpform from './src/screens/authentication/CustomerSignUpForm'
 import SignInWithGoogle from './src/components/SignInWithGoogle';
 import ChatAreaScreen from './src/screens/ChatAreaScreen';
 import OnlineUsersScreen from './src/screens/OnlineUsersScreen';
+import registerNNPushToken from 'native-notify';
 
 const Stack = createStackNavigator();
 
 export default function App() {
+  registerNNPushToken(21639, 'dwb6dAoCmrQD8faaLyciTU');
   return (
     <NavigationContainer>
       <Stack.Navigator>
