@@ -1,32 +1,33 @@
-import { StatusBar } from 'expo-status-bar';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { StyleSheet, Text, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import 'react-native-gesture-handler';
-import Login from './src/screens/authentication/Login';
-import ChooseRole from './src/screens/ChooseRole';
-import GettingStarted from './src/screens/GettingStarted'
-import LabourSignUpForm from './src/screens/authentication/LabourSignUpForm';
-import CustomerSignUpform from './src/screens/authentication/CustomerSignUpForm'
-import SignInWithGoogle from './src/components/SignInWithGoogle';
-import AuthTestSignup from './NotUsingComponents/AuthTestSignup'; // For testing. Remove later.
-import AuthTestLogin from './NotUsingComponents/AuthTestLogin'; // For testing. Remove later.
-import Home from './NotUsingComponents/Home';
-import UploadDocument from './src/components/UploadDocument';
-import Test from './NotUsingComponents/Test';
-import ForgotPassword from './src/screens/authentication/ForgotPassword';
-import OTPVerification from './src/screens/authentication/OTPVerification';
-import ChangePassword from './src/screens/authentication/ChangePassword';
-import WaitingPage from './src/screens/authentication/WaitingPage';
-import ChatAreaScreen from './src/screens/ChatAreaScreen';
-import OnlineUsersScreen from './src/screens/OnlineUsersScreen';
-import registerNNPushToken from 'native-notify';
+import { StatusBar } from "expo-status-bar";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { StyleSheet, Text, View } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import "react-native-gesture-handler";
+import Login from "./src/screens/authentication/Login";
+import ChooseRole from "./src/screens/ChooseRole";
+import GettingStarted from "./src/screens/GettingStarted";
+import LabourSignUpForm from "./src/screens/authentication/LabourSignUpForm";
+import CustomerSignUpform from "./src/screens/authentication/CustomerSignUpForm";
+import SignInWithGoogle from "./src/components/SignInWithGoogle";
+// import AuthTestSignup from './NotUsingComponents/AuthTestSignup'; // For testing. Remove later.
+// import AuthTestLogin from './NotUsingComponents/AuthTestLogin'; // For testing. Remove later.
+// import Home from './NotUsingComponents/Home';
+// import UploadDocument from './src/components/UploadDocument';
+// import Test from './NotUsingComponents/Test';
+// import ForgotPassword from './src/screens/authentication/ForgotPassword';
+// import OTPVerification from './src/screens/authentication/OTPVerification';
+// import ChangePassword from './src/screens/authentication/ChangePassword';
+// import WaitingPage from './src/screens/authentication/WaitingPage';
+import ChatAreaScreen from "./src/screens/ChatAreaScreen";
+import OnlineUsersScreen from "./src/screens/OnlineUsersScreen";
+import registerNNPushToken from "native-notify";
+import Notification from "./src/screens/Notification"
 
 const Stack = createStackNavigator();
 
 export default function App() {
-  registerNNPushToken(21639, 'dwb6dAoCmrQD8faaLyciTU');
+  registerNNPushToken(21639, "dwb6dAoCmrQD8faaLyciTU");
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -63,7 +64,7 @@ export default function App() {
           options={{ title: "back" }}
         /> */}
 
-        <Stack.Screen
+        {/* <Stack.Screen
           name="OnlineUsersScreen"
           component={OnlineUsersScreen}
           // options={{ title: "back" }}
@@ -73,6 +74,13 @@ export default function App() {
           name="ChatAreaScreen"
           component={ChatAreaScreen}
           options={{ title: "back" }}
+        /> */}
+
+        <Stack.Screen
+          name="Notification"
+          component={Notification}
+          // options={{ title: "back" }}
+          options={{ headerShown: false }}
         />
 
         {/* <Stack.Screen 
@@ -87,10 +95,10 @@ export default function App() {
             name="Home" 
             component={Home}
             options={{ headerShown: false }} />
-        <Stack.Screen 
-            name="AuthTestSignup" 
-            component={AuthTestSignup}
-            options={{ headerShown: false }} />
+        // <Stack.Screen 
+        //     name="AuthTestSignup" 
+        //     component={AuthTestSignup}
+        //     options={{ headerShown: false }} />
 
         <Stack.Screen 
             name="AuthTestLogin" 
@@ -139,14 +147,12 @@ export default function App() {
      </NavigationContainer>
    
         /> */}
-        
-
       </Stack.Navigator>
     </NavigationContainer>
 
     // <SafeAreaProvider>
     //   <View style={styles.container}>
-        
+
     //     {/* <ForgotPassword /> */}
     //     {/* <OTPVerification /> */}
     //     <ChangePassword />
