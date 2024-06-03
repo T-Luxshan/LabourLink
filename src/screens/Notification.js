@@ -3,11 +3,14 @@ import { View, Text, Button, ScrollView, StyleSheet, TouchableOpacity } from 're
 import * as Notifications from 'expo-notifications';
 import registerNNPushToken from 'native-notify';
 import { saveNotifications, findNotifications, updateNotificationReadStatus } from '../service/NoificationSevice';
+import SockJS from 'sockjs-client';
+import { Client } from '@stomp/stompjs';
 
 const Notification = ({ navigation }) => {
   const email = "johndoe@example.com";
   const [notifications, setNotifications] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  let stompClient = null;
 
   registerNNPushToken(21639, 'dwb6dAoCmrQD8faaLyciTU');
 
@@ -24,19 +27,48 @@ const Notification = ({ navigation }) => {
 
     fetchNotifications();
 
-    const foregroundSubscription = Notifications.addNotificationReceivedListener(notification => {
-      console.log("Received notification:", notification);
+    // WebSocket connection
+    const socket = new SockJS('http://172.20.10.7:8080/ws');
+    stompClient = new Client({
+      brokerURL: 'ws://172.20.10.7:8080/ws',
+      connectHeaders: {
+        login: 'guest',
+        passcode: 'guest',
+      },
+      debug: (str) => {
+        console.log(str);
+      },
+      reconnectDelay: 5000,
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
+    });
+
+    stompClient.onConnect = (frame) => {
+      console.log('Connected: ' + frame);
+      stompClient.subscribe('/topic/notifications', (message) => {
+        const notification = JSON.parse(message.body);
+        setNotifications((prevNotifications) => [notification, ...prevNotifications]);
+      });
+    };
+
+    stompClient.activate();
+
+    const foregroundSubscription = Notifications.addNotificationReceivedListener((notification) => {
+      console.log('Received notification:', notification);
       if (notification && notification.request && notification.request.content) {
         const { title, body } = notification.request.content;
-        setNotifications(prevNotifications => [
+        setNotifications((prevNotifications) => [
           ...prevNotifications,
-          { title, message: body, createdAt: new Date().toISOString(), read: false }
+          { title, message: body, createdAt: new Date().toISOString(), read: false },
         ]);
       }
     });
 
     return () => {
       foregroundSubscription.remove();
+      if (stompClient) {
+        stompClient.deactivate();
+      }
     };
   }, []);
 
@@ -48,28 +80,28 @@ const Notification = ({ navigation }) => {
         const sortedNotifications = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         setNotifications(sortedNotifications);
       } catch (error) {
-        console.error("Error refreshing notifications", error);
+        console.error('Error refreshing notifications', error);
       } finally {
         setRefreshing(false);
       }
-    }, 60000); // Refresh every 60 seconds
+    }, 1000); // Refresh every 1 seconds
 
     return () => clearInterval(interval);
   }, []);
 
   const handleNotification = async () => {
     const notification = {
-      title: "First Notification",
-      message: "This is the first notification testing",
+      title: 'First Notification',
+      message: 'This is the first notification testing',
       recipient: email,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
 
     await fetch('https://app.nativenotify.com/api/notification', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer dwb6dAoCmrQD8faaLyciTU`
+        Authorization: `Bearer dwb6dAoCmrQD8faaLyciTU`,
       },
       body: JSON.stringify({
         appId: 21639,
@@ -77,28 +109,28 @@ const Notification = ({ navigation }) => {
         title: notification.title,
         message: notification.message,
         userId: notification.recipient,
-        date: notification.createdAt
-      })
+        date: notification.createdAt,
+      }),
     });
 
     try {
       await saveNotifications(notification);
-      setNotifications(prevNotifications => [notification, ...prevNotifications]);
+      setNotifications((prevNotifications) => [notification, ...prevNotifications]);
     } catch (error) {
-      console.error("Error saving notification", error);
+      console.error('Error saving notification', error);
     }
   };
 
   const markAsRead = async (id) => {
     try {
       await updateNotificationReadStatus(id, true);
-      setNotifications(prevNotifications =>
-        prevNotifications.map(notification =>
+      setNotifications((prevNotifications) =>
+        prevNotifications.map((notification) =>
           notification.id === id ? { ...notification, read: true } : notification
         )
       );
     } catch (error) {
-      console.error("Error marking notification as read", error);
+      console.error('Error marking notification as read', error);
     }
   };
 
@@ -112,8 +144,8 @@ const Notification = ({ navigation }) => {
         {notifications.map((notification, index) => (
           <TouchableOpacity key={index} onPress={() => markAsRead(notification.id)}>
             <View style={[styles.notification, notification.read && styles.readNotification]}>
-              <Text style={styles.title}>{notification.title || "No Title"}</Text>
-              <Text style={styles.message}>{notification.message || "No Message"}</Text>
+              <Text style={styles.title}>{notification.title || 'No Title'}</Text>
+              <Text style={styles.message}>{notification.message || 'No Message'}</Text>
               <Text style={styles.date}>{new Date(notification.createdAt).toLocaleString()}</Text>
             </View>
           </TouchableOpacity>
