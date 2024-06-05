@@ -151,12 +151,13 @@ const styles = StyleSheet.create({
   modelText: {
     color: 'black',
   },
-  infoContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
+  // infoContainer: {
+  //   flexDirection: 'row',
+  //   alignItems: 'center',
+  // },
   infoIcon: {
-    margin: 150,
+    marginTop:300
+    // margin: 150,
     // elevation: 0, // for Android
     // shadowOpacity: 0, // for iOS
   },
