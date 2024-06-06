@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } fr
 import { Button, Modal, Portal, Provider as PaperProvider, Headline, IconButton, TextInput, MD3LightTheme } from 'react-native-paper';
 import { Rating, AirbnbRating } from 'react-native-ratings';
 import DropDown from 'react-native-paper-dropdown';
+import { addReview, editReview } from '../services/ReviewService';
 
 const ReviewModel = () => {
   const [visible, setVisible] = useState(true);
@@ -11,7 +12,14 @@ const ReviewModel = () => {
   const [jobList, setJobList] = useState([]);
   const [description, setDescription] = useState('');
   const [rating, setRating] = useState(3);
+  const [error, setError] = useState('');
+  const [reviewId, setReviewId] = useState(null);
+  const [saveError, setSaveError] = useState('');
 
+  const labour = {
+    "name":"Luxshan",
+    "email": "lucky@gmail.com"
+  }
   useEffect(() => {
     const fetchAvailableJobs = async () => {
       // Replace this with actual fetch call
@@ -22,7 +30,6 @@ const ReviewModel = () => {
       const formattedJobList = availableJobs.map(job => ({ label: job, value: job }));
       setJobList(formattedJobList);
     };
-
     fetchAvailableJobs();
   }, []);
 
@@ -40,9 +47,37 @@ const ReviewModel = () => {
     console.log('Rating is: ' + rating);
   };
 
-  const handleSave =()=>{
-    console.log(rating, jobRole, description)
-    setVisible(false);
+  const handleSave =()=>{   
+    if(jobRole){
+      setError('');  
+      console.log(jobRole, description, rating );
+      if(reviewId){
+        editReview(reviewId, jobRole, description, rating, labour.email)
+          .then(res=>{
+            console.log(res);
+            setReviewId(res.data.id);
+            setVisible(false);
+          })
+        .catch(err=>{
+          console.log(err)
+          setSaveError("Something went wrong, try again later.");
+        })
+      
+      }else{
+      addReview(jobRole, description, rating, labour.email)
+        .then(res=>{
+          console.log(res);
+          setReviewId(res.data.id);
+          setVisible(false);
+        })
+        .catch(err=>{
+          console.log(err)
+          setSaveError("Something went wrong, try again later.");
+        })
+    }
+    }else{
+      setError("Please select the job role.")
+    }
   }
 
   const theme = {
@@ -73,7 +108,7 @@ const ReviewModel = () => {
       <ScrollView>
           <Headline style={styles.headline}>Rate his performance</Headline>
           <AirbnbRating 
-            onFinishRating={ratingCompleted}
+            onChangeRating={ratingCompleted}
             size={24}
           />
           <Text style={{ marginTop: 10 }}>Please select the job role you hired for..</Text>
@@ -92,6 +127,7 @@ const ReviewModel = () => {
             activeColor="#FB9741"
             theme={theme}
           />
+          {error && <Text style={{color:'red'}} > {error} </Text>}
           <TextInput
             label="Description"
             value={description}
@@ -107,6 +143,7 @@ const ReviewModel = () => {
             }}
             style={styles.textInput}
           />
+          {saveError && <Text style={{color:'red'}} > {saveError} </Text>}
           <View style={styles.btnContainer}>
             <Button mode="text" textColor="#F97300" onPress={hideModal} style={{ borderColor: '#F97300' }}>
               Cancel
@@ -122,7 +159,7 @@ const ReviewModel = () => {
       </Portal>
       <View style={styles.uploadContainer}>
         <View style={styles.infoContainer}>
-            <Button mode="text" textColor="#F97300"   onPress={showModal} style={styles.infoIcon}>
+            <Button mode="text" textColor="#F97300" onPress={showModal} style={styles.infoIcon}>
               Add review 
             </Button>
           
