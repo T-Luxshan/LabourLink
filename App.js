@@ -20,6 +20,7 @@ import OTPVerification from './src/screens/authentication/OTPVerification';
 import ChangePassword from './src/screens/authentication/ChangePassword';
 import WaitingPage from './src/screens/authentication/WaitingPage';
 import ReviewModel from './src/components/ReviewModel';
+import ReportModel from './src/components/ReportModel';
 
 const Stack = createStackNavigator();
 
@@ -31,7 +32,7 @@ export default function App() {
     
     <NavigationContainer>
       <Stack.Navigator>
-        {/* <Stack.Screen 
+        <Stack.Screen 
             name="GettingStarted" 
             component={GettingStarted} />
         <Stack.Screen 
@@ -43,10 +44,6 @@ export default function App() {
             name="Home" 
             component={Home}
             options={{ headerShown: false }} />
-        
-        
-
-
         <Stack.Screen 
             name="AuthTestSignup" 
             component={AuthTestSignup}
@@ -55,12 +52,7 @@ export default function App() {
         <Stack.Screen 
             name="AuthTestLogin" 
             component={AuthTestLogin}
-            options={{ headerShown: false }} />
-
-
-
-            
-          
+            options={{ headerShown: false }} />  
         <Stack.Screen 
             name="SignInWithGoogle" 
             component={SignInWithGoogle}
@@ -97,29 +89,19 @@ export default function App() {
             name="WaitingPage" 
             component={WaitingPage} 
             options={{ headerShown: false }} 
-        /> */}
+        /> 
         <Stack.Screen 
             name="ReviewModel" 
             component={ReviewModel} 
             options={{ headerShown: false }} 
         />
+        <Stack.Screen 
+            name="ReportModel" 
+            component={ReportModel} 
+            options={{ headerShown: false }} 
+        />
        </Stack.Navigator>
-     </NavigationContainer>
-   
-
-    // <SafeAreaProvider>
-    //   <View style={styles.container}>
-        
-    //     {/* <ForgotPassword /> */}
-    //     {/* <OTPVerification /> */}
-    //     <ChangePassword />
-    //     {/* <Test /> */}
-    //     <StatusBar style="auto" />
-    //   </View>
-    // </SafeAreaProvider>
-
-
-    
+     </NavigationContainer>   
   );
 }
 
