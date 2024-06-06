@@ -151,10 +151,10 @@ const styles = StyleSheet.create({
   modelText: {
     color: 'black',
   },
-  // infoContainer: {
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  // },
+  infoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   infoIcon: {
     marginTop:300
     // margin: 150,
@@ -174,7 +174,8 @@ const styles = StyleSheet.create({
   textInput: {
     backgroundColor: 'white',
     marginVertical: 10,
-    height: 100, // Adjust the height for the multiline TextInput
+    minHeight: 100, // Adjust the height for the multiline TextInput
+    textAlignVertical:'top'
   },
   btnContainer: {
     flexDirection: 'row',
