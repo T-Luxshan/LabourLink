@@ -10,11 +10,7 @@ import GettingStarted from './src/screens/GettingStarted'
 import LabourSignUpForm from './src/screens/authentication/LabourSignUpForm';
 import CustomerSignUpform from './src/screens/authentication/CustomerSignUpForm'
 import SignInWithGoogle from './src/components/SignInWithGoogle';
-import AuthTestSignup from './NotUsingComponents/AuthTestSignup'; // For testing. Remove later.
-import AuthTestLogin from './NotUsingComponents/AuthTestLogin'; // For testing. Remove later.
-import Home from './NotUsingComponents/Home';
 import UploadDocument from './src/components/UploadDocument';
-import Test from './NotUsingComponents/Test';
 import ForgotPassword from './src/screens/authentication/ForgotPassword';
 import OTPVerification from './src/screens/authentication/OTPVerification';
 import ChangePassword from './src/screens/authentication/ChangePassword';
@@ -35,7 +31,7 @@ export default function App() {
     
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen 
+        {/* <Stack.Screen 
             name="GettingStarted" 
             component={GettingStarted} />
         <Stack.Screen 
@@ -43,22 +39,9 @@ export default function App() {
             component={Login}
             options={{ headerShown: false }} />
 
-         <Stack.Screen 
-            name="Home" 
-            component={Home}
-            options={{ headerShown: false }} />
-        {/* For Validation testing purpose, remove later */}
-        <Stack.Screen 
-            name="AuthTestSignup" 
-            component={AuthTestSignup}
-            options={{ headerShown: false }} />
-
-        <Stack.Screen 
-            name="AuthTestLogin" 
-            component={AuthTestLogin}
-            options={{ headerShown: false }} />
-            
-          {/* TODO : remove above block  */}
+         
+       
+        
         <Stack.Screen 
             name="SignInWithGoogle" 
             component={SignInWithGoogle}
@@ -95,26 +78,13 @@ export default function App() {
             name="WaitingPage" 
             component={WaitingPage} 
             options={{ headerShown: false }} 
-        />
-        {/* <Stack.Screen name="MapViewScreen" component={MapViewScreen} />
-        <Stack.Screen name="LabourInfo" component={LabourInfo} />
-        <Stack.Screen name="BookAppointment" component={BookAppointment} /> */}
+        /> */}
+        <Stack.Screen name="MapViewScreen" component={MapViewScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="LabourInfo" component={LabourInfo} options={{ headerShown: false }}/>
+        <Stack.Screen name="BookAppointment" component={BookAppointment} options={{ headerShown: false }}/>
        </Stack.Navigator>
      </NavigationContainer>
    
-
-    // <SafeAreaProvider>
-    //   <View style={styles.container}>
-        
-    //     {/* <ForgotPassword /> */}
-    //     {/* <OTPVerification /> */}
-    //     <ChangePassword />
-    //     {/* <Test /> */}
-    //     <StatusBar style="auto" />
-    //   </View>
-    // </SafeAreaProvider>
-
-
     
   );
 }
