@@ -29,28 +29,35 @@ const SignInWithGoogle = (props) => {
 
   return (
     <View style={styles.signInContainer}>
+
+       {/* TODO: signin with google feature. */}
+
+
         {/* Text tittle for sign in/sign up */}
-        <Text style={styles.signInText }>{props.signText1}</Text>
+        {/* <Text style={styles.signInText }>{props.signText1}</Text> */}
         {/* Make the image as a pressable button. */}
-        <TouchableRipple onPress={handleImageButtonPress} style={styles.signInButton}>
-          <View style={styles.imageContainer}>
+        {/* <TouchableRipple onPress={handleImageButtonPress} style={styles.signInButton}> */}
+          {/* <View style={styles.imageContainer}> */}
             {/* Google logo png */}
-            <Image
+            {/* <Image
               source={require('../assets/Images/google-logo3.png')}
 
               style={styles.image}
-            />
-        </View>
-      </TouchableRipple>
+            /> */}
+        {/* </View> */}
+      {/* </TouchableRipple> */}
       <View style={styles.signUpContainer}>
         {/* bottom txt for sign in/sign up */}
           <Text style={styles.dontHaveAccountText}>{props.signText2}</Text>
           {/* Pressable text to navigate to appropriate screen */}
-          <TouchableRipple onPress={handleSignUp_In}>
+          <TouchableRipple  onPress={handleSignUp_In}>
             {/* sign up/ sing in text */}
-              <Text style={styles.signUpLink}>{props.signState}</Text>
+              <Text style={[styles.signUpLink, ]}>{props.signState}</Text>
           </TouchableRipple>
       </View> 
+      <View style={{ marginBottom: 120 }}>
+                {/* Your component */}
+          </View>
     </View>
   );
 };
@@ -58,6 +65,7 @@ const SignInWithGoogle = (props) => {
 const styles = StyleSheet.create({
   signInContainer:{
     alignItems: 'center',
+    
     
   },
 

@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
       height: 120,
     },
     logoContainer: {
-        paddingLeft: 120,
+      alignItems: 'center',
     },
     homeContainer:{
         marginRight:10,

@@ -26,12 +26,12 @@ const ChooseRole = () => {
   };
 
     // This Function will be called when the sign up button is pressed. 
-    const handleSignUp = () => {
+    const handleSignUpPage = () => {
       if (role === 'customer') {
           navigation.navigate('CustomerSignUpForm'); // Navigate to customer signup form
           
       } else if (role === 'labour') {
-          navigation.navigate('LabourSignUp'); // Navigate to labour signup form
+          navigation.navigate('LabourSignUpForm'); // Navigate to labour signup form
       } else {
           console.log('Please select a role'); // Future use, remove if it doesn't needed.
       }
@@ -62,7 +62,7 @@ const ChooseRole = () => {
             </View>
             <View>
               {/* Button for navigate to the appropriate sign up page based on selected role */}
-                <Button mode="contained" fontSize='24' buttonColor="#01214A" onPress={handleSignUp} style={styles.nextButton}>
+                <Button mode="contained" fontSize='24' buttonColor="#01214A" onPress={handleSignUpPage} style={styles.nextButton}>
                   Let's {buttonTxt} 
                 </Button>
             </View>
