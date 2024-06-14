@@ -19,6 +19,7 @@ const Customer_page = () => {
   const handleLanguagesPress = () => {
     console.log("Languages section pressed");
   };
+  
 
   // Component rendering
   return (
@@ -29,10 +30,10 @@ const Customer_page = () => {
           <Avatar.Image
             size={50}
             source={require("../assets/girl1.jpeg")}
-            style={{ marginLeft: 10, marginTop: 28 }}
+            style={{ marginLeft: 10, marginTop: 35 }}
           />
           <View style={{ marginLeft: 15, marginTop: 28 }}>
-            <Text style={{ fontSize: 13, fontWeight: "400", color: "#ADA4A5" }}>
+            <Text style={{ fontSize: 15, fontWeight: "400", color: "#ADA4A5" }}>
               Welcome Back,
             </Text>
             <Text style={{ fontSize: 16, fontWeight: "700", color: "#1D1617" }}>
@@ -52,7 +53,7 @@ const Customer_page = () => {
         <View style={{ marginTop: 10 }}>
           <Searchbar
             style={{
-              opacity: 0.5,
+              opacity: 1,
               borderRadius: 20,
               width: 350,
               marginLeft: 12,

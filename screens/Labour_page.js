@@ -9,13 +9,21 @@ import {
 import { Button, Surface, Icon, Avatar } from "react-native-paper";
 
 // Functional component definition
-const Labour_page = () => {
+const Labour_page = ({ navigation }) => {
   // State for search query
   const [searchQuery, setSearchQuery] = React.useState("");
 
   // Function to handle languages press
   const handleLanguagesPress = () => {
     console.log("Languages section pressed");
+  };
+
+  const handleViewAllPress = () => {
+    navigation.navigate("Previous_Work_History");
+  };
+
+  const handleAppointmentPress = () => {
+    navigation.navigate("Appointment");
   };
 
   // Component rendering
@@ -71,20 +79,7 @@ const Labour_page = () => {
                 </Text>
                 <Text style={{ fontSize: 13 }}>Total Services</Text>
               </View>
-              <View
-                style={{
-                  marginRight: 20,
-                  flexDirection: "column",
-                  alignItems: "center",
-                }}
-              >
-                <Text
-                  style={{ fontSize: 16, fontWeight: 500, color: "#464255" }}
-                >
-                  20 yrs
-                </Text>
-                <Text style={{ fontSize: 13 }}>Experience</Text>
-              </View>
+
               <View style={{ flexDirection: "column", alignItems: "center" }}>
                 <Text
                   style={{ fontSize: 16, fontWeight: 500, color: "#464255" }}
@@ -254,11 +249,13 @@ const Labour_page = () => {
                 Previous Work History
               </Text>
               {"\t"}
-              <Text
-                style={{ color: "#25A9D2", textDecorationLine: "underline" }}
-              >
-                View All
-              </Text>
+              <TouchableOpacity onPress={handleViewAllPress}>
+                <Text
+                  style={{ color: "#25A9D2", textDecorationLine: "underline" }}
+                >
+                  View All
+                </Text>
+              </TouchableOpacity>
             </Text>
 
             {/* Previous work details */}
@@ -346,6 +343,7 @@ const Labour_page = () => {
         <Button
           icon="bell-badge-outline"
           mode="contained"
+          onPress={handleAppointmentPress}
           style={{
             backgroundColor: "#FF7600",
             borderRadius: 30,
@@ -376,18 +374,22 @@ export default Labour_page;
 
 // Styles for the component
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   scrollContainer: {
     paddingBottom: 80,
   },
   fixedHeader: {
     backgroundColor: "#FFFFFF",
-    paddingVertical: 10,
+    paddingBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+    zIndex: 10,
   },
 
   surface: {
     padding: 8,
-    height: 80,
-    width: 80,
     alignItems: "center",
     justifyContent: "center",
   },
