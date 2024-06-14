@@ -70,30 +70,6 @@ const Appointment_page = () => {
             11:00 AM
           </Text>
         </View>
-        <View>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              paddingLeft: 20,
-            }}
-          >
-            <Icon source="map-marker-outline" size={20} />
-            <Text style={{ fontSize: 14, padding: 10, color: "#0D0D0D" }}>
-              Kollupitiya, Colombo
-            </Text>
-          </View>
-          <Text
-            style={{
-              marginLeft: 40,
-              fontSize: 12,
-              color: "#25A9D2",
-              textDecorationLine: "underline",
-            }}
-          >
-            View map
-          </Text>
-        </View>
 
         {/* Client information */}
         <View style={{ marginTop: 15 }}>
