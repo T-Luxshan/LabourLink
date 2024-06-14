@@ -11,6 +11,7 @@
 //     );
 //     return response.data;
 //   } catch (error) {
+
 //     console.error("Error creating labour profile:", error);
 //     throw error; // Rethrow the error for handling in components
 //   }
