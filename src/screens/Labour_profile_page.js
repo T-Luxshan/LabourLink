@@ -6,10 +6,49 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { Button, Surface, Icon, Avatar } from "react-native-paper";
+import { Button, Surface, Avatar } from "react-native-paper";
+import Icon from "react-native-vector-icons/FontAwesome"; 
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import {
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
+
 
 const Labour_profile_page = ({ navigation }) => {
+    
   // Function to handle press event for the "Languages" section
+ const [name, setName] = useState("");
+ const [image, setImage] = useState(null);
+
+useEffect(() => {
+  const fetchProfileData = async () => {
+    try {
+      const storedName = await AsyncStorage.getItem("name");
+      const storedImage = await AsyncStorage.getItem("image");
+
+      if (storedName !== null) {
+        setName(storedName);
+      }
+
+      if (storedImage !== null) {
+        setImage(storedImage);
+      }
+    } catch (error) {
+      console.error("Error fetching profile data:", error);
+    }
+  };
+
+  fetchProfileData();
+}, []);
+
+
+
+const handleEditProfile = () => {
+  navigation.navigate("Edit_Profile", { name, image});
+};
+
+
   const handleSelectLanguages = () => {
     navigation.navigate("Languages");
   };
@@ -17,6 +56,14 @@ const Labour_profile_page = ({ navigation }) => {
   const handleAboutUs = () => {
     navigation.navigate("About_Us");
   };
+
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem("token");
+    await AsyncStorage.removeItem("refreshToken");
+    navigation.navigate("Login");
+  };
+
+
 
   return (
     <View>
@@ -37,12 +84,6 @@ const Labour_profile_page = ({ navigation }) => {
           >
             My Profile
           </Text>
-          {/* Icon for additional actions */}
-          <Icon
-            source="dots-horizontal-circle-outline"
-            size={25}
-            style={{ marginLeft: "auto" }}
-          />
         </View>
 
         {/* User information section */}
@@ -68,7 +109,7 @@ const Labour_profile_page = ({ navigation }) => {
             </Text>
           </View>
           {/* Button to edit profile */}
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleEditProfile}>
             <Button
               mode="contained"
               style={{ width: 90, marginLeft: 10, backgroundColor: "#00204A" }}
@@ -92,7 +133,7 @@ const Labour_profile_page = ({ navigation }) => {
           </Text>
 
           {/* Languages option */}
-          <TouchableOpacity onPress={handleSelectLanguages}>
+          
             <View
               style={{
                 flexDirection: "row",
@@ -107,21 +148,27 @@ const Labour_profile_page = ({ navigation }) => {
                   paddingLeft: 10,
                 }}
               >
-                <Icon source="earth" size={20} color="#505151" />
+                <Icon
+                  name="globe"
+                  size={20}
+                  color="#505151"
+                  style={{ marginRight: 10 }}
+                />
                 <Text style={{ fontSize: 16, padding: 10, color: "#888888" }}>
                   Languages
                 </Text>
               </View>
+              <TouchableOpacity onPress={handleSelectLanguages}>
               {/* Button to navigate to language settings */}
-              <View style={{ flex: 1, alignItems: "flex-end" }}>
-                <Icon
-                  source="chevron-right"
-                  size={20}
-                  style={{ paddingLeft: 80 }}
-                />
-              </View>
+              {/* <View style={{ flex: 1, alignItems: "flex-end" }}> */}
+              <FontAwesomeIcon
+                icon={faChevronRight}
+                size={18}
+                style={{ marginLeft: 150 }}
+              />
+              </TouchableOpacity>
+              {/* </View> */}
             </View>
-          </TouchableOpacity>
         </Surface>
 
         {/* Surface for other settings */}
@@ -137,7 +184,14 @@ const Labour_profile_page = ({ navigation }) => {
             Others
           </Text>
           {/* About Us option */}
-          <TouchableOpacity onPress={handleAboutUs}>
+
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              paddingLeft: 10,
+            }}
+          >
             <View
               style={{
                 flexDirection: "row",
@@ -145,28 +199,27 @@ const Labour_profile_page = ({ navigation }) => {
                 paddingLeft: 10,
               }}
             >
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  paddingLeft: 10,
-                }}
-              >
-                <Icon source="alert-circle-outline" size={20} color="#505151" />
-                <Text style={{ fontSize: 16, padding: 10, color: "#888888" }}>
-                  About Us
-                </Text>
-              </View>
-              {/* Button to navigate to About Us section */}
-              <View style={{ flex: 1, alignItems: "flex-end" }}>
-                <Icon
-                  source="chevron-right"
-                  size={20}
-                  style={{ paddingLeft: 50, color: "#555555" }}
-                />
-              </View>
+              <Icon
+                name="info-circle"
+                size={20}
+                color="#505151"
+                style={{ marginRight: 10 }}
+              />
+              <Text style={{ fontSize: 16, padding: 10, color: "#888888" }}>
+                About Us
+              </Text>
             </View>
-          </TouchableOpacity>
+            <TouchableOpacity onPress={handleAboutUs}>
+              {/* Button to navigate to About Us section */}
+              {/* <View style={{ flex: 1, alignItems: "flex-end" }}> */}
+              <FontAwesomeIcon
+                icon={faChevronRight}
+                size={18}
+                style={{ marginLeft: 160 }}
+              />
+            </TouchableOpacity>
+            {/* </View> */}
+          </View>
 
           {/* Logout option */}
           <View
@@ -183,8 +236,13 @@ const Labour_profile_page = ({ navigation }) => {
                 paddingLeft: 10,
               }}
             >
-              <Icon source="logout" size={20} color="#F15C5C" />
-              <TouchableOpacity>
+              <Icon
+                name="sign-out"
+                size={20}
+                color="#F15C5C"
+                style={{ marginRight: 10 }}
+              />
+              <TouchableOpacity onPress={handleLogout}>
                 <Text style={{ fontSize: 16, padding: 10, color: "#888888" }}>
                   Logout
                 </Text>
