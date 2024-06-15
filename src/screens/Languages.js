@@ -1,8 +1,14 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { Checkbox, Surface } from "react-native-paper"; // Assuming you use Paper for checkboxes
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Checkbox, Surface, Button } from "react-native-paper"; // Assuming you use Paper for checkboxes
 
-const Languages = () => {
+const Languages = ({ navigation }) => {
   const [checked, setChecked] = useState({
     // State to manage checked languages
     english: false,
@@ -10,11 +16,39 @@ const Languages = () => {
     sinhala: false,
   });
 
+  useEffect(() => {
+    // Load saved language preferences on component mount
+    loadSavedLanguages();
+  }, []);
+
+  const loadSavedLanguages = async () => {
+    try {
+      const savedLanguages = await AsyncStorage.getItem("selectedLanguages");
+      if (savedLanguages !== null) {
+        setChecked(JSON.parse(savedLanguages));
+      }
+    } catch (error) {
+      console.error("Error loading languages:", error);
+    }
+  };
+
   const handleCheckboxChange = (language) => {
     setChecked((prevState) => ({
       ...prevState,
       [language]: !prevState[language], // Toggle the checked state
     }));
+  };
+
+  const handleSaveLanguages = async () => {
+    try {
+      await AsyncStorage.setItem("selectedLanguages", JSON.stringify(checked));
+      // alert("Languages saved successfully!");
+      navigation.navigate("Labour_profile_page", {
+        selectedLanguages: checked,
+      });
+    } catch (error) {
+      console.error("Error saving languages:", error);
+    }
   };
 
   return (
@@ -38,6 +72,13 @@ const Languages = () => {
             onPress={() => handleCheckboxChange("sinhala")}
           />
         </View>
+        <Button
+          mode="contained"
+          onPress={handleSaveLanguages}
+          style={styles.saveButton}
+        >
+          Save
+        </Button>
       </View>
     </Surface>
   );
@@ -65,7 +106,7 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginTop: 70,
     padding: 5,
-    height: 250,
+    height: 300,
     width: 345,
     alignItems: "center",
     justifyContent: "flexStart",
