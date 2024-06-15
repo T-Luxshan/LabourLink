@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { Button, Surface, Icon, Avatar } from "react-native-paper";
+import { Button, Surface, Avatar, Icon } from "react-native-paper";
+// import Icon from "react-native-vector-icons/FontAwesome";
 
 // Functional component definition
 const Labour_page = ({ navigation }) => {
@@ -118,6 +119,7 @@ const Labour_page = ({ navigation }) => {
               }}
             >
               About Me
+              <Icon source="pencil-outline" size={20} />
             </Text>
 
             {/* Description */}
