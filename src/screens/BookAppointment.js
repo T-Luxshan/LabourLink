@@ -62,10 +62,8 @@ const BookAppointment = (navigation ) => {
       </View>
       </View>
       <View style={styles.p1}>
-      <Text>Address</Text>
-      <TouchableOpacity style={styles.seeAllButton}>
-          <Text style={styles.seeAllButtonText}>Tap View map</Text>
-        </TouchableOpacity>
+      
+     
       </View>
       <View style={styles.S2}>
       <PageButton screen="MapViewScreen" />
@@ -82,17 +80,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1, // Take up entire space
     margin: 10, 
-    marginTop: 10, 
+    marginTop: 0, 
+    backgroundColor: "white",
   },
   label: {
     fontSize: 18, 
-    marginBottom: 10, 
+    marginBottom: 3, 
   },
   button: {
     backgroundColor: 'blue', 
     padding: 10, 
     borderRadius: 5, 
-    marginTop: 20, 
+    marginTop: 5, 
   },
   rowContainer: {
     flexDirection: 'row',
@@ -123,7 +122,7 @@ const styles = StyleSheet.create({
     gap:10,
   },
   S2:{
-     marginTop:35,
+    //  marginTop:0,
    
   },
   lebel2: {
