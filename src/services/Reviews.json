@@ -1,0 +1,34 @@
+[
+  {
+    "Name": "Harunika Bala",
+    "Rating": 4.5,
+    "Review": "Their expertise behind the wheel was commendable. I felt safe and comfortable throughout the journey, both to and from Colombo.",
+    "reviewerPhoto": "../assets/Images/profile_photo1.png"
+  },
+  {
+    "Name": "Kavinda Perera",
+    "Rating": 4.7,
+    "Review": "The plumber arrived on time and efficiently fixed the issues. Highly recommend their services!",
+    "reviewerPhoto": "../assets/Images/profile_photo2.png"
+  },
+  {
+    "Name": "Shehan Fernando",
+    "Rating": 4.3,
+    "Review": "The carpenter crafted beautiful furniture for our home. Great attention to detail and craftsmanship.",
+    "reviewerPhoto": "../assets/Images/profile_photo3.png"
+  },
+  {
+    "Name": "Amanda Jayasinghe",
+    "Rating": 4.8,
+    "Review": "The painter did an excellent job with the interior of our house. Very clean and professional work.",
+    "reviewerPhoto": "../assets/Images/profile_photo1.png"
+  },
+  {
+    "Name": "Dinuka Silva",
+    "Rating": 4.6,
+    "Review": "The mason constructed our garden wall perfectly. Solid work and very reliable.",
+    "reviewerPhoto": "../assets/Images/profile_photo2.png"
+  }
+]
+
+  

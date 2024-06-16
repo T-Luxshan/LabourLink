@@ -1,0 +1,54 @@
+[
+  {
+    "id": 1,
+    "name": "John Doe",
+    "jobRole": "Plumber",
+    "rating": 4,
+    "latitude": 6.7952,
+    "longitude": 79.9018
+    
+  },
+  {
+    "id": 2,
+    "name": "Jane Smith",
+    "jobRole": "Driver",
+    "rating": 4,
+    "latitude": 6.785,
+    "longitude": 79.9005
+    
+  },
+  {
+    "id": 3,
+    "name": "Alice Johnson",
+    "jobRole": "Electrician",
+    "rating": 4,
+    "latitude": 6.7805,
+    "longitude": 79.9012
+    
+  },
+  {
+    "id": 4,
+    "name": "Bob Brown",
+    "jobRole": "Carpenter",
+    "rating": 4,
+    "latitude": 6.7873,
+    "longitude": 79.8989
+  },
+  {
+    "id": 5,
+    "name": "Charlie Davis",
+    "jobRole": "Painter",
+    "rating": 4,
+    "latitude": 6.7901,
+    "longitude": 79.9025
+  },
+  {
+    "id": 6,
+    "name": "Diane Evans",
+    "jobRole": "Mason",
+    "rating": 4,
+    "latitude": 6.7934,
+    "longitude": 79.9038
+  }
+]
+
