@@ -23,6 +23,9 @@ import Appointment_page from "./src/screens/Appointment_page";
 import Labour_profile_page from "./src/screens/Labour_profile_page";
 import Languages from "./src/screens/Languages";
 import About_Us from "./src/screens/About_Us";
+import Edit_Profile from "./src/screens/Edit_Profile";
+
+
 
 const Stack = createStackNavigator();
 
@@ -31,12 +34,10 @@ export default function App() {
   
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Labour_profile_page">
-        <Stack.Screen 
-          name="GettingStarted" 
-          component={GettingStarted}
-         />
+   
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Labour_page">
+          {/* <Stack.Screen name="GettingStarted" component={GettingStarted} />
         <Stack.Screen
           name="Login"
           component={Login}
@@ -82,27 +83,28 @@ export default function App() {
           name="WaitingPage"
           component={WaitingPage}
           options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Labour_page"
-          component={Labour_page}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Previous_Work_History"
-          component={Previous_Work_History}
-          options={{ headerBackTitle: "Back" }}
-        />
-        <Stack.Screen
-          name="Appointment"
-          component={Appointment}
-          options={{ headerBackTitle: "Back" }}
-        />
-        <Stack.Screen 
+        /> */}
+          <Stack.Screen
+            name="Labour_page"
+            component={Labour_page}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Previous_Work_History"
+            component={Previous_Work_History}
+            options={{ headerBackTitle: "Back" }}
+          />
+          <Stack.Screen
+            name="Appointment"
+            component={Appointment}
+            options={{ headerBackTitle: "Back" }}
+          />
+          <Stack.Screen 
           name="Appointment_page" 
           component={Appointment_page} 
-        />
-        <Stack.Screen
+            
+          />
+          {/* <Stack.Screen
           name="Labour_profile_page"
           component={Labour_profile_page}
           options={{ headerShown: false }}
@@ -117,8 +119,13 @@ export default function App() {
           component={About_Us}
           options={{ title: "About Us" }}
         />
-      </Stack.Navigator>
-    </NavigationContainer>
+        <Stack.Screen 
+          name="Edit_Profile" 
+          component={Edit_Profile} 
+        /> */}
+        </Stack.Navigator>
+      </NavigationContainer>
+   
 
     // <SafeAreaProvider>
     //   <View style={styles.container}>
