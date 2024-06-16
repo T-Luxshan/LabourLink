@@ -1,6 +1,6 @@
 // Importing necessary modules from React and React Native
-import React from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, Button,ScrollView } from "react-native";
 import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
 import AppBar from "../components/AppBar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -8,11 +8,25 @@ import LabourProfileComponent from "../components/LabourProfileComponent";
 import ServiceBoxBar from "../components/ServiceBoxBar";
 import ScrollReviewer from "../components/ScrollReviewer";
 import PageButton from "../components/PageButton";
+import { getLabourByEmail } from "../services/LabourDetailsService";
+import {getLabourByAbout} from "../services/LabourDetailsService";
+import {getLabourByRating} from "../services/LabourDetailsService";
+import { getLabourByTotalservice } from "../services/LabourDetailsService";
+
+
 
 // LabourInfo component definition
 const LabourInfo = () => {
   // console.props(props);
    const navigation = useNavigation(); // Get navigation object using useNavigation hook
+   let email = "thana@example.com";
+   let jobRole = "Electrician";
+
+   
+   
+  
+
+  
 
 
   // Function to handle navigation to BookAppointment screen
@@ -21,27 +35,106 @@ const LabourInfo = () => {
   // };
 
   // Rendering JSX
+
+     useEffect(() => {
+     fetchLabour(email);
+      },[email])
+
+     useEffect(() => {
+        fetchAbout(email);
+         },[email])
+
+  const [labour, setLabour] = useState('');
+  const [Labourfrofile, setAbout] = useState('');
+  const [labourrating, setrating] = useState('');
+  const [labourTotalservice, setTotalServices] = useState('');
+
+  const fetchLabour = (email) =>{
+    getLabourByEmail(email)
+      .then(respose=>{
+        console.log(respose);
+        setLabour(respose.data);
+      })
+      .catch(error=>{
+        console.log("Error in fetching labour", error);
+      })
+  }
+  const fetchAbout = (email) =>{
+    getLabourByAbout(email)
+      .then(respose=>{
+        console.log(respose);
+        setAbout(respose.data);
+      })
+      .catch(error=>{
+        console.log("Error in fetching About", error);
+      })
+  }
+  useEffect(() => {
+    fetchrating(email);
+     },[email])
+
+     const fetchrating = (email) =>{
+      getLabourByRating(email)
+        .then(respose=>{
+          console.log(respose);
+          setrating(respose.data);
+        })
+        .catch(error=>{
+          console.log("Error in fetching About", error);
+        })
+    }
+
+    useEffect(() => {
+    fetchTotalServices(email, "ACCEPTED");  // Fetch total services with a specific stage
+  }, [email]);
+
+
+    const fetchTotalServices = (email, stage) => {
+      getLabourByTotalservice(email, stage)
+        .then(response => {
+          setTotalServices(response.data.length);  // Assuming response.data is an array of services
+        })
+        .catch(error => {
+          console.log("Error in fetching total services", error);
+        });
+    };
+  
+  
+  // useEffect(() => {
+  //   fetchAbout(email,jobRole);
+  //    },[email])
+  // const fetchReview = (email,jobRole) =>{
+  //   getLabourByReview(email,jobRole)
+  //     .then(respose=>{
+  //       console.log(respose);
+  //       setReview(respose.data);
+  //     })
+  //     .catch(error=>{
+  //       console.log("Error in fetching About", error);
+  //     })
+  // }
   return (
     // Wrapping the entire component with SafeAreaProvider to handle safe areas for different devices
-    <SafeAreaProvider>
+     <SafeAreaProvider>
       {/* Main container view */}
-      <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.container}>
         {/* AppBar component with title */}
-        <AppBar Title="Willeam Smith"/>
+        <AppBar Title={labour.name}/>
+
 
         {/* Labour profile component */}
         <LabourProfileComponent
           profileImage={require("../assets/Images/profile_photo3.png")} // Profile image
-          name="Williem Smith" // Name of the labour
-          jobTitle="Electrician" // Job title
-          rating={4} // Rating
+           name = { labour ? labour.name : "Name not found" }  // Name of the labour
+          jobTitle={labour ? labour.jobRole.join(" | ") : "Role not found"} // Job title
+          rating={4.6} // Rating
         />
         
         {/* Container for displaying service information */}
+        
         <View style={styles.infoContainer}>
-          <ServiceBoxBar Cardtext="Total Services" Cardno="210" /> 
-          <ServiceBoxBar Cardtext="Experience" Cardno="10Y+" /> 
-          <ServiceBoxBar Cardtext="Rating" Cardno="4.8" /> 
+          <ServiceBoxBar Cardtext="Total Services" Cardno={labourTotalservice} />  
+          <ServiceBoxBar  Cardtext="Rating" Cardno ={labourrating} /> 
         </View>  
 
         {/* Container for labour information */}
@@ -49,16 +142,19 @@ const LabourInfo = () => {
           {/* Title for labour information section */}
           <Text style={styles.title}>Labor Information</Text>
           {/* Displaying various information about the labour */}
-          <Text style={styles.info}>Full Name: John Doe</Text>
-          <Text style={styles.info}>Age: 24</Text>
-          <Text style={styles.info}>Gender: Male</Text> 
+              <Text style={styles.info}>Name: {labour ? labour.name : "Name not found"}</Text> 
+
+          <Text style={styles.info}>Gender: {Labourfrofile ? Labourfrofile.gender : "Name not found"}</Text> 
+          <Text style={styles.info}>language: {Labourfrofile ? Labourfrofile.languages.join(", ") : "languages not found"}</Text> 
           {/* Container for displaying about information */}
           <View style={styles.about}>
             {/* Title for about section */}
             <Text style={styles.info}>About:</Text>
             {/* Description about the labour */}
             <Text style={styles.indentedText}>
-              Committed to providing top-notch transportation solutions with a focus on efficiency and customer satisfaction. Continuously updating skills to adapt to the evolving demands of the transportation industry. View More
+              
+                {Labourfrofile ? Labourfrofile.aboutMe : "text not found"}
+
             </Text>
           </View>
         </View>
@@ -73,8 +169,9 @@ const LabourInfo = () => {
 
         {/* Button to navigate to BookAppointment screen */}
         
-      </View>
-    </SafeAreaProvider>
+    </ScrollView>
+     </SafeAreaProvider>
+    
   );
 };
 
@@ -82,19 +179,26 @@ const LabourInfo = () => {
 const styles = StyleSheet.create({
   
   container: {
-    flex: 1, // Take up entire space
+    flexGrow: 1, // Take up entire space
     marginTop: 10, 
     paddingHorizontal: 20, 
+    backgroundColor: "white",
+  
+   
   },
   
   infoContainer: {
-    flexDirection: "row", // Arrange items in a row
-    justifyContent: "space-between", // Align items with space between them
-    paddingVertical: 16, 
+     flexDirection: "row", 
+     paddingHorizontal: 1,
+      alignItems: 'center',
+      gap:0,
+    // marginVertical:10,
+    
+     
   },
  
   labor: {
-    marginTop: 20, 
+    marginTop: 0, 
   },
  
   title: {
@@ -116,6 +220,7 @@ const styles = StyleSheet.create({
   indentedText: {
     marginLeft: 10, 
     fontSize: 16, 
+    marginRight:40,
   },
 });
 

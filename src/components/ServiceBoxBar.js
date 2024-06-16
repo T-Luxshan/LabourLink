@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Card, Text } from 'react-native-paper';
+// const ratingText = props.rating ? props.rating.toFixed(1) : 'N/A';
 
 const ServiceBoxBar = (props) => (
   <Card style={styles.card}>
@@ -12,10 +13,24 @@ const ServiceBoxBar = (props) => (
 
 const styles = {
   card: {
-    width: 115, // Adjust the width as needed
+    width: 120, // Adjust the width as needed
     height: 75, // Adjust the height as needed
-    margin:5,
+    margin:27,
     marginTop:0.5,// Add any other styling properties as necessary
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 7,
+      height: 7,
+      
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
+    elevation: 5,
+    backgroundColor: "#F6F9Fd",
+  
+     
+  
+    
   },
   cardContent: {
     // flex: 1,
