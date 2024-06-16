@@ -233,7 +233,7 @@ const Labour_page = ({ navigation }) => {
               width: 345,
               alignItems: "flexStart",
               justifyContent: "flexStart",
-              marginBottom: 10,
+              marginBottom: 30,
             }}
             elevation={1}
           >
@@ -396,3 +396,4 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
+
