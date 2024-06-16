@@ -79,10 +79,10 @@ export default function App() {
             component={WaitingPage} 
             options={{ headerShown: false }} 
         /> */}
-        <Stack.Screen name="MapViewScreen" component={MapViewScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="MapViewScreen" component={MapViewScreen} options={{ headerShown: false }}/> 
         <Stack.Screen name="LabourInfo" component={LabourInfo} options={{ headerShown: false }}/>
         <Stack.Screen name="BookAppointment" component={BookAppointment} options={{ headerShown: false }}/>
-       </Stack.Navigator>
+       </Stack.Navigator> 
      </NavigationContainer>
    
     
