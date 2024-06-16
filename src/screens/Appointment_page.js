@@ -1,9 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { Button, Surface, Icon, Avatar } from "react-native-paper";
 
 // Functional component definition
-const Appointment_page = () => {
+const Appointment_page = ({ route, navigation }) => {
+  const { appointment, removeAppointment } = route.params;
+
+  const handleAccept = () => {
+    removeAppointment(appointment.id);
+    navigation.goBack();
+  };
+
+  const handleIgnore = () => {
+    removeAppointment(appointment.id);
+    navigation.goBack();
+  };
   // State for search query
   const [searchQuery, setSearchQuery] = React.useState("");
 
@@ -15,9 +26,9 @@ const Appointment_page = () => {
   // Component rendering
   return (
     <View style={styles.container}>
-      {/* ScrollView for scrolling content */}
+      {/* ScrollView for scrolling content /} */}
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {/* Logo and app name */}
+        {/* {/ Logo and app name */}
         <View style={{ flexDirection: "column", alignItems: "center" }}>
           <Avatar.Image
             size={50}
@@ -29,7 +40,7 @@ const Appointment_page = () => {
             <Text style={{ color: "#FF7600" }}> App</Text>
           </Text>
         </View>
-
+       
         {/* Schedule Appointment */}
         <View>
           <Text
@@ -70,7 +81,6 @@ const Appointment_page = () => {
             11:00 AM
           </Text>
         </View>
-
         {/* Client information */}
         <View style={{ marginTop: 15 }}>
           <Surface
@@ -135,7 +145,6 @@ const Appointment_page = () => {
             </Text>
           </Surface>
         </View>
-
         {/* Action buttons */}
         <View>
           <View
@@ -149,7 +158,7 @@ const Appointment_page = () => {
             <Button
               icon="phone-outline"
               mode="contained"
-              onPress={() => console.log("Pressed")}
+              onPress={handleAccept}
               style={{
                 backgroundColor: "#00204A",
                 borderRadius: 10,
@@ -170,7 +179,7 @@ const Appointment_page = () => {
             <Button
               icon="comment-outline"
               mode="contained"
-              onPress={() => console.log("Pressed")}
+              onPress={handleIgnore}
               style={{
                 backgroundColor: "#00204A",
                 borderRadius: 10,
