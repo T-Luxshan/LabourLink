@@ -11,7 +11,7 @@ import { Surface, Icon, Searchbar, Avatar } from "react-native-paper";
 import { LinearGradient } from "expo-linear-gradient";
 
 // Functional component definition
-const Customer_page = () => {
+const Customer_page = ({ navigation }) => {
   // State for search query
   const [searchQuery, setSearchQuery] = React.useState("");
 
@@ -19,6 +19,34 @@ const Customer_page = () => {
   const handleLanguagesPress = () => {
     console.log("Languages section pressed");
   };
+
+  const handleJobPressDriver = (job) => {
+    navigation.navigate("Driver", { job });
+  };
+  const handleJobPressElectrician = (job) => {
+    navigation.navigate("Electrician", { job });
+  };
+  const handleJobPressPlumber = (job) => {
+    navigation.navigate("Plumber", { job });
+  };
+  const handleJobPressMechanic = (job) => {
+    navigation.navigate("Mechanic", { job });
+  };
+  const handleJobPressMason = (job) => {
+    navigation.navigate("Mason", { job });
+  };
+  const handleJobPressPainter = (job) => {
+    navigation.navigate("Painter", { job });
+  };
+  const handleJobPressCarpenter = (job) => {
+    navigation.navigate("Carpenter", { job });
+  };
+  const handleJobPressWelder = (job) => {
+    navigation.navigate("Welder", { job });
+  };
+
+
+
 
   // Component rendering
   return (
@@ -40,27 +68,9 @@ const Customer_page = () => {
             </Text>
           </View>
 
-          <View style={{ marginLeft: 100, marginTop: 28 }}>
+          <View style={{ marginLeft: 150, marginTop: 28 }}>
             <Icon source="bell-badge-outline" size={25} />
           </View>
-          <View style={{ marginTop: 28, marginLeft: 20 }}>
-            <Icon source="heart-outline" size={25} />
-          </View>
-        </View>
-
-        {/* Search bar */}
-        <View style={{ marginTop: 10 }}>
-          <Searchbar
-            style={{
-              opacity: 1,
-              borderRadius: 20,
-              width: 350,
-              marginLeft: 12,
-            }}
-            placeholder="Search"
-            onChangeText={setSearchQuery}
-            value={searchQuery}
-          />
         </View>
 
         {/* Special offer section */}
@@ -103,19 +113,7 @@ const Customer_page = () => {
                     marginLeft: 0,
                     width: 150,
                   }}
-                >
-                  <View>
-                    <Text
-                      style={{
-                        color: "#FFFFFF",
-                        textAlign: "center",
-                        padding: 10,
-                      }}
-                    >
-                      Grab Now
-                    </Text>
-                  </View>
-                </LinearGradient>
+                ></LinearGradient>
               </TouchableOpacity>
             </View>
             <View style={{ alignSelf: "flex-end", flex: 1 }}>
@@ -201,15 +199,25 @@ const Customer_page = () => {
                   marginLeft: -10,
                 }}
               >
-                {renderImage("Drivers", require("../assets/Images/driver.jpg"))}
-                {renderImage("Event\nStaff", require("../assets/Images/event.jpg"))}
                 {renderImage(
-                  "Catering Staff",
-                  require("../assets/Images/catering.jpg")
+                  "Driver",
+                  require("../assets/Images/driver.png"),
+                  () => handleJobPressDriver("Driver")
                 )}
                 {renderImage(
-                  "Restaurant Staffing",
-                  require("../assets/Images/restaurant.jpg")
+                  "Electrician",
+                  require("../assets/Images/electrician.png"),
+                  () => handleJobPressElectrician("Electrician")
+                )}
+                {renderImage(
+                  "Carpenter",
+                  require("../assets/Images/carpenter.png"),
+                  () => handleJobPressCarpenter("Carpenter")
+                )}
+                {renderImage(
+                  "Painter",
+                  require("../assets/Images/painter.png"),
+                  () => handleJobPressPainter("Painter")
                 )}
               </View>
 
@@ -223,11 +231,27 @@ const Customer_page = () => {
                   marginLeft: -10,
                 }}
               >
-                {renderImage("Manager", require("../assets/Images/manager.jpg"))}
-                {renderImage("Plumber", require("../assets/Images/plumber.jpg"))}
-                {renderImage("Mechanic", require("../assets/Images/mechanic.jpg"))}
-                {renderImage("Delivery", require("../assets/Images/delivery.jpg"))}
-              </View>Images/
+                {renderImage(
+                  "Mason",
+                  require("../assets/Images/mason.png"),
+                  () => handleJobPressMason("Mason")
+                )}
+                {renderImage(
+                  "Plumber",
+                  require("../assets/Images/plumber.png"),
+                  () => handleJobPressPlumber("Plumber")
+                )}
+                {renderImage(
+                  "Mechanic",
+                  require("../assets/Images/mechanic.png"),
+                  () => handleJobPressMechanic("Mechanic")
+                )}
+                {renderImage(
+                  "Welder",
+                  require("../assets/Images/welder.png"),
+                  () => handleJobPressWelder("Welder")
+                )}
+              </View>
             </Surface>
           </LinearGradient>
         </View>
@@ -326,14 +350,16 @@ const Customer_page = () => {
 export default Customer_page;
 
 // Function to render individual category images
-const renderImage = (text, source) => (
-  <View
+const renderImage = (text, source, onPress) => (
+
+  <TouchableOpacity
     style={{
       width: "24%",
       marginBottom: 20,
       alignItems: "center",
       justifyContent: "center",
     }}
+    onPress={onPress}
   >
     {/* Image */}
     <View style={{ marginTop: text === "Drivers" ? -15 : 0 }}>
@@ -351,8 +377,9 @@ const renderImage = (text, source) => (
         {text}
       </Text>
     </View>
-  </View>
+  </TouchableOpacity>
 );
+
 
 // Styles
 const styles = StyleSheet.create({
