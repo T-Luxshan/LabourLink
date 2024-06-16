@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -9,40 +9,45 @@ import {
 import { Card } from "react-native-paper";
 
 const Appointment = ({ navigation }) => {
-  const appointmentDetails = [
-    { name: "Mr.Shanthan", job: "I need a Driver on 2024-07-23" },
-    { name: "Mrs.Shaar", job: "I need a Driver on 2024-07-23" },
-    { name: "Mrs.Kulam", job: "I need a Driver on 2024-07-23" },
-    { name: "Mr.Shanthan", job: "I need a Driver on 2024-07-23" },
-    { name: "Mr.Shanthan", job: "I need a Driver on 2024-07-23" },
-    { name: "Mrs.Shaar", job: "I need a Driver on 2024-07-23" },
-    { name: "Mrs.Kulam", job: "I need a Driver on 2024-07-23" },
-    { name: "Mr.Shanthan", job: "I need a Driver on 2024-07-23" },
-    { name: "Mr.Shanthan", job: "I need a Driver on 2024-07-23" },
-    { name: "Mrs.Shaar", job: "I need a Driver on 2024-07-23" },
-    { name: "Mrs.Kulam", job: "I need a Driver on 2024-07-23" },
-    { name: "Mr.Shanthan", job: "I need a Driver on 2024-07-23" },
-  ];
+  const [appointments, setAppointments] = useState([
+    { id: 1, name: "Mr.Shanthan", job: "I need a Driver on 2024-07-23" },
+    { id: 2, name: "Mrs.Shaar", job: "I need a Driver on 2024-07-23" },
+    { id: 3, name: "Mrs.Kulam", job: "I need a Driver on 2024-07-23" },
+    { id: 4, name: "Mr.Shanthan", job: "I need a Driver on 2024-07-23" },
+    { id: 5, name: "Mr.Shanthan", job: "I need a Driver on 2024-07-23" },
+    { id: 6, name: "Mrs.Shaar", job: "I need a Driver on 2024-07-23" },
+    { id: 7, name: "Mrs.Kulam", job: "I need a Driver on 2024-07-23" },
+    { id: 8, name: "Mr.Shanthan", job: "I need a Driver on 2024-07-23" },
+    { id: 9, name: "Mr.Shanthan", job: "I need a Driver on 2024-07-23" },
+    { id: 10, name: "Mrs.Shaar", job: "I need a Driver on 2024-07-23" },
+    { id: 11, name: "Mrs.Kulam", job: "I need a Driver on 2024-07-23" },
+    { id: 12, name: "Mr.Shanthan", job: "I need a Driver on 2024-07-23" },
+  ]);
 
-  const handleViewAppointment = () => {
-    navigation.navigate("Appointment_page");
+  const handleViewAppointment = (appointment) => {
+    navigation.navigate("Appointment_page", {
+      appointment: appointment,
+      removeAppointment: handleRemoveAppointment,
+    });
+  };
+
+  const handleRemoveAppointment = (id) => {
+    setAppointments(
+      appointments.filter((appointment) => appointment.id !== id)
+    );
   };
 
   return (
     <ScrollView>
       <View style={{ marginTop: 10 }}>
-        {/* <View style={styles.header}>
-          <Text style={styles.title}>Appointments</Text>
-        </View> */}
-
-        {appointmentDetails.map((appointment, index) => (
+        {appointments.map((appointment, index) => (
           <Card key={index} style={styles.card}>
             <Card.Content>
               <Text style={styles.appointmentDetail}>{appointment.name}</Text>
               <Text style={styles.appointmentJob}>{appointment.job}</Text>
               <TouchableOpacity
                 style={styles.viewTextContainer}
-                onPress={handleViewAppointment}
+                onPress={() => handleViewAppointment(appointment)}
               >
                 <Text style={styles.viewText}>View</Text>
               </TouchableOpacity>
@@ -55,18 +60,6 @@ const Appointment = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  title: {
-    marginLeft: 10,
-    marginBottom: 30,
-    color: "#FF7600",
-    fontWeight: "bold",
-    fontSize: 22,
-    paddingLeft: 10,
-  },
   card: {
     marginHorizontal: 20,
     marginVertical: 10,
@@ -98,3 +91,6 @@ const styles = StyleSheet.create({
 });
 
 export default Appointment;
+
+
+
