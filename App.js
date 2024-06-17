@@ -19,6 +19,7 @@ import ForgotPassword from './src/screens/authentication/ForgotPassword';
 import OTPVerification from './src/screens/authentication/OTPVerification';
 import ChangePassword from './src/screens/authentication/ChangePassword';
 import WaitingPage from './src/screens/authentication/WaitingPage';
+import BottomNavigationBar from './src/components/BottomNavigationBar';
 
 const Stack = createStackNavigator();
 
@@ -42,18 +43,6 @@ export default function App() {
             name="Home" 
             component={Home}
             options={{ headerShown: false }} />
-        {/* For Validation testing purpose, remove later */}
-        <Stack.Screen 
-            name="AuthTestSignup" 
-            component={AuthTestSignup}
-            options={{ headerShown: false }} />
-
-        <Stack.Screen 
-            name="AuthTestLogin" 
-            component={AuthTestLogin}
-            options={{ headerShown: false }} />
-            
-          {/* TODO : remove above block  */}
         <Stack.Screen 
             name="SignInWithGoogle" 
             component={SignInWithGoogle}
@@ -91,22 +80,15 @@ export default function App() {
             component={WaitingPage} 
             options={{ headerShown: false }} 
         />
+        
+        {/* <Stack.Screen 
+            name="BottomNavigation" 
+            component={BottomNavigationBar} 
+            options={{ headerShown: false }} 
+        /> */}
+
        </Stack.Navigator>
      </NavigationContainer>
-   
-
-    // <SafeAreaProvider>
-    //   <View style={styles.container}>
-        
-    //     {/* <ForgotPassword /> */}
-    //     {/* <OTPVerification /> */}
-    //     <ChangePassword />
-    //     {/* <Test /> */}
-    //     <StatusBar style="auto" />
-    //   </View>
-    // </SafeAreaProvider>
-
-
     
   );
 }
