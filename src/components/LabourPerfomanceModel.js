@@ -1,40 +1,49 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { Button, Modal, Portal, Provider as PaperProvider } from 'react-native-paper';
-import { PieChart, LineChart } from "react-native-gifted-charts";
+import { Button, Modal, Portal, Provider as PaperProvider, TextInput, MD3LightTheme } from 'react-native-paper';
+import { PieChart } from "react-native-gifted-charts";
 import DropDown from 'react-native-paper-dropdown';
 
 import BookingData from './BookingDetails.json';
 import RatingData from './ReviewDetails.json';
 
-
 const LabourPerformanceModel = ({ onMStateChange, marginTop, Password }) => {
+
+  const theme = {
+    roundness: 2,
+    colors: {
+      ...MD3LightTheme.colors,
+      primary: '#3498db',
+      secondary: '#f1c40f',
+      tertiary: '#a1b2c3',
+    },
+  };
+
   const [visible, setVisible] = React.useState(false);
   const [bookingDetails, setBookingDetails] = useState([]);
   const [ratingDetails, setRatingDetails] = useState([]);
   const [selectedRole, setSelectedRole] = React.useState('all');
+  const [showDropDown, setShowDropDown] = useState(false);
   const allBookingStagePieData = [];
 
   useEffect(() => {
     setBookingDetails(BookingData);
     setRatingDetails(RatingData);
-  }, []); // Ensure this effect runs only once
+  }, []);
 
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
 
-  const handleRoleChange = (event) => {
-    setSelectedRole(event.target.value);
-  };
-
-  const jobRoles = [...new Set(bookingDetails.map((item) => item.jobRole))];
+  const jobRoles = [...new Set(bookingDetails.map((item) => item.jobRole))].map((role) => ({
+    label: role,
+    value: role,
+  }));
 
   const jobRoleCounts = {};
 
-  // Loop through each job role
-  jobRoles.forEach((role) => {
-    // Initialize counts for each booking stage
+  jobRoles.forEach((roleObj) => {
+    const role = roleObj.value;
     const counts = {
       PENDING: 0,
       ACCEPTED: 0,
@@ -42,21 +51,19 @@ const LabourPerformanceModel = ({ onMStateChange, marginTop, Password }) => {
       COMPLETED: 0,
     };
 
-    // Count occurrences of each booking stage for the current job role
     bookingDetails.forEach((item) => {
       if (item.jobRole === role) {
         counts[item.bookingStage]++;
       }
     });
 
-    // Store counts for the current job role
     jobRoleCounts[role] = counts;
 
     allBookingStagePieData[role] = [
-      { id: 0, value: counts.PENDING, label: 'Pending' },
-      { id: 1, value: counts.ACCEPTED, label: 'Accepted' },
-      { id: 2, value: counts.COMPLETED, label: 'Completed' },
-      { id: 3, value: counts.DECLINED, label: 'Declined' },
+      { id: 0, value: counts.PENDING, label: 'Pending', color: '#FF6347' },
+      { id: 1, value: counts.ACCEPTED, label: 'Accepted', color: '#4682B4' },
+      { id: 2, value: counts.COMPLETED, label: 'Completed', color: '#32CD32' },
+      { id: 3, value: counts.DECLINED, label: 'Declined', color: '#FFD700' },
     ];
   });
 
@@ -79,58 +86,59 @@ const LabourPerformanceModel = ({ onMStateChange, marginTop, Password }) => {
     ),
   };
 
-  const data = [
-    { value: 50, text: 'Label 1', color: '#73CDFF' },
-    { value: 80, text: 'Label 2', color: '#DB01FF' },
-    { value: 90, text: 'Label 3', color: '#9100CB' },
-    { value: 70, text: 'Label 4', color: '#2F97FF' }
-  ];
-
   const getChartData = () => {
     if (selectedRole === 'all') {
-      // Display total data for all roles
       return Object.keys(totalBookingStagePieData).map((label, index) => ({
         id: index,
         value: totalBookingStagePieData[label],
         label: label,
+        color: ['#FF6347', '#4682B4', '#32CD32', '#FFD700'][index],
       }));
     } else {
-      // Display data for selected role
       return allBookingStagePieData[selectedRole];
     }
   };
 
   return (
-    <PaperProvider>
+    <PaperProvider theme={theme}>
       <Portal>
         <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={styles.modalContainer}>
           <ScrollView contentContainerStyle={styles.scrollViewContent}>
-          {/* <Text style={{ marginTop: 10 }}>Please select the job role you hired for..</Text> */}
-          <DropDown
-            label="Job Role"
-            mode="outlined"
-            value={selectedRole}
-            setValue={setSelectedRole}
-            list={jobRoles}
-            visible={showDropDown}
-            showDropDown={() => setShowDropDown(true)}
-            onDismiss={() => setShowDropDown(false)}
-            inputProps={{
-              right: <TextInput.Icon name="menu-down" />,
-            }}
-            activeColor="#FB9741"
-            theme={theme}
-          />
-            <PieChart data={data} focusOnPress={true} />
+            <DropDown
+              label="Job Role"
+              mode="outlined"
+              value={selectedRole}
+              setValue={setSelectedRole}
+              list={[{ label: 'All', value: 'all' }, ...jobRoles]}
+              visible={showDropDown}
+              showDropDown={() => setShowDropDown(true)}
+              onDismiss={() => setShowDropDown(false)}
+              inputProps={{
+                right: <TextInput.Icon name="menu-down" />,
+              }}
+              activeColor="#FB9741"
+              theme={theme}
+            />
+            <PieChart
+              data={getChartData()}
+              focusOnPress={true}
+              donut
+              innerCircleColor="white"
+              radius={100}
+              renderDecorator={({ item }) => (
+                <View style={styles.decorator}>
+                  <Text style={styles.decoratorText}>{item.label}: {item.value}</Text>
+                </View>
+              )}
+            />
             <View style={styles.legendContainer}>
-              {data.map((item, index) => (
+              {getChartData().map((item, index) => (
                 <View key={index} style={styles.legendItem}>
                   <View style={[styles.legendColor, { backgroundColor: item.color }]} />
-                  <Text style={styles.legendText}>{item.text}</Text>
+                  <Text style={styles.legendText}>{item.label}</Text>
                 </View>
               ))}
             </View>
-            <LineChart data={data} areaChart />
           </ScrollView>
         </Modal>
       </Portal>
@@ -174,5 +182,14 @@ const styles = StyleSheet.create({
   },
   legendText: {
     fontSize: 14,
+  },
+  decorator: {
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  decoratorText: {
+    fontSize: 12,
+    color: 'black',
   },
 });
