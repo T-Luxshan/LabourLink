@@ -3,13 +3,17 @@ import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { Button, Modal, Portal, Provider as PaperProvider } from 'react-native-paper';
 import { PieChart, LineChart } from "react-native-gifted-charts";
+import DropDown from 'react-native-paper-dropdown';
+
 import BookingData from './BookingDetails.json';
 import RatingData from './ReviewDetails.json';
+
 
 const LabourPerformanceModel = ({ onMStateChange, marginTop, Password }) => {
   const [visible, setVisible] = React.useState(false);
   const [bookingDetails, setBookingDetails] = useState([]);
   const [ratingDetails, setRatingDetails] = useState([]);
+  const [selectedRole, setSelectedRole] = React.useState('all');
   const allBookingStagePieData = [];
 
   useEffect(() => {
@@ -19,6 +23,10 @@ const LabourPerformanceModel = ({ onMStateChange, marginTop, Password }) => {
 
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
+
+  const handleRoleChange = (event) => {
+    setSelectedRole(event.target.value);
+  };
 
   const jobRoles = [...new Set(bookingDetails.map((item) => item.jobRole))];
 
@@ -97,6 +105,22 @@ const LabourPerformanceModel = ({ onMStateChange, marginTop, Password }) => {
       <Portal>
         <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={styles.modalContainer}>
           <ScrollView contentContainerStyle={styles.scrollViewContent}>
+          {/* <Text style={{ marginTop: 10 }}>Please select the job role you hired for..</Text> */}
+          <DropDown
+            label="Job Role"
+            mode="outlined"
+            value={selectedRole}
+            setValue={setSelectedRole}
+            list={jobRoles}
+            visible={showDropDown}
+            showDropDown={() => setShowDropDown(true)}
+            onDismiss={() => setShowDropDown(false)}
+            inputProps={{
+              right: <TextInput.Icon name="menu-down" />,
+            }}
+            activeColor="#FB9741"
+            theme={theme}
+          />
             <PieChart data={data} focusOnPress={true} />
             <View style={styles.legendContainer}>
               {data.map((item, index) => (
