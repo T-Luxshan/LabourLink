@@ -20,6 +20,7 @@ import OTPVerification from './src/screens/authentication/OTPVerification';
 import ChangePassword from './src/screens/authentication/ChangePassword';
 import WaitingPage from './src/screens/authentication/WaitingPage';
 import BottomNavigationBar from './src/components/BottomNavigationBar';
+import LabourPerfomanceModel from './src/components/LabourPerfomanceModel';
 
 const Stack = createStackNavigator();
 
@@ -31,7 +32,7 @@ export default function App() {
     
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen 
+        {/* <Stack.Screen 
             name="GettingStarted" 
             component={GettingStarted} />
         <Stack.Screen 
@@ -79,6 +80,11 @@ export default function App() {
             name="WaitingPage" 
             component={WaitingPage} 
             options={{ headerShown: false }} 
+        /> */}
+        <Stack.Screen
+            name="LabourPerfomance"
+            component={LabourPerfomanceModel}
+            options={{headerShown: false}}
         />
         
         {/* <Stack.Screen 
