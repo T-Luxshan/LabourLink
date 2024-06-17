@@ -1,17 +1,19 @@
 // Importing necessary modules from React and React Native
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Button,ScrollView } from "react-native";
+import { View, Text, StyleSheet,ScrollView } from "react-native";
 import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
 import AppBar from "../components/AppBar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import LabourProfileComponent from "../components/LabourProfileComponent";
 import ServiceBoxBar from "../components/ServiceBoxBar";
 import ScrollReviewer from "../components/ScrollReviewer";
-import PageButton from "../components/PageButton";
+// import PageButton from "../components/PageButton";
 import { getLabourByEmail } from "../services/LabourDetailsService";
 import {getLabourByAbout} from "../services/LabourDetailsService";
 import {getLabourByRating} from "../services/LabourDetailsService";
 import { getLabourByTotalservice } from "../services/LabourDetailsService";
+import { Button } from 'react-native-paper';
+
 
 
 
@@ -20,7 +22,7 @@ const LabourInfo = () => {
   // console.props(props);
    const navigation = useNavigation(); // Get navigation object using useNavigation hook
    let email = "thana@example.com";
-   let jobRole = "Electrician";
+   let jobRole = "ELECTRICIAN";
 
    
    
@@ -48,6 +50,7 @@ const LabourInfo = () => {
   const [Labourfrofile, setAbout] = useState('');
   const [labourrating, setrating] = useState('');
   const [labourTotalservice, setTotalServices] = useState('');
+  const [labourcard, setLabourCard] = useState([]);
 
   const fetchLabour = (email) =>{
     getLabourByEmail(email)
@@ -113,6 +116,16 @@ const LabourInfo = () => {
   //       console.log("Error in fetching About", error);
   //     })
   // }
+
+  const handlePress = () => {
+    // Navigate to 'BookAppointment' screen
+    navigation.navigate("BookAppointment",{
+      labourId: email,
+      jobRole: jobRole,
+      labourCard: {}
+    });
+  };
+
   return (
     // Wrapping the entire component with SafeAreaProvider to handle safe areas for different devices
      <SafeAreaProvider>
@@ -164,7 +177,14 @@ const LabourInfo = () => {
           {/* ScrollReviewer component for displaying reviews */}
           <ScrollReviewer />
           {/* PageButton component for navigating to different pages */}
-          <PageButton screen="BookAppointment"/>
+          {/* <PageButton screen="BookAppointment"/> */}
+          <Button
+            mode="contained"
+            onPress={handlePress}
+            style={styles.button}
+          >
+            Book Now
+          </Button>
         </View>
 
         {/* Button to navigate to BookAppointment screen */}
@@ -221,6 +241,15 @@ const styles = StyleSheet.create({
     marginLeft: 10, 
     fontSize: 16, 
     marginRight:40,
+  },
+  button: {
+    marginBottom: 100,
+    backgroundColor: 'orange',
+    width:350,
+    height:50,
+    marginLeft:10,
+    borderRadius:50
+    // Adjust the marginTop for spacing
   },
 });
 

@@ -6,6 +6,7 @@ const ABOUT_BASE_URL = "http://192.168.1.207:8080/api/labour-profiles";
 const TATAL_SERVICE_URL ="http://192.168.1.207:8080/api/bookings"
 
 
+
 export const getLabourByEmail = (email) => {
     return axios.get(`${BASE_URL}/getLabourById/${email}`)
 }
@@ -26,3 +27,12 @@ export const getLabourByRating = (email) => {
 export const getLabourByTotalservice = (labourEmail, stage) => {
     return axios.get(`${REVIEW_BASE_URL}/getReviews/${labourEmail}/${stage}`)
 }
+
+export const BookingLabour = (labourId,customerId,date,startTime, bookingStage,jobDescription,jobRole) => {
+    return axios.post(`${TATAL_SERVICE_URL}`, {
+        labourId,customerId,date,startTime, bookingStage,jobDescription,jobRole
+    });
+  };
+ 
+
+ 

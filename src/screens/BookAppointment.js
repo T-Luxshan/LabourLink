@@ -1,138 +1,245 @@
 import React, { useState } from 'react'; 
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'; 
+import { View, Text, StyleSheet, TouchableOpacity, Platform, TextInput, KeyboardAvoidingView, Alert } from 'react-native'; 
 import { Calendar } from 'react-native-calendars'; 
 import LabourProfileComponent from '../components/LabourProfileComponent'; 
-import AppBar from '../components/AppBar'; 
-import CardContainer from '../components/CardContainer'; 
-import PageButton from '../components/PageButton';
+import AppBar from '../components/AppBar';  
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { ScrollView } from 'react-native-gesture-handler';
+import { Formik } from 'formik';  
+import * as Yup from 'yup';  
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { BookingLabour } from '../services/LabourDetailsService';
 
-// BookAppointment component definition
-const BookAppointment = (navigation ) => {
-  const handleBack = () => {
-    navigation.goBack(); // Go back to the previous screen
-  };
-  // State variable for storing selected date
+// Define Yup validation schema
+const bookingSchema = Yup.object().shape({
+  date: Yup.string()
+    .required('Date is required')
+    .matches(
+      /^\d{4}-\d{2}-\d{2}$/,
+      'Date must be in the format YYYY-MM-DD'
+    ),
+  startTime: Yup.string()
+    .required('Start time is required')
+    .matches(
+      /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
+      'Start time must be in the format HH:MM'
+    ),
+  jobDescription: Yup.string()
+    .required('Job description is required')
+    // .min(10, 'Job description must be at least 10 characters long')
+});
+
+const BookAppointment = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
+  const {labourId, jobRole} = route.params;
+
   const [selectedDate, setSelectedDate] = useState('');
+  const [selectedTime, setSelectedTime] = useState(new Date());
+  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [timePicked, setTimePicked] = useState(false);
+  // const labourId = "thana@example.com";
+  const customerId = "thanakaran@gmail.com";
+  const bookingStage = "PENDING";
+  // const jobRole = "ELECTRICIAN";
 
-  // Function to handle date selection
   const handleDateSelect = (day) => {
-    // Ensure that day.dateString is defined before setting the state
     if (day.dateString) {
       setSelectedDate(day.dateString); // Set the selected date
     }
   };
 
-  // JSX rendering
+  const handleTimeChange = (event, selectedDate) => {
+    const currentDate = selectedDate || selectedTime;
+    setShowTimePicker(Platform.OS === 'ios');
+    setSelectedTime(currentDate);
+    setTimePicked(true);
+  };
+
+  const showTimePickerModal = () => {
+    setShowTimePicker(true);
+  };
+
+  const handleSubmit = async (values, { resetForm }) => {
+    // const bookingData = {
+    //   labourId,
+    //   customerId,
+    //   date: values.date,
+    //   startTime: values.startTime,
+    //   bookingStage,
+    //   jobDescription: values.jobDescription,
+    //   jobRole
+    // };
+
+    console.log("Submitting booking data: ",  values); // Log the booking data
+    console.log(jobRole.toUpperCase(), labourId)
+
+    try {
+      const response = await BookingLabour( labourId,customerId,values.date, values.startTime, "PENDING", values.jobDescription,jobRole.toUpperCase());
+      Alert.alert('Success', 'Booking has been made successfully.');
+      console.log("Booking response: ", response.data);
+      resetForm();  // Reset the form after successful submission
+    } catch (error) {
+      Alert.alert('Error', 'Failed to make the booking. Please try again.');
+      console.error("Booking error: ", error);
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      {/* AppBar component */}
-       <AppBar Title="       BookAppointment" /> 
-      {/* LabourProfileComponent */}
-      <View style={styles.Labourprofile}>
-        <LabourProfileComponent 
-          profileImage={require('../assets/Images/profile_photo2.png')}
-          name="Thanakaran"
-          jobTitle="Plumber"
-          rating={4} 
-        /> 
-      </View>
-      {/* Label for selecting date */}
-      <Text style={styles.label}>Select Date:</Text>
-      {/* Calendar component for date selection */}
-      <Calendar
-        onDayPress={handleDateSelect} // Pass the function to handle date selection
-        markedDates={{
-          [selectedDate]: { selected: true, selectedColor: 'blue' }, // Mark selected date with blue color
-        }}
-      />
-      {/* Text for selecting hour */}
-     
-      <Text style={styles.lebel2}>Select Hour:</Text>
-      <View style={styles.rowContainer}>
-      {/* Text for selecting 'From' hour */}
-      <Text style={styles.lebel3}>From:</Text>
-      {/* CardContainer component for displaying hour selection */}
-      <View Style={styles.S1}>
-      <CardContainer content="10.30" /> 
-      </View>
-      {/* Text for selecting 'To' hour */}
-      <Text style={styles.lebel3}>To</Text>
-      <View Style={styles.S1}>
-      <CardContainer content="11.30" /> 
-      </View>
-      </View>
-      <View style={styles.p1}>
-      
-     
-      </View>
-      <View style={styles.S2}>
-      <PageButton screen="MapViewScreen" />
-      </View>
-    </View>
+    <Formik
+      initialValues={{ date: '', startTime: '', jobDescription: '' }}
+      validationSchema={bookingSchema}
+      onSubmit={handleSubmit}
+    >
+      {({ handleChange, handleBlur, handleSubmit, values, errors, touched, setFieldValue }) => (
+        <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+          <ScrollView style={styles.container}>
+            <AppBar Title="BookAppointment" /> 
+
+            <View style={styles.Labourprofile}>
+              <LabourProfileComponent 
+                profileImage={require('../assets/Images/profile_photo2.png')}
+                name="Thanakaran"
+                jobTitle="Plumber"
+                rating={4} 
+              /> 
+            </View>
+
+            <Text style={styles.label}>Select Date:</Text>
+            <Calendar
+              onDayPress={(day) => {
+                handleDateSelect(day);
+                setFieldValue('date', day.dateString);  // Set Formik field value
+              }}
+              markedDates={{
+                [selectedDate]: { selected: true, selectedColor: 'blue' },
+              }}
+            />
+            {selectedDate && (
+              <Text style={styles.selectedDateText}>
+                Selected Date: {selectedDate}
+              </Text>
+            )}
+
+            <TouchableOpacity onPress={showTimePickerModal}>
+              <Text style={styles.label2}>Select Hour:</Text>
+            </TouchableOpacity>
+            {showTimePicker && (
+              <DateTimePicker
+                value={selectedTime}
+                mode="time"
+                is24Hour={false}
+                display="default"
+                onChange={(event, date) => {
+                  handleTimeChange(event, date);
+                  setFieldValue('startTime', date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));  // Set Formik field value
+                }}
+              />
+            )}
+            {timePicked && (
+              <Text style={styles.selectedTimeText}>
+                Selected Time: {selectedTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              </Text>
+            )}
+
+            <View style={styles.jobDetailsContainer}>
+              <Text style={styles.jobDetailsHeader}>Job Detail :</Text>
+              <View style={styles.jobDetailRow}>
+                <TextInput 
+                  style={styles.jobDescriptionInput}
+                  placeholder="Type job description here..."
+                  multiline
+                  value={values.jobDescription}
+                  onChangeText={handleChange('jobDescription')}
+                  onBlur={handleBlur('jobDescription')}
+                />
+                
+              </View>
+              {errors.jobDescription && touched.jobDescription && (
+                  <Text style={styles.errorText}>{errors.jobDescription}</Text>
+                )}
+            </View>
+
+            <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+              <Text style={styles.submitButtonText}>Booking</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      )}
+    </Formik>
   );
 };
 
-
 export default BookAppointment;
-
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, // Take up entire space
-    margin: 10, 
-    marginTop: 0, 
-    backgroundColor: "white",
+    flex: 1,
+    margin: 10,
+    marginTop: 0,
+    backgroundColor: 'white',
   },
   label: {
-    fontSize: 18, 
-    marginBottom: 3, 
+    fontSize: 18,
+    marginBottom: 3,
   },
-  button: {
-    backgroundColor: 'blue', 
-    padding: 10, 
-    borderRadius: 5, 
-    marginTop: 5, 
-  },
-  rowContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap:10,
-  },
-  buttonText: {
-    color: 'white', 
-    fontWeight: 'bold', 
-  },
-  S1: {
-   height:10,
-   margin:10,
-   backgroundColor:"red"
-  },
-  seeAllButton: {
-    backgroundColor: 'white',
-    // padding: 10,
-    borderRadius: 5,
-  },
-  seeAllButtonText: {
+  label2: {
+    fontSize: 18,
+    marginTop: 10,
+    marginBottom: 15,
     color: 'blue',
+  },
+  Labourprofile: {
+    marginBottom: 20,
+  },
+  jobDetailsContainer: {
+    marginTop: 50,
+    marginVertical: 20,
+    padding: 10,
+    // Styling can be adjusted as needed
+  },
+  jobDetailsHeader: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  jobDetailRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  jobDescriptionInput: {
+    flex: 1,
+    height: 100,
+    borderColor: '#ddd',
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 10,
+    textAlignVertical: 'top',
+    backgroundColor: '#fff',
+  },
+  submitButton: {
+    backgroundColor: 'orange',
+    padding: 15,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  submitButtonText: {
+    color: '#fff',
+    fontSize: 16,
     fontWeight: 'bold',
   },
-  p1:{
-    marginTop:20,
-    flexDirection: 'row',
-    gap:10,
-  },
-  S2:{
-    //  marginTop:0,
-   
-  },
-  lebel2: {
-    fontSize: 18, 
+  selectedTimeText: {
+    fontSize: 18,
     marginTop: 10,
-    marginBottom:15, 
   },
-  S1:{
-    height:100,
-    backgroundColor:"red"
-}
+  selectedDateText: {
+    fontSize: 18,
+    marginTop: 10,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 14,
+    marginTop: 5,
+  },
 });
-

@@ -31,7 +31,7 @@ export default function App() {
     
     <NavigationContainer>
       <Stack.Navigator>
-        {/* <Stack.Screen 
+         {/* <Stack.Screen 
             name="GettingStarted" 
             component={GettingStarted} />
         <Stack.Screen 
@@ -78,12 +78,12 @@ export default function App() {
             name="WaitingPage" 
             component={WaitingPage} 
             options={{ headerShown: false }} 
-        /> */}
-        <Stack.Screen name="MapViewScreen" component={MapViewScreen} options={{ headerShown: false }}/> 
-        <Stack.Screen name="LabourInfo" component={LabourInfo} options={{ headerShown: false }}/>
-        <Stack.Screen name="BookAppointment" component={BookAppointment} options={{ headerShown: false }}/>
+        />  */}
+         <Stack.Screen name="MapViewScreen" component={MapViewScreen} options={{ headerShown: false }}/> 
+         <Stack.Screen name="LabourInfo" component={LabourInfo} options={{ headerShown: false }}/>  
+         <Stack.Screen name="BookAppointment" component={BookAppointment} options={{ headerShown: false }}/>
        </Stack.Navigator> 
-     </NavigationContainer>
+     </NavigationContainer> 
    
     
   );
