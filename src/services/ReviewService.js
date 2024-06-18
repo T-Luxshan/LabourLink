@@ -20,5 +20,5 @@ export const editReview = (id, jobRole, description, rating, labourEmail) => {
 };
 
 export const getReviewById = (email) => {
-    return axios.get(`${REST_API_BASE_URL_REVIEW}/getReviewById/${email}`)
+    return axiosAuthInstance.get(`${REST_API_BASE_URL_REVIEW}/getReviewById/${email}`)
 } 
