@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
-import { Button, Modal, Portal, Provider as PaperProvider, Headline, IconButton, TextInput, MD3LightTheme } from 'react-native-paper';
+import { Button, Modal, Portal, Provider as PaperProvider, Headline, TextInput, MD3LightTheme } from 'react-native-paper';
 import { Rating, AirbnbRating } from 'react-native-ratings';
 import DropDown from 'react-native-paper-dropdown';
 import { addReview, editReview } from '../services/ReviewService';
+import { getLabourJobRoles } from '../services/AuthService';
 
 const ReviewModel = () => {
   const [visible, setVisible] = useState(true);
@@ -21,17 +22,23 @@ const ReviewModel = () => {
     "email": "lucky@gmail.com"
   }
   useEffect(() => {
-    const fetchAvailableJobs = async () => {
-      // Replace this with actual fetch call
-      // const response = await fetch('your-api-endpoint');
-      // const availableJobs = await response.json();
-      const availableJobs = ['Electrician', 'Plumber', 'Carpenter', 'Painter']; // Temporary data
-      
-      const formattedJobList = availableJobs.map(job => ({ label: job, value: job }));
-      setJobList(formattedJobList);
-    };
     fetchAvailableJobs();
   }, []);
+
+  const fetchAvailableJobs = () => {
+    
+    getLabourJobRoles()
+      .then(response => {
+        setJobList(response.data.map(job => ({ label: job, value: job })));
+      })
+      .catch(error => {
+        console.log('Error fetching job roles:');
+      });
+    // const availableJobs = ['Electrician', 'Plumber', 'Carpenter', 'Painter']; // Temporary data
+    
+    // const formattedJobList = availableJobs.map(job => ({ label: job, value: job }));
+    // setJobList(formattedJobList);
+  };
 
   const showModal = () => {
     setVisible(true);
@@ -121,9 +128,9 @@ const ReviewModel = () => {
             visible={showDropDown}
             showDropDown={() => setShowDropDown(true)}
             onDismiss={() => setShowDropDown(false)}
-            inputProps={{
-              right: <TextInput.Icon name="menu-down" />,
-            }}
+            // inputProps={{
+            //   right: <TextInput.Icon name="menu-down" />,
+            // }}
             activeColor="#FB9741"
             theme={theme}
           />
