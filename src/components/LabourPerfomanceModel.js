@@ -6,8 +6,9 @@ import { PieChart, LineChart } from "react-native-gifted-charts";
 import DropDown from 'react-native-paper-dropdown';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import RatingData from './ReviewDetails.json';
+
 import { getBookingDetailsByLabourId } from '../services/HiringService';
+import { getReviewById } from '../services/ReviewService';
 
 const LabourPerformanceModel = ({ onMStateChange, marginTop, Password }) => {
 
@@ -31,19 +32,19 @@ const LabourPerformanceModel = ({ onMStateChange, marginTop, Password }) => {
 
   useEffect(() => {
     fetchbookingDetails(email);
-
-    // setBookingDetails(BookingData);
-    setRatingDetails(RatingData);
+    fetchRatingDetails(email);
   }, [email]);
 
   const fetchbookingDetails = (email) => {
       getBookingDetailsByLabourId(email)
         .then(res=>setBookingDetails(res.data))
-        .catch(err=>console.log(err))
+        .catch(err=>console.log("failed to fetch booking details",err))
   }
 
   const fetchRatingDetails = (email) => {
-
+      getReviewById(email)
+        .then(res=>setRatingDetails(res.data))
+        .catch(err=>console.log("failed to fetch rating details", err))
   }
 
   const showModal = () => setVisible(true);
