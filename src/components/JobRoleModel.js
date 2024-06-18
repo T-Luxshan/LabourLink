@@ -16,11 +16,6 @@ const JobRoleModel = ({onMStateChange, onJobRolesChange, mState}) => {
     onMStateChange(false);
     onJobRolesChange(selectedJobs);
   };
-  // let availableJobRoles = ["CARPENTER", "ELECTRICIAN", "PLUMBER", "PAINTER", "MASON", "WELDER", "DRIVER"];
-
-  // useEffect(() => {
-  //   setJoblist(availableJobRoles);
-  // }, []);
   useEffect(() => {
     getLabourJobRoles()
       .then(response => {
