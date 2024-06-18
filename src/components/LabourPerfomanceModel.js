@@ -1,9 +1,10 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Button, Modal, Portal, Provider as PaperProvider, MD3LightTheme } from 'react-native-paper';
-import { PieChart } from "react-native-gifted-charts";
+import { PieChart, LineChart } from "react-native-gifted-charts";
 import DropDown from 'react-native-paper-dropdown';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import BookingData from './BookingDetails.json';
 import RatingData from './ReviewDetails.json';
@@ -20,10 +21,10 @@ const LabourPerformanceModel = ({ onMStateChange, marginTop, Password }) => {
     },
   };
 
-  const [visible, setVisible] = React.useState(false);
+  const [visible, setVisible] = useState(false);
   const [bookingDetails, setBookingDetails] = useState([]);
   const [ratingDetails, setRatingDetails] = useState([]);
-  const [selectedRole, setSelectedRole] = React.useState('all');
+  const [selectedRole, setSelectedRole] = useState('all');
   const [showDropDown, setShowDropDown] = useState(false);
   const allBookingStagePieData = [];
 
@@ -92,18 +93,70 @@ const LabourPerformanceModel = ({ onMStateChange, marginTop, Password }) => {
         id: index,
         value: totalBookingStagePieData[label],
         label: label,
-        color: ['#FF6347', '#4682B4', '#32CD32', '#FFD700'][index],
+        color: ['#FFD700', '#4682B4', '#32CD32', '#FF6347'][index],
       }));
     } else {
       return allBookingStagePieData[selectedRole];
     }
   };
 
+  const getLineChartData = () => {
+    if (selectedRole === 'all') {
+      return jobRoles.map((roleObj) => {
+        const role = roleObj.value;
+        const ratings = ratingDetails
+          .filter((item) => item.jobRole === role)
+          .map((item) => item.rating);
+        return { name: role, ratings: ratings };
+      });
+    } else {
+      const selectedRatings = ratingDetails
+        .filter((item) => item.jobRole === selectedRole)
+        .map((item) => item.rating);
+      return [{ name: selectedRole, ratings: selectedRatings }];
+    }
+  };
+  
+
+  const lineChartData = getLineChartData();
+
+  const formatLineData = (lineChartData) => {
+    const formattedData = lineChartData.map((data) => {
+      const lineData = data.ratings.map((rating, index) => ({
+        value: rating,
+        label: `${index + 1}`,
+      }));
+      return {
+        seriesName: data.name,
+        data: lineData,
+        color: getColorForSeries(data.name),
+      };
+    });
+    return formattedData;
+  };
+
+  const getColorForSeries = (seriesName) => {
+    const colors = {
+      'Role 1': '#3498db',
+      'Role 2': '#f1c40f',
+      // Add more colors for other roles as needed
+    };
+    const defaultColor = '#' + Math.floor(Math.random()*16777215).toString(16); // random color
+    return colors[seriesName] || defaultColor;
+  };
+
+  const formattedLineData = formatLineData(lineChartData);
+
   return (
     <PaperProvider theme={theme}>
       <Portal>
         <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={styles.modalContainer}>
           <ScrollView contentContainerStyle={styles.scrollViewContent}>
+            <View style={styles.iconContainer}>
+            <TouchableOpacity style={styles.iconContainer} onPress={hideModal}>
+              <MaterialCommunityIcons name="close-circle-outline" size={30} color="red" />
+            </TouchableOpacity>
+            </View>
             <DropDown
               label="Job Role"
               mode="outlined"
@@ -132,6 +185,35 @@ const LabourPerformanceModel = ({ onMStateChange, marginTop, Password }) => {
                 </View>
               ))}
             </View>
+            <View>
+              <Text style={[styles.seriesTitle, {textAlign:'center', fontSize:20}]}>Rating trend</Text>
+              {formattedLineData.map((series, index) => (
+                <View key={index}>
+                  <Text style={styles.seriesTitle}>{series.seriesName}</Text>
+                  <LineChart
+                  data={series.data}
+                  spacing={30}
+                  textColor1="black"
+                  textShiftY={-8}
+                  textShiftX={-10}
+                  textFontSize={13}
+                  thickness={5}
+                  yAxisColor="#0BA5A4"
+                  showVerticalLines
+                  // hideYAxisText
+                  verticalLinesColor="rgba(14,164,164,0.5)"
+                  xAxisColor="#0BA5A4"
+                  // color={series.color}
+                  // color1="skyblue"
+                  color1="orange"
+                  isAnimated
+                  yAxisLabelTexts={['1', '2', '3', '4', '5']}
+                  yAxisTextNumberOfLines={5}
+                />
+
+                </View>
+              ))}
+            </View>
           </ScrollView>
         </Modal>
       </Portal>
@@ -156,6 +238,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 20,
   },
+  iconContainer: {
+    position: 'absolute',
+    top: 15,
+    right: 10,
+  },
   legendContainer: {
     flexDirection: 'row',
     marginTop: 20,
@@ -176,13 +263,9 @@ const styles = StyleSheet.create({
   legendText: {
     fontSize: 14,
   },
-  decorator: {
-    position: 'absolute',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  decoratorText: {
-    fontSize: 12,
-    color: 'black',
+  seriesTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginVertical: 10,
   },
 });
