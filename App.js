@@ -32,7 +32,7 @@ export default function App() {
     
     <NavigationContainer>
       <Stack.Navigator>
-        {/* <Stack.Screen 
+        <Stack.Screen 
             name="GettingStarted" 
             component={GettingStarted} />
         <Stack.Screen 
@@ -80,12 +80,12 @@ export default function App() {
             name="WaitingPage" 
             component={WaitingPage} 
             options={{ headerShown: false }} 
-        /> */}
-        <Stack.Screen
+        />
+        {/* <Stack.Screen
             name="LabourPerfomance"
             component={LabourPerfomanceModel}
             options={{headerShown: false}}
-        />
+        /> */}
         
         {/* <Stack.Screen 
             name="BottomNavigation" 
