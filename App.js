@@ -21,6 +21,8 @@ import ChangePassword from './src/screens/authentication/ChangePassword';
 import WaitingPage from './src/screens/authentication/WaitingPage';
 import BottomNavigationBar from './src/components/BottomNavigationBar';
 import LabourPerfomanceModel from './src/components/LabourPerfomanceModel';
+import ReviewModel from './src/components/ReviewModel';
+import ReportModel from './src/components/ReportModel';
 
 const Stack = createStackNavigator();
 
@@ -79,6 +81,16 @@ export default function App() {
         <Stack.Screen 
             name="WaitingPage" 
             component={WaitingPage} 
+            options={{ headerShown: false }} 
+        /> 
+        <Stack.Screen 
+            name="ReviewModel" 
+            component={ReviewModel} 
+            options={{ headerShown: false }} 
+        />
+        <Stack.Screen 
+            name="ReportModel" 
+            component={ReportModel} 
             options={{ headerShown: false }} 
         />
         {/* <Stack.Screen
