@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import { Button, Modal, Portal, Provider as PaperProvider, TextInput, MD3LightTheme } from 'react-native-paper';
+import { Button, Modal, Portal, Provider as PaperProvider, MD3LightTheme } from 'react-native-paper';
 import { PieChart } from "react-native-gifted-charts";
 import DropDown from 'react-native-paper-dropdown';
 
@@ -113,9 +113,6 @@ const LabourPerformanceModel = ({ onMStateChange, marginTop, Password }) => {
               visible={showDropDown}
               showDropDown={() => setShowDropDown(true)}
               onDismiss={() => setShowDropDown(false)}
-              inputProps={{
-                right: <TextInput.Icon name="menu-down" />,
-              }}
               activeColor="#FB9741"
               theme={theme}
             />
@@ -125,11 +122,6 @@ const LabourPerformanceModel = ({ onMStateChange, marginTop, Password }) => {
               donut
               innerCircleColor="white"
               radius={100}
-              // renderDecorator={({ item }) => (
-              //   <View style={styles.decorator}>
-              //     <Text style={styles.decoratorText}>{item.label}: {item.value}</Text>
-              //   </View>
-              // )}
             />
             <View style={styles.legendContainer}>
               {getChartData().map((item, index) => (
