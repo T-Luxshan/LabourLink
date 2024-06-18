@@ -7,6 +7,7 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Checkbox, Surface, Button } from "react-native-paper"; // Assuming you use Paper for checkboxes
+import LabourProfileService from "../services/LabourProfileService";
 
 const Languages = ({ navigation }) => {
   const [checked, setChecked] = useState({
@@ -50,6 +51,33 @@ const Languages = ({ navigation }) => {
       console.error("Error saving languages:", error);
     }
   };
+
+  // const handleSaveLanguages = async () => {
+  //   try {
+  //     await AsyncStorage.setItem("selectedLanguages", JSON.stringify(checked));
+  //     // Assuming you have a way to get the labour email dynamically
+  //     const labourEmail = "example@example.com"; // Replace with dynamic value if needed
+
+  //     // Update the labour profile with the selected languages
+  //     await LabourProfileService.updateLabourProfile(
+  //       "", // Assuming you don't update aboutMe and gender here
+  //       "", // Assuming you don't update aboutMe and gender here
+  //       Object.keys(checked).filter((key) => checked[key]), // Filter out only checked languages
+  //       labourEmail
+  //     );
+
+  //     navigation.navigate("Labour_profile_page", {
+  //       selectedLanguages: checked,
+  //     });
+  //   } catch (error) {
+  //     console.error("Error saving languages:", error);
+  //   }
+  // };
+
+
+
+
+
 
   return (
     <Surface style={styles.surface} elevation={1}>

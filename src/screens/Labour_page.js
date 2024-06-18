@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,13 +7,39 @@ import {
   ScrollView,
 } from "react-native";
 import { Button, Surface, Avatar, Icon } from "react-native-paper";
-// import Icon from "react-native-vector-icons/FontAwesome";
+import LabourService from "../services/LabourService"
+
 
 // Functional component definition
 const Labour_page = ({ navigation }) => {
   // State for search query
   const [searchQuery, setSearchQuery] = React.useState("");
+  const [name, setName] = useState("");
+  const [jobRole, setJobRole] = useState("");
+  const [totalServices, setTotalServices] = useState(0);
+  const [rating, setRating] = useState(0);
+  const [aboutMe, setAboutMe] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
 
+
+  useEffect(() => {
+    const email = "example@example.com"; // Replace with dynamic value if needed
+    LabourService.getLabourById(email)
+      .then((response) => {
+        const data = response.data;
+        setName(data.name);
+        setJobRole(data.jobRole);
+        setTotalServices(data.totalServices);
+        setRating(data.rating);
+        setAboutMe(data.aboutMe);
+        setMobileNumber(data.mobileNumber);
+      })
+      .catch((error) => {
+        console.error("Error fetching labour data:", error);
+      });
+  }, []);
+
+  
   // Function to handle languages press
   const handleLanguagesPress = () => {
     console.log("Languages section pressed");
@@ -45,14 +71,11 @@ const Labour_page = ({ navigation }) => {
             />
 
             <Text style={{ fontSize: 18, fontWeight: 500, marginTop: 5 }}>
-              Ayshmankura Shan
-            </Text>
-            <Text style={{ fontSize: 22, fontWeight: 200, color: "#969696" }}>
-              @Ayushshan
+              {name || "Ayshmankura Shan"}
             </Text>
 
             <Text style={{ fontSize: 20, fontWeight: 200, marginLeft: 20 }}>
-              Driver <Icon source="pencil-outline" size={20} />
+              {jobRole || "Driver"} <Icon source="pencil-outline" size={20} />
             </Text>
           </View>
         </View>
@@ -76,7 +99,7 @@ const Labour_page = ({ navigation }) => {
                 <Text
                   style={{ fontSize: 16, fontWeight: 500, color: "#464255" }}
                 >
-                  180
+                  {totalServices || 180}
                 </Text>
                 <Text style={{ fontSize: 13 }}>Total Services</Text>
               </View>
@@ -85,7 +108,7 @@ const Labour_page = ({ navigation }) => {
                 <Text
                   style={{ fontSize: 16, fontWeight: 500, color: "#464255" }}
                 >
-                  4.5
+                  {rating || 4.5}
                 </Text>
                 <Text style={{ fontSize: 13 }}>Rating</Text>
               </View>
@@ -102,7 +125,7 @@ const Labour_page = ({ navigation }) => {
               marginLeft: 15,
               marginTop: 25,
               padding: 5,
-              height: 220,
+              height: 250,
               width: 345,
               alignItems: "flexStart",
               justifyContent: "flexStart",
@@ -131,10 +154,11 @@ const Labour_page = ({ navigation }) => {
                 color: "#2F3239",
               }}
             >
-              Experienced Driver with over two decades of dedicated service
-              since the year 2000. Possessing a strong track record of safe
-              driving, punctuality, and excellent knowledge of local and
-              regional routes.
+              {aboutMe ||
+                `Experienced Driver with over two decades of dedicated service
+  since the year 2000. Possessing a strong track record of safe
+  driving, punctuality, and excellent knowledge of local and
+  regional routes.`}
             </Text>
 
             {/* Contact details */}
@@ -152,7 +176,7 @@ const Labour_page = ({ navigation }) => {
 
             <Text style={{ paddingTop: 5, marginLeft: 30, color: "#41434A" }}>
               <Icon source="phone-outline" size={20} />
-              +92 1234567890
+              {mobileNumber || "+92 1234567890"}
             </Text>
           </Surface>
         </View>
@@ -371,8 +395,7 @@ const Labour_page = ({ navigation }) => {
   );
 };
 
-// Exporting the component as default
-export default Labour_page;
+
 
 // Styles for the component
 const styles = StyleSheet.create({
@@ -397,3 +420,5 @@ const styles = StyleSheet.create({
   },
 });
 
+// Exporting the component as default
+export default Labour_page;

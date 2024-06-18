@@ -26,14 +26,6 @@ import About_Us from "./src/screens/About_Us";
 import Edit_Profile from "./src/screens/Edit_Profile";
 import Customer_page from './src/screens/Customer_page';
 import Notification_customer_page from "./src/screens/Notification_customer_page";
-import Driver from "./src/screens/Driver";
-import Electrician from './src/screens/Electrician';
-import Welder from "./src/screens/Welder";
-import Plumber from './src/screens/Plumber';
-import Mechanic from './src/screens/Mechanic';
-import Mason from './src/screens/Mason';
-import Carpenter from './src/screens/Carpenter';
-import Painter from './src/screens/Painter';
 
 
 
@@ -51,9 +43,9 @@ export default function App() {
           name="Login"
           component={Login}
           options={{ headerShown: false }}
-        />
+        /> */}
 
-        <Stack.Screen
+        {/* <Stack.Screen
           name="SignInWithGoogle"
           component={SignInWithGoogle}
           options={{ headerShown: false }}
@@ -136,49 +128,10 @@ export default function App() {
           component={Customer_page}
           options={{ headerShown: false }}
         />
+        
         <Stack.Screen
           name="Notification_customer_page"
           component={Notification_customer_page}
-        />
-        <Stack.Screen
-          name="Driver"
-          component={Driver}
-          options={{ headerBackTitle: "Back" }}
-        />
-        <Stack.Screen
-          name="Electrician"
-          component={Electrician}
-          options={{ headerBackTitle: "Back" }}
-        />
-        <Stack.Screen
-          name="Painter"
-          component={Painter}
-          options={{ headerBackTitle: "Back" }}
-        />
-        <Stack.Screen
-          name="Plumber"
-          component={Plumber}
-          options={{ headerBackTitle: "Back" }}
-        />
-        <Stack.Screen
-          name="Carpenter"
-          component={Carpenter}
-          options={{ headerBackTitle: "Back" }}
-        />
-        <Stack.Screen
-          name="Welder"
-          component={Welder}
-          options={{ headerBackTitle: "Back" }}
-        />
-        <Stack.Screen
-          name="Mason"
-          component={Mason}
-          options={{ headerBackTitle: "Back" }}
-        />
-        <Stack.Screen
-          name="Mechanic"
-          component={Mechanic}
-          options={{ headerBackTitle: "Back" }}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,42 +9,58 @@ import {
 } from "react-native";
 import { Surface, Icon, Searchbar, Avatar } from "react-native-paper";
 import { LinearGradient } from "expo-linear-gradient";
+import CustomerService from "../services/CustomerService";
+import LabourService from "../services/LabourService";
 
 // Functional component definition
 const Customer_page = ({ navigation }) => {
   // State for search query
   const [searchQuery, setSearchQuery] = React.useState("");
+   const [customerName, setCustomerName] = useState("");
+    const [labourName, setLabourName] = useState("");
+  const [jobRole, setJobRole] = useState("");
+  const [rating, setRating] = useState(0);
+
+   useEffect(() => {
+     const email = "example@example.com"; // Replace with dynamic value if needed
+
+     CustomerService.getCustomerById(email)
+       .then((response) => {
+         const data = response.data;
+         setCustomerName(data.name);
+       })
+       .catch((error) => {
+         console.error("Error fetching customer name data:", error);
+       });
+
+     LabourService.getLabourById(email)
+       .then((response) => {
+         const data = response.data;
+         setLabourName(data.name);
+         setJobRole(data.jobRole);
+       })
+       .catch((error) => {
+         console.error("Error fetching labour profile data:", error);
+       });
+   }, []);
+
+
+
+
+
+
 
   // Function to handle languages press
   const handleLanguagesPress = () => {
     console.log("Languages section pressed");
   };
 
-  const handleJobPressDriver = (job) => {
-    navigation.navigate("Driver", { job });
-  };
-  const handleJobPressElectrician = (job) => {
-    navigation.navigate("Electrician", { job });
-  };
-  const handleJobPressPlumber = (job) => {
-    navigation.navigate("Plumber", { job });
-  };
-  const handleJobPressMechanic = (job) => {
-    navigation.navigate("Mechanic", { job });
-  };
-  const handleJobPressMason = (job) => {
-    navigation.navigate("Mason", { job });
-  };
-  const handleJobPressPainter = (job) => {
-    navigation.navigate("Painter", { job });
-  };
-  const handleJobPressCarpenter = (job) => {
-    navigation.navigate("Carpenter", { job });
-  };
-  const handleJobPressWelder = (job) => {
-    navigation.navigate("Welder", { job });
+  const handleJobPress = (jobCategory) => {
+    console.log(`Job category pressed: ${jobCategory}`);
+    
   };
 
+ 
 
 
 
@@ -64,7 +80,7 @@ const Customer_page = ({ navigation }) => {
               Welcome Back,
             </Text>
             <Text style={{ fontSize: 16, fontWeight: "700", color: "#1D1617" }}>
-              Stefani Wong
+              {customerName || "Stefani Wong"} 
             </Text>
           </View>
 
@@ -151,19 +167,6 @@ const Customer_page = ({ navigation }) => {
           >
             Categories
           </Text>
-          <TouchableOpacity onPress={handleLanguagesPress}>
-            <Text
-              style={{
-                marginTop: 35,
-                fontSize: 12,
-                color: "#25A9D2",
-                fontWeight: 500,
-                marginRight: 15,
-              }}
-            >
-              SEE ALL
-            </Text>
-          </TouchableOpacity>
         </View>
 
         {/* Category Images */}
@@ -202,22 +205,22 @@ const Customer_page = ({ navigation }) => {
                 {renderImage(
                   "Driver",
                   require("../assets/Images/driver.png"),
-                  () => handleJobPressDriver("Driver")
+                  () => handleJobPress()
                 )}
                 {renderImage(
                   "Electrician",
                   require("../assets/Images/electrician.png"),
-                  () => handleJobPressElectrician("Electrician")
+                  () => handleJobPress()
                 )}
                 {renderImage(
                   "Carpenter",
                   require("../assets/Images/carpenter.png"),
-                  () => handleJobPressCarpenter("Carpenter")
+                  () => handleJobPress()
                 )}
                 {renderImage(
                   "Painter",
                   require("../assets/Images/painter.png"),
-                  () => handleJobPressPainter("Painter")
+                  () => handleJobPress()
                 )}
               </View>
 
@@ -234,22 +237,22 @@ const Customer_page = ({ navigation }) => {
                 {renderImage(
                   "Mason",
                   require("../assets/Images/mason.png"),
-                  () => handleJobPressMason("Mason")
+                  () => handleJobPress()
                 )}
                 {renderImage(
                   "Plumber",
                   require("../assets/Images/plumber.png"),
-                  () => handleJobPressPlumber("Plumber")
+                  () => handleJobPress()
                 )}
                 {renderImage(
                   "Mechanic",
                   require("../assets/Images/mechanic.png"),
-                  () => handleJobPressMechanic("Mechanic")
+                  () => handleJobPress()
                 )}
                 {renderImage(
                   "Welder",
                   require("../assets/Images/welder.png"),
-                  () => handleJobPressWelder("Welder")
+                  () => handleJobPress()
                 )}
               </View>
             </Surface>
@@ -301,12 +304,12 @@ const Customer_page = ({ navigation }) => {
                 <Text
                   style={{ fontSize: 16, fontWeight: "700", color: "#1D1617" }}
                 >
-                  Williem Smith
+                  {labourName || "Williem Smith"}
                 </Text>
                 <Text
                   style={{ fontSize: 13, fontWeight: "400", color: "#7B6F72" }}
                 >
-                  Driver
+                  {jobRole || "Driver"}
                 </Text>
                 <View
                   style={{
@@ -323,21 +326,10 @@ const Customer_page = ({ navigation }) => {
                   <Text> 4.8</Text>
                 </View>
               </View>
-              <View style={{ marginTop: 20, marginLeft: 20 }}>
-                <View style={{ marginLeft: 30 }}>
+              <View style={{ marginTop: 20, marginLeft: 15 }}>
+                <View style={{ marginLeft: 10 }}>
                   <Icon source="heart" size={20} color="#FF0000" />
                 </View>
-                <TouchableOpacity onPress={handleLanguagesPress}>
-                  <Text
-                    style={{
-                      paddingTop: 40,
-                      color: "#25A9D2",
-                      marginRight: 30,
-                    }}
-                  >
-                    View all
-                  </Text>
-                </TouchableOpacity>
               </View>
             </View>
           </Surface>

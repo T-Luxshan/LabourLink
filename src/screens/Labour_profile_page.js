@@ -13,16 +13,22 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
+import LabourProfileService from "../services/LabourProfileService";
+import LabourService from "../services/LabourService";
 
 
-const Labour_profile_page = ({ navigation }) => {
+
+const Labour_profile_page = ({ navigation, route }) => {
     
   // Function to handle press event for the "Languages" section
  const [name, setName] = useState("");
+ const [aboutMe, setAboutMe] = useState("");
+ const [languages, setLanguages] = useState([]);
+ const [gender, setGender] = useState("");
  const [image, setImage] = useState(null);
 
 useEffect(() => {
-  const fetchProfileData = async () => {
+  const fetchName = async () => {
     try {
       const storedName = await AsyncStorage.getItem("name");
       const storedImage = await AsyncStorage.getItem("image");
@@ -30,18 +36,48 @@ useEffect(() => {
       if (storedName !== null) {
         setName(storedName);
       }
-
       if (storedImage !== null) {
         setImage(storedImage);
       }
+
     } catch (error) {
       console.error("Error fetching profile data:", error);
     }
   };
 
-  fetchProfileData();
+  fetchName();
 }, []);
 
+
+useEffect(() => {
+  const labourEmail = "example@example.com"; // Replace with dynamic value if needed
+
+  LabourService.getLabourById(labourEmail)
+    .then((response) => {
+      const data = response.data;
+      setName(data.name);
+    })
+    .catch((error) => {
+      console.error("Error fetching labour name data:", error);
+    });
+
+  LabourProfileService.getLabourProfileById(labourEmail)
+    .then((response) => {
+      const data = response.data;
+      setAboutMe(data.aboutMe);
+      setGender(data.gender);
+      setLanguages(data.languages);
+    })
+    .catch((error) => {
+      console.error("Error fetching labour profile data:", error);
+    });
+}, []);
+
+useEffect(() => {
+  if (route.params?.image) {
+    setImage(route.params.image);
+  }
+}, [route.params?.image]);
 
 
 const handleEditProfile = () => {
@@ -93,13 +129,15 @@ const handleEditProfile = () => {
           {/* User avatar */}
           <Avatar.Image
             size={60}
-            source={require("../assets/Images/boy.png")}
+            source={
+              image ? { uri: image } : require("../assets/Images/boy.png")
+            }
             style={{ marginLeft: 15 }}
           />
           {/* User details */}
           <View style={{ marginLeft: 15 }}>
             <Text style={{ fontSize: 18, fontWeight: "700", color: "#222222" }}>
-              Ayshmankura shan
+              {name}
             </Text>
             <Text style={{ fontSize: 14, fontWeight: "400", color: "#888888" }}>
               Joined since{" "}
@@ -133,7 +171,14 @@ const handleEditProfile = () => {
           </Text>
 
           {/* Languages option */}
-          
+
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              paddingLeft: 10,
+            }}
+          >
             <View
               style={{
                 flexDirection: "row",
@@ -141,24 +186,17 @@ const handleEditProfile = () => {
                 paddingLeft: 10,
               }}
             >
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  paddingLeft: 10,
-                }}
-              >
-                <Icon
-                  name="globe"
-                  size={20}
-                  color="#505151"
-                  style={{ marginRight: 10 }}
-                />
-                <Text style={{ fontSize: 16, padding: 10, color: "#888888" }}>
-                  Languages
-                </Text>
-              </View>
-              <TouchableOpacity onPress={handleSelectLanguages}>
+              <Icon
+                name="globe"
+                size={20}
+                color="#505151"
+                style={{ marginRight: 10 }}
+              />
+              <Text style={{ fontSize: 16, padding: 10, color: "#888888" }}>
+                Languages
+              </Text>
+            </View>
+            <TouchableOpacity onPress={handleSelectLanguages}>
               {/* Button to navigate to language settings */}
               {/* <View style={{ flex: 1, alignItems: "flex-end" }}> */}
               <FontAwesomeIcon
@@ -166,9 +204,9 @@ const handleEditProfile = () => {
                 size={18}
                 style={{ marginLeft: 150 }}
               />
-              </TouchableOpacity>
-              {/* </View> */}
-            </View>
+            </TouchableOpacity>
+            {/* </View> */}
+          </View>
         </Surface>
 
         {/* Surface for other settings */}

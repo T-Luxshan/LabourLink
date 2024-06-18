@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,8 +7,36 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Card } from "react-native-paper";
+import LabourService from "../services/LabourService";
 
 const Appointment = ({ navigation }) => {
+    const [name, setName] = useState("");
+    const [jobRole, setJobRole] = useState("");
+
+
+    useEffect(() => {
+      const email = "example@example.com"; // Replace with dynamic value if needed
+      LabourService.getLabourById(email)
+        .then((response) => {
+          const data = response.data;
+          setName(data.name);
+          setJobRole(data.jobRole);
+          const updatedAppointments = Array.from(
+            { length: 12 },
+            (_, index) => ({
+              id: index + 1,
+              name: data.name,
+              job: `I need a ${data.jobRole} on 2024-07-23`,
+            })
+          );
+          setAppointments(updatedAppointments);
+        })
+        .catch((error) => {
+          console.error("Error fetching labour data:", error);
+        });
+    }, []);
+
+
   const [appointments, setAppointments] = useState([
     { id: 1, name: "Mr.Shanthan", job: "I need a Driver on 2024-07-23" },
     { id: 2, name: "Mrs.Shaar", job: "I need a Driver on 2024-07-23" },

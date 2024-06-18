@@ -1,15 +1,64 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { Button, Surface, Icon, Avatar } from "react-native-paper";
+import LabourProfileService from "../services/LabourProfileService";
+import LabourService from "../services/LabourService";
+
+
 
 // Functional component definition
 const Appointment_page = ({ route, navigation }) => {
   const { appointment, removeAppointment } = route.params;
+  const [name, setName] = useState("");
+  const [aboutMe, setAboutMe] = useState("");
 
+  useEffect(() => {
+    const fetchName = async () => {
+      try {
+        const storedName = await AsyncStorage.getItem("name");
+
+        if (storedName !== null) {
+          setName(storedName);
+        }
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
+      }
+    };
+
+    fetchName();
+  }, []);
+
+  useEffect(() => {
+    const labourEmail = "example@example.com"; // Replace with dynamic value if needed
+    const email = "example@example.com"; // Replace with dynamic value if needed
+
+    LabourService.getLabourById(email)
+      .then((response) => {
+        const data = response.data;
+        setName(data.name);
+      })
+      .catch((error) => {
+        console.error("Error fetching labour name data:", error);
+      });
+
+    LabourProfileService.getLabourProfileById(labourEmail)
+      .then((response) => {
+        const data = response.data;
+        setAboutMe(data.aboutMe);
+      })
+      .catch((error) => {
+        console.error("Error fetching labour profile data:", error);
+      });
+  }, []);
+
+ 
+  
   const handleAccept = () => {
     removeAppointment(appointment.id);
     navigation.goBack();
   };
+
+ 
 
   const handleIgnore = () => {
     removeAppointment(appointment.id);
@@ -40,7 +89,7 @@ const Appointment_page = ({ route, navigation }) => {
             <Text style={{ color: "#FF7600" }}> App</Text>
           </Text>
         </View>
-       
+
         {/* Schedule Appointment */}
         <View>
           <Text
@@ -112,9 +161,9 @@ const Appointment_page = ({ route, navigation }) => {
             {/* Client details */}
             <Text style={{ paddingTop: 15, paddingLeft: 10 }}>
               <Text style={{ fontWeight: 600, color: "#0A090A" }}>
-                Full Name :
+                Full Name : 
               </Text>
-              <Text style={{ color: "#0A090A" }}> Samata Shin</Text>
+              <Text style={{ color: "#0A090A" }}> {name || "Samata Shin" }</Text>
             </Text>
 
             <Text
@@ -135,13 +184,8 @@ const Appointment_page = ({ route, navigation }) => {
                 paddingLeft: 10,
               }}
             >
-              I have a commitment in Colombo on the 31st of December and am
-              seeking a professional driver for my personal vehicle on that day.
-              The responsibilities will include picking me up and dropping me
-              off in Colombo. I will need to be ready by 11 a.m. on the 30th of
-              December. If you're available on that day and can assist, please
-              let me know at your earliest convenience. I look forward to your
-              prompt response.
+            {aboutMe || `I have a commitment in Colombo on the 31st of December and I need a professional Driver.`}
+              
             </Text>
           </Surface>
         </View>
