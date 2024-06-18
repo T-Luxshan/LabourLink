@@ -6,7 +6,6 @@ import { PieChart, LineChart } from "react-native-gifted-charts";
 import DropDown from 'react-native-paper-dropdown';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import BookingData from './BookingDetails.json';
 import RatingData from './ReviewDetails.json';
 import { getBookingDetailsByLabourId } from '../services/HiringService';
 
@@ -44,7 +43,7 @@ const LabourPerformanceModel = ({ onMStateChange, marginTop, Password }) => {
   }
 
   const fetchRatingDetails = (email) => {
-    
+
   }
 
   const showModal = () => setVisible(true);
