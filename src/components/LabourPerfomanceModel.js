@@ -60,10 +60,10 @@ const LabourPerformanceModel = ({ onMStateChange, marginTop, Password }) => {
     jobRoleCounts[role] = counts;
 
     allBookingStagePieData[role] = [
-      { id: 0, value: counts.PENDING, label: 'Pending', color: '#FF6347' },
+      { id: 0, value: counts.PENDING, label: 'Pending', color: '#FFD700' },
       { id: 1, value: counts.ACCEPTED, label: 'Accepted', color: '#4682B4' },
       { id: 2, value: counts.COMPLETED, label: 'Completed', color: '#32CD32' },
-      { id: 3, value: counts.DECLINED, label: 'Declined', color: '#FFD700' },
+      { id: 3, value: counts.DECLINED, label: 'Declined', color: '#FF6347' },
     ];
   });
 
@@ -125,17 +125,18 @@ const LabourPerformanceModel = ({ onMStateChange, marginTop, Password }) => {
               donut
               innerCircleColor="white"
               radius={100}
-              renderDecorator={({ item }) => (
-                <View style={styles.decorator}>
-                  <Text style={styles.decoratorText}>{item.label}: {item.value}</Text>
-                </View>
-              )}
+              // renderDecorator={({ item }) => (
+              //   <View style={styles.decorator}>
+              //     <Text style={styles.decoratorText}>{item.label}: {item.value}</Text>
+              //   </View>
+              // )}
             />
             <View style={styles.legendContainer}>
               {getChartData().map((item, index) => (
                 <View key={index} style={styles.legendItem}>
                   <View style={[styles.legendColor, { backgroundColor: item.color }]} />
-                  <Text style={styles.legendText}>{item.label}</Text>
+                  <Text style={styles.legendText}>{item.label} : {item.value} </Text>
+                  <Text>{'\n'}</Text>
                 </View>
               ))}
             </View>
