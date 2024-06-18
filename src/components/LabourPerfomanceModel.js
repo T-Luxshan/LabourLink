@@ -8,6 +8,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import BookingData from './BookingDetails.json';
 import RatingData from './ReviewDetails.json';
+import { getBookingDetailsByLabourId } from '../services/HiringService';
 
 const LabourPerformanceModel = ({ onMStateChange, marginTop, Password }) => {
 
@@ -27,11 +28,24 @@ const LabourPerformanceModel = ({ onMStateChange, marginTop, Password }) => {
   const [selectedRole, setSelectedRole] = useState('all');
   const [showDropDown, setShowDropDown] = useState(false);
   const allBookingStagePieData = [];
+  let email = "lehaan@example.com";
 
   useEffect(() => {
-    setBookingDetails(BookingData);
+    fetchbookingDetails(email);
+
+    // setBookingDetails(BookingData);
     setRatingDetails(RatingData);
-  }, []);
+  }, [email]);
+
+  const fetchbookingDetails = (email) => {
+      getBookingDetailsByLabourId(email)
+        .then(res=>setBookingDetails(res.data))
+        .catch(err=>console.log(err))
+  }
+
+  const fetchRatingDetails = (email) => {
+    
+  }
 
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
