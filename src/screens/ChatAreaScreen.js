@@ -11,12 +11,12 @@ const ChatAreaScreen = ({ route }) => {
   const webSocketRef = useRef(null);
 
   const user = {
-    email: "johndoe@example.com", // Replace with actual logged-in user's email
+    email: "kirushanthan06@gmail.com", // Replace with actual logged-in user's email
   };
 
   const connect = () => {
     console.log("connect function called");
-    const ws = new WebSocket("ws://172.20.10.7:8080/ws");
+    const ws = new WebSocket("ws://localhost:8080/ws");
 
     ws.onopen = () => {
       console.log("WebSocket connection opened.");

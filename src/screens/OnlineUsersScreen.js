@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { List, Avatar } from "react-native-paper";
-import { findConnectedUsers } from "../service/userService";
+import { findConnectedLabours } from "../service/userService";
 
 const OnlineUsersScreen = ({ navigation }) => {
   const [connectedUsers, setConnectedUsers] = useState([]);
@@ -10,7 +10,7 @@ const OnlineUsersScreen = ({ navigation }) => {
   useEffect(() => {
     const fetchConnectedUsers = async () => {
       try {
-        const response = await findConnectedUsers();
+        const response = await findConnectedLabours();
         setConnectedUsers(response.data);
       } catch (error) {
         console.log("Error fetching connected users:", error);

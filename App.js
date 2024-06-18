@@ -64,7 +64,7 @@ export default function App() {
           options={{ title: "back" }}
         /> */}
 
-        {/* <Stack.Screen
+        <Stack.Screen
           name="OnlineUsersScreen"
           component={OnlineUsersScreen}
           // options={{ title: "back" }}
@@ -74,14 +74,14 @@ export default function App() {
           name="ChatAreaScreen"
           component={ChatAreaScreen}
           options={{ title: "back" }}
-        /> */}
+        />
 
-        <Stack.Screen
+        {/* <Stack.Screen
           name="Notification"
           component={Notification}
           // options={{ title: "back" }}
           options={{ headerShown: false }}
-        />
+        /> */}
 
         {/* <Stack.Screen 
             name="GettingStarted" 

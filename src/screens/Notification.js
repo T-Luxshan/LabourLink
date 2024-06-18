@@ -137,10 +137,11 @@ const Notification = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
-        <Button title="Click to Notify" onPress={handleNotification} />
+        {/* <Button title="Click to Notify" onPress={handleNotification} /> */}
+        <Text style={styles.heading}>Notifications</Text>
       </View>
       <ScrollView style={styles.scrollContainer}>
-        <Text style={styles.heading}>Notifications</Text>
+        
         {notifications.map((notification, index) => (
           <TouchableOpacity key={index} onPress={() => markAsRead(notification.id)}>
             <View style={[styles.notification, notification.read && styles.readNotification]}>
@@ -160,13 +161,13 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginVertical: 20,
+    marginVertical: 10,
     color: '#00204A',
   },
   buttonContainer: {
-    marginVertical: 40,
+    marginVertical: 20,
     width: '80%',
-    backgroundColor: '#F30A49',
+    // backgroundColor: '',
     borderRadius: 8,
   },
   buttonText: {
