@@ -28,6 +28,10 @@ import Customer_page from './src/screens/Customer_page';
 import Notification_customer_page from "./src/screens/Notification_customer_page";
 
 
+import BottomNavigationBar from './src/components/BottomNavigationBar';
+import LabourPerfomanceModel from './src/components/LabourPerfomanceModel';
+import ReviewModel from './src/components/ReviewModel';
+import ReportModel from './src/components/ReportModel';
 
 const Stack = createStackNavigator();
 
@@ -98,8 +102,12 @@ export default function App() {
         <Stack.Screen
           name="Appointment"
           component={Appointment}
-          options={{ headerBackTitle: "Back" }}
-        />
+          options={{ headerBackTitle: "Back" }} />
+         <Stack.Screen 
+            name="Home" 
+            component={Home}
+            options={{ headerShown: false }} />
+        
         <Stack.Screen 
           name="Appointment_page" 
           component={Appointment_page} 
@@ -128,24 +136,41 @@ export default function App() {
           component={Customer_page}
           options={{ headerShown: false }}
         />
-        
-        <Stack.Screen
-          name="Notification_customer_page"
-          component={Notification_customer_page}
+        <Stack.Screen 
+            name="ChangePassword" 
+            component={ChangePassword} 
+            options={{ headerShown: false }} 
+        />
+        <Stack.Screen 
+            name="WaitingPage" 
+            component={WaitingPage} 
+            options={{ headerShown: false }} 
+        /> 
+        <Stack.Screen 
+            name="ReviewModel" 
+            component={ReviewModel} 
+            options={{ headerShown: false }} 
+        />
+        <Stack.Screen 
+            name="ReportModel" 
+            component={ReportModel} 
+            options={{ headerShown: false }} 
+        />
+        {/* <Stack.Screen
+            name="LabourPerfomance"
+            component={LabourPerfomanceModel}
+            options={{headerShown: false}}
         /> */}
-      </Stack.Navigator>
-    </NavigationContainer>
+        
+        {/* <Stack.Screen 
+            name="BottomNavigation" 
+            component={BottomNavigationBar} 
+            options={{ headerShown: false }} 
+        /> */}
 
-    // <SafeAreaProvider>
-    //   <View style={styles.container}>
-
-    //     {/* <ForgotPassword /> */}
-    //     {/* <OTPVerification /> */}
-    //     <ChangePassword />
-    //     {/* <Test /> */}
-    //     <StatusBar style="auto" />
-    //   </View>
-    // </SafeAreaProvider>
+       </Stack.Navigator>
+     </NavigationContainer>
+    
   );
 }
 

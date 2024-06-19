@@ -46,6 +46,9 @@
     "react-native-vector-icons": "^10.1.0",
     "react-native-web": "~0.19.6",
     "typescript": "^5.4.2",
+    "react-native-gifted-charts": "^1.4.10",
+    "react-native-ratings": "^8.1.0",
+    "react-native-paper-dropdown": "^1.0.2",
     "yup": "^1.4.0"
   },
   "devDependencies": {
