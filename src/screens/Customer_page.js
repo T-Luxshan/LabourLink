@@ -9,46 +9,42 @@ import {
 } from "react-native";
 import { Surface, Icon, Searchbar, Avatar } from "react-native-paper";
 import { LinearGradient } from "expo-linear-gradient";
-import CustomerService from "../services/CustomerService";
-import LabourService from "../services/LabourService";
+import {getCustomerById} from "../services/CustomerService";
+import {getLabourById} from "../services/LabourService";
 
 // Functional component definition
 const Customer_page = ({ navigation }) => {
   // State for search query
   const [searchQuery, setSearchQuery] = React.useState("");
-   const [customerName, setCustomerName] = useState("");
-    const [labourName, setLabourName] = useState("");
+  const [customerName, setCustomerName] = useState("");
+  const [labour, setLabour] = useState("");
   const [jobRole, setJobRole] = useState("");
   const [rating, setRating] = useState(0);
 
-   useEffect(() => {
-     const email = "example@example.com"; // Replace with dynamic value if needed
+  const email = "aruran@example.com"; // Replace with dynamic value if needed
+ const email2 = "lehaan@example.com";
+  useEffect(() => {
+    getCustomerById(email)
+      .then((response) => {
+        const data = response.data;
+        setCustomerName(data.name);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching customer name data:", error);
+      });
 
-     CustomerService.getCustomerById(email)
-       .then((response) => {
-         const data = response.data;
-         setCustomerName(data.name);
-       })
-       .catch((error) => {
-         console.error("Error fetching customer name data:", error);
-       });
-
-     LabourService.getLabourById(email)
-       .then((response) => {
-         const data = response.data;
-         setLabourName(data.name);
-         setJobRole(data.jobRole);
-       })
-       .catch((error) => {
-         console.error("Error fetching labour profile data:", error);
-       });
-   }, []);
-
-
-
-
-
-
+    getLabourById(email2)
+      .then((response) => {
+        const data = response.data;
+        setLabour(data);
+        setJobRole(data.jobRole);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching labour profile data:", error);
+      });
+  }, []);
 
   // Function to handle languages press
   const handleLanguagesPress = () => {
@@ -57,12 +53,7 @@ const Customer_page = ({ navigation }) => {
 
   const handleJobPress = (jobCategory) => {
     console.log(`Job category pressed: ${jobCategory}`);
-    
   };
-
- 
-
-
 
   // Component rendering
   return (
@@ -80,7 +71,7 @@ const Customer_page = ({ navigation }) => {
               Welcome Back,
             </Text>
             <Text style={{ fontSize: 16, fontWeight: "700", color: "#1D1617" }}>
-              {customerName || "Stefani Wong"} 
+              {customerName}
             </Text>
           </View>
 

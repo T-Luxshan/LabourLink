@@ -6,7 +6,7 @@ const BASE_URL = "http://172.20.10.3:8080/api/customer";
 
 
 // API for fetching a specific labour by ID
-export const getCustomerById = (email) => {
+export const getCustomerById = (email) => {    
   return axios.get(`${BASE_URL}/${email}`);
 };
 
@@ -16,7 +16,7 @@ export const updateCustomer = (
   address,
   email,
   mobileNumber,
-  status,
+  status,       
 ) => {
   return axios.put(`${BASE_URL}/${email}`, {
     name,
@@ -27,6 +27,7 @@ export const updateCustomer = (
   });
 };
 
+
 // API for deleting a labour
 export const deleteCustomer = (email) => {
   return axios.delete(`${BASE_URL}/deleteCustomer/${email}`);
@@ -36,9 +37,3 @@ export const updateCustomerPassword = (email, newPassword) => {
   return axios.put(`${BASE_URL}/changePassword/${email}`, { newPassword });
 };
 
-export default {
-  getCustomerById,
-  updateCustomer,
-  deleteCustomer,
-  updateCustomerPassword,
-};
