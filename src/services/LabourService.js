@@ -33,9 +33,3 @@ export const updateLabourPassword = (email, newPassword) => {
 };
 
 
-export default {
-  getLabourById,
-  updateLabour,
-  deleteLabour,
-  updateLabourPassword,
-};

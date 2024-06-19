@@ -1,56 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { Button, Surface, Icon, Avatar } from "react-native-paper";
-import LabourProfileService from "../services/LabourProfileService";
-import LabourService from "../services/LabourService";
+import { getCustomerById } from "../services/CustomerService";
 
 
 
 // Functional component definition
 const Appointment_page = ({ route, navigation }) => {
   const { appointment, removeAppointment } = route.params;
-  const [name, setName] = useState("");
-  const [aboutMe, setAboutMe] = useState("");
+   const [customerName, setCustomerName] = useState("");
+  
+ const email = "aruran@example.com"; 
 
-  useEffect(() => {
-    const fetchName = async () => {
-      try {
-        const storedName = await AsyncStorage.getItem("name");
-
-        if (storedName !== null) {
-          setName(storedName);
-        }
-      } catch (error) {
-        console.error("Error fetching profile data:", error);
-      }
-    };
-
-    fetchName();
-  }, []);
-
-  useEffect(() => {
-    const labourEmail = "example@example.com"; // Replace with dynamic value if needed
-    const email = "example@example.com"; // Replace with dynamic value if needed
-
-    LabourService.getLabourById(email)
-      .then((response) => {
-        const data = response.data;
-        setName(data.name);
-      })
-      .catch((error) => {
-        console.error("Error fetching labour name data:", error);
-      });
-
-    LabourProfileService.getLabourProfileById(labourEmail)
-      .then((response) => {
-        const data = response.data;
-        setAboutMe(data.aboutMe);
-      })
-      .catch((error) => {
-        console.error("Error fetching labour profile data:", error);
-      });
-  }, []);
-
+ useEffect(() => {
+   getCustomerById(email)
+     .then((response) => {
+       const data = response.data;
+       setCustomerName(data.name);
+       console.log(response.data);
+     })
+     .catch((error) => {
+       console.error("Error fetching customer name data:", error);
+     });
+ }, []);
+  
  
   
   const handleAccept = () => {
@@ -163,7 +136,7 @@ const Appointment_page = ({ route, navigation }) => {
               <Text style={{ fontWeight: 600, color: "#0A090A" }}>
                 Full Name : 
               </Text>
-              <Text style={{ color: "#0A090A" }}> {name || "Samata Shin" }</Text>
+              <Text style={{ color: "#0A090A" }}> {customerName}</Text>
             </Text>
 
             <Text

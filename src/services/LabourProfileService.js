@@ -9,13 +9,29 @@ export const getLabourProfileById = (labourEmail) => {
 };
 
 // API for updating the profile of a specific labour
-export const updateLabourProfile = (aboutMe, gender, languages, labourEmail) => {
-  return axios.put(`${BASE_URL}/update/${labourEmail}`, {
-    aboutMe,
-    gender,
-    languages,
-  });
+export const updateLabourProfile = async (
+  aboutMe,
+  gender,
+  languages,
+  labourEmail
+) => {
+  try {
+    const response = await axios.put(`${BASE_URL}/update/${labourEmail}`, {
+      aboutMe,
+      gender,
+      languages,
+    });
+    console.log("Response from update API:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error(
+      "Error in update API:",
+      error.response ? error.response.data : error.message
+    );
+    throw error;
+  }
 };
+
 
 export const createLabourProfile = (aboutMe, gender, languages, labourEmail) => {
   return axios.post(`${BASE_URL}/create`, {
@@ -61,12 +77,6 @@ export const searchByLanguages = (aboutMe, gender, languages, labourEmail) => {
 
 
 
-export default {
-  getLabourProfileById,
-  updateLabourProfile,
-  createLabourProfile,
-  deleteLabourProfile,
-  searchByAboutMe,
-  searchByGender,
-  searchByLanguages,
-};
+
+
+

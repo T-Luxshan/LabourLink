@@ -13,65 +13,46 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
-import LabourProfileService from "../services/LabourProfileService";
-import LabourService from "../services/LabourService";
+import { getLabourProfileById } from "../services/LabourProfileService";
+import { getLabourById } from "../services/LabourService";
 
 
 
 const Labour_profile_page = ({ navigation, route }) => {
     
   // Function to handle press event for the "Languages" section
- const [name, setName] = useState("");
- const [aboutMe, setAboutMe] = useState("");
- const [languages, setLanguages] = useState([]);
- const [gender, setGender] = useState("");
+ const [labour, setLabour] = useState("");
+ const [labourProfile, setLabourProfile] = useState("");
  const [image, setImage] = useState(null);
 
+
+
+
+const labourEmail = "aruran@example.com"; // Replace with dynamic value if needed
+const email2 = "lehaan@example.com";
 useEffect(() => {
-  const fetchName = async () => {
-    try {
-      const storedName = await AsyncStorage.getItem("name");
-      const storedImage = await AsyncStorage.getItem("image");
-
-      if (storedName !== null) {
-        setName(storedName);
-      }
-      if (storedImage !== null) {
-        setImage(storedImage);
-      }
-
-    } catch (error) {
-      console.error("Error fetching profile data:", error);
-    }
-  };
-
-  fetchName();
-}, []);
-
-
-useEffect(() => {
-  const labourEmail = "example@example.com"; // Replace with dynamic value if needed
-
-  LabourService.getLabourById(labourEmail)
+  getLabourProfileById(labourEmail)
     .then((response) => {
       const data = response.data;
-      setName(data.name);
+      setLabourProfile(data);
+      console.log(response.data);
     })
     .catch((error) => {
-      console.error("Error fetching labour name data:", error);
+      console.error("Error fetching labourProfile name data:", error);
     });
 
-  LabourProfileService.getLabourProfileById(labourEmail)
+  getLabourById(email2)
     .then((response) => {
       const data = response.data;
-      setAboutMe(data.aboutMe);
-      setGender(data.gender);
-      setLanguages(data.languages);
+      setLabour(data);
+      // setJobRole(data.jobRole);
+      console.log(response.data);
     })
     .catch((error) => {
       console.error("Error fetching labour profile data:", error);
     });
 }, []);
+
 
 useEffect(() => {
   if (route.params?.image) {
@@ -93,14 +74,45 @@ const handleEditProfile = () => {
     navigation.navigate("About_Us");
   };
 
+  // const handleLogout = async () => {
+  //   await AsyncStorage.removeItem("token");
+  //   await AsyncStorage.removeItem("refreshToken");
+  //   navigation.navigate("Login");
+  // };
+
   const handleLogout = async () => {
-    await AsyncStorage.removeItem("token");
-    await AsyncStorage.removeItem("refreshToken");
-    navigation.navigate("Login");
+    try {
+      // Log current AsyncStorage values
+      const tokenValue = await AsyncStorage.getItem("token");
+      const refreshTokenValue = await AsyncStorage.getItem("refreshToken");
+      console.log(
+        "Before logout - token:",
+        tokenValue,
+        "refreshToken:",
+        refreshTokenValue
+      );
+
+      // Clear tokens from AsyncStorage
+      await AsyncStorage.removeItem("token");
+      await AsyncStorage.removeItem("refreshToken");
+
+      // Log to confirm removal
+      console.log("After logout - tokens removed");
+
+      // Navigate to Login screen
+      navigation.navigate("Login");
+    } catch (error) {
+      console.error("Error logging out:", error);
+      // Handle error gracefully
+    }
   };
 
 
 
+
+
+
+   
   return (
     <View>
       <ScrollView>
@@ -137,7 +149,7 @@ const handleEditProfile = () => {
           {/* User details */}
           <View style={{ marginLeft: 15 }}>
             <Text style={{ fontSize: 18, fontWeight: "700", color: "#222222" }}>
-              {name}
+              {labour.name}
             </Text>
             <Text style={{ fontSize: 14, fontWeight: "400", color: "#888888" }}>
               Joined since{" "}

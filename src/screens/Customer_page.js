@@ -11,6 +11,9 @@ import { Surface, Icon, Searchbar, Avatar } from "react-native-paper";
 import { LinearGradient } from "expo-linear-gradient";
 import {getCustomerById} from "../services/CustomerService";
 import {getLabourById} from "../services/LabourService";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getAllReviews } from "../services/LabourReviewService";
+import { AntDesign } from "@expo/vector-icons";
 
 // Functional component definition
 const Customer_page = ({ navigation }) => {
@@ -18,32 +21,81 @@ const Customer_page = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = React.useState("");
   const [customerName, setCustomerName] = useState("");
   const [labour, setLabour] = useState("");
-  const [jobRole, setJobRole] = useState("");
-  const [rating, setRating] = useState(0);
+  const [employeeOfTheMonth, setEmployeeOfTheMonth] = useState(null);
+
+  // const email = AsyncStorage.getItem('userEmail')
 
   const email = "aruran@example.com"; // Replace with dynamic value if needed
- const email2 = "lehaan@example.com";
-  useEffect(() => {
-    getCustomerById(email)
-      .then((response) => {
-        const data = response.data;
-        setCustomerName(data.name);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching customer name data:", error);
-      });
+  const email2 = "lehaan@example.com";
+  // useEffect(() => {
+  //   getCustomerById(email)
+  //     .then((response) => {
+  //       const data = response.data;
+  //       setCustomerName(data.name);
+  //       console.log(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching customer name data:", error);
+  //     });
 
-    getLabourById(email2)
-      .then((response) => {
-        const data = response.data;
-        setLabour(data);
-        setJobRole(data.jobRole);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching labour profile data:", error);
-      });
+  //   getLabourById(email2)
+  //     .then((response) => {
+  //       const data = response.data;
+  //       setLabour(data);
+  //       // setJobRole(data.jobRole);
+  //       console.log(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching labour profile data:", error);
+  //     });
+
+  // }, []);
+
+  // Updated useEffect with error handling
+  useEffect(() => {
+    const fetchCustomerAndLabourData = async () => {
+      try {
+        // Fetch customer data by email
+        const customerResponse = await getCustomerById(email);
+        const customerData = customerResponse.data;
+        setCustomerName(customerData.name);
+
+        // Fetch all reviews
+        const reviewsResponse = await getAllReviews();
+        const reviewsData = reviewsResponse.data;
+
+        // Calculate total sum of ratings for each labour
+        const labourRatings = reviewsData.reduce((acc, review) => {
+          if (!acc[review.labourName]) {
+            acc[review.labourName] = {
+              totalRating: 0,
+              reviewCount: 0,
+              labourRole: review.labourRole, // Assuming the job role is available in review data
+            };
+          }
+          acc[review.labourName].totalRating += review.rating;
+          acc[review.labourName].reviewCount += 1;
+          return acc;
+        }, {});
+
+        // Find the labour with the highest total sum of ratings
+        const topRatedLabour = Object.entries(labourRatings).reduce(
+          (topLabour, [labourName, currentLabour]) => {
+            return currentLabour.totalRating > (topLabour.totalRating || 0)
+              ? { labourName, ...currentLabour }
+              : topLabour;
+          },
+          {}
+        );
+
+        setEmployeeOfTheMonth(topRatedLabour);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        // Handle specific error scenarios, e.g., display error message to user
+      }
+    };
+
+    fetchCustomerAndLabourData();
   }, []);
 
   // Function to handle languages press
@@ -259,71 +311,90 @@ const Customer_page = ({ navigation }) => {
             marginLeft: 15,
           }}
         >
-          Employee of the month
+          Employee of the Month
         </Text>
 
         <View style={{ marginTop: 15, marginBottom: 30 }}>
-          <Surface
-            style={{
-              ...styles.surface,
-              width: 350,
-              marginLeft: 12,
-              borderRadius: 20,
-              height: 150,
-              backgroundColor: "#FFFFFF",
-            }}
-            elevation={4}
-          >
-            <View
+          {employeeOfTheMonth && (
+            <Surface
               style={{
-                flexDirection: "row",
-                alignItems: "center",
+                ...styles.surface,
+                width: 350,
+                marginLeft: 12,
+                borderRadius: 20,
+                height: 150,
+                backgroundColor: "#FFFFFF",
               }}
+              elevation={4}
             >
-              <Avatar.Image
-                size={90}
-                source={require("../assets/Images/boy.png")}
-                style={{ marginLeft: 25 }}
-              />
-
               <View
                 style={{
-                  marginLeft: 35,
-                  marginTop: 20,
+                  flexDirection: "row",
+                  alignItems: "center",
                 }}
               >
-                <Text
-                  style={{ fontSize: 16, fontWeight: "700", color: "#1D1617" }}
-                >
-                  {labourName || "Williem Smith"}
-                </Text>
-                <Text
-                  style={{ fontSize: 13, fontWeight: "400", color: "#7B6F72" }}
-                >
-                  {jobRole || "Driver"}
-                </Text>
+                <Avatar.Image
+                  size={90}
+                  source={require("../assets/Images/boy.png")}
+                  style={{ marginLeft: 25 }}
+                />
+
                 <View
                   style={{
-                    flex: 1,
-                    flexDirection: "row",
-                    alignItems: "center",
+                    marginLeft: 35,
+                    marginTop: 20,
                   }}
                 >
-                  <Icon source="star" size={20} color="#EEB854" />
-                  <Icon source="star" size={20} color="#EEB854" />
-                  <Icon source="star" size={20} color="#EEB854" />
-                  <Icon source="star" size={20} color="#EEB854" />
-                  <Icon source="star" size={20} color="#D9D9D9" />
-                  <Text> 4.8</Text>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontWeight: "700",
+                      color: "#1D1617",
+                    }}
+                  >
+                    {employeeOfTheMonth.labourName}
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      fontWeight: "400",
+                      color: "#7B6F72",
+                    }}
+                  >
+                    {employeeOfTheMonth.labourRole}
+                  </Text>
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    {Array.from({ length: 5 }, (_, index) => (
+                      <AntDesign
+                        key={index}
+                        name={
+                          index <
+                          employeeOfTheMonth.totalRating /
+                            employeeOfTheMonth.reviewCount
+                            ? "star"
+                            : "staro"
+                        }
+                        size={24}
+                        color="gold"
+                      />
+                    ))}
+                    <Text> {employeeOfTheMonth.totalRating}</Text>
+                  </View>
+                </View>
+                <View style={{ marginTop: 20, marginLeft: 15 }}>
+                  <View style={{ marginLeft: 10 }}>
+                    <Icon source="heart" size={20} color="#FF0000" />
+                  </View>
                 </View>
               </View>
-              <View style={{ marginTop: 20, marginLeft: 15 }}>
-                <View style={{ marginLeft: 10 }}>
-                  <Icon source="heart" size={20} color="#FF0000" />
-                </View>
-              </View>
-            </View>
-          </Surface>
+            </Surface>
+          )}
         </View>
       </View>
     </ScrollView>

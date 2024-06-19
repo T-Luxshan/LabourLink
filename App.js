@@ -41,7 +41,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Labour_page">
+      <Stack.Navigator initialRouteName="Customer_page">
         {/* <Stack.Screen name="GettingStarted" component={GettingStarted} />
         <Stack.Screen
           name="Login"
@@ -89,7 +89,7 @@ export default function App() {
           component={WaitingPage}
           options={{ headerShown: false }}
         /> */}
-        <Stack.Screen
+        {/* <Stack.Screen
           name="Labour_page"
           component={Labour_page}
           options={{ headerShown: false }}
@@ -103,15 +103,11 @@ export default function App() {
           name="Appointment"
           component={Appointment}
           options={{ headerBackTitle: "Back" }} />
-         <Stack.Screen 
-            name="Home" 
-            component={Home}
-            options={{ headerShown: false }} />
-        
+  
         <Stack.Screen 
           name="Appointment_page" 
           component={Appointment_page} 
-        />
+        /> */}
         {/* <Stack.Screen
           name="Labour_profile_page"
           component={Labour_profile_page}
@@ -131,12 +127,12 @@ export default function App() {
           name="Edit_Profile" 
           component={Edit_Profile} 
         /> */}
-        {/* <Stack.Screen
+        <Stack.Screen
           name="Customer_page"
           component={Customer_page}
           options={{ headerShown: false }}
         />
-        <Stack.Screen 
+        {/* <Stack.Screen 
             name="ChangePassword" 
             component={ChangePassword} 
             options={{ headerShown: false }} 
@@ -155,12 +151,12 @@ export default function App() {
             name="ReportModel" 
             component={ReportModel} 
             options={{ headerShown: false }} 
-        />
+        /> */}
         {/* <Stack.Screen
             name="LabourPerfomance"
             component={LabourPerfomanceModel}
             options={{headerShown: false}}
-        /> */}
+        />
         
         {/* <Stack.Screen 
             name="BottomNavigation" 

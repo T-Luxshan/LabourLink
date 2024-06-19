@@ -7,39 +7,45 @@ import {
   ScrollView,
 } from "react-native";
 import { Button, Surface, Avatar, Icon } from "react-native-paper";
-import LabourService from "../services/LabourService"
-
+import { getLabourProfileById } from "../services/LabourProfileService";
+import { getLabourById } from "../services/LabourService";
 
 // Functional component definition
 const Labour_page = ({ navigation }) => {
   // State for search query
   const [searchQuery, setSearchQuery] = React.useState("");
-  const [name, setName] = useState("");
-  const [jobRole, setJobRole] = useState("");
-  const [totalServices, setTotalServices] = useState(0);
-  const [rating, setRating] = useState(0);
-  const [aboutMe, setAboutMe] = useState("");
-  const [mobileNumber, setMobileNumber] = useState("");
+  const [labour, setLabour] = useState("");
+   const [labourProfile, setLabourProfile] = useState("");
+ 
 
+  const email = "lehaan@example.com"; // Replace with dynamic value if needed
+  const labourEmail = "lehaan@example.com";
 
   useEffect(() => {
-    const email = "example@example.com"; // Replace with dynamic value if needed
-    LabourService.getLabourById(email)
+    getLabourById(email)
       .then((response) => {
         const data = response.data;
-        setName(data.name);
-        setJobRole(data.jobRole);
-        setTotalServices(data.totalServices);
-        setRating(data.rating);
-        setAboutMe(data.aboutMe);
-        setMobileNumber(data.mobileNumber);
+        setLabour(data);
+       console.log(response.data)
       })
       .catch((error) => {
         console.error("Error fetching labour data:", error);
       });
   }, []);
 
-  
+
+  useEffect(() => {
+    getLabourProfileById(labourEmail)
+      .then((response) => {
+        const data = response.data;
+        setLabourProfile(data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching labourProfile data:", error);
+      });
+  }, []);
+
   // Function to handle languages press
   const handleLanguagesPress = () => {
     console.log("Languages section pressed");
@@ -71,11 +77,11 @@ const Labour_page = ({ navigation }) => {
             />
 
             <Text style={{ fontSize: 18, fontWeight: 500, marginTop: 5 }}>
-              {name || "Ayshmankura Shan"}
+              {labour.name}
             </Text>
 
             <Text style={{ fontSize: 20, fontWeight: 200, marginLeft: 20 }}>
-              {jobRole || "Driver"} <Icon source="pencil-outline" size={20} />
+              {labour.jobRole} <Icon source="pencil-outline" size={20} />
             </Text>
           </View>
         </View>
@@ -99,7 +105,7 @@ const Labour_page = ({ navigation }) => {
                 <Text
                   style={{ fontSize: 16, fontWeight: 500, color: "#464255" }}
                 >
-                  {totalServices || 180}
+                  180
                 </Text>
                 <Text style={{ fontSize: 13 }}>Total Services</Text>
               </View>
@@ -108,7 +114,7 @@ const Labour_page = ({ navigation }) => {
                 <Text
                   style={{ fontSize: 16, fontWeight: 500, color: "#464255" }}
                 >
-                  {rating || 4.5}
+                  4.5
                 </Text>
                 <Text style={{ fontSize: 13 }}>Rating</Text>
               </View>
@@ -154,11 +160,7 @@ const Labour_page = ({ navigation }) => {
                 color: "#2F3239",
               }}
             >
-              {aboutMe ||
-                `Experienced Driver with over two decades of dedicated service
-  since the year 2000. Possessing a strong track record of safe
-  driving, punctuality, and excellent knowledge of local and
-  regional routes.`}
+              {labourProfile.aboutMe}
             </Text>
 
             {/* Contact details */}
@@ -176,7 +178,7 @@ const Labour_page = ({ navigation }) => {
 
             <Text style={{ paddingTop: 5, marginLeft: 30, color: "#41434A" }}>
               <Icon source="phone-outline" size={20} />
-              {mobileNumber || "+92 1234567890"}
+              {labourProfile.mobileNumber}
             </Text>
           </Surface>
         </View>

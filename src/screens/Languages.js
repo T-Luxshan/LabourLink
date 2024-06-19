@@ -40,32 +40,10 @@ const Languages = ({ navigation }) => {
     }));
   };
 
-  const handleSaveLanguages = async () => {
-    try {
-      await AsyncStorage.setItem("selectedLanguages", JSON.stringify(checked));
-      // alert("Languages saved successfully!");
-      navigation.navigate("Labour_profile_page", {
-        selectedLanguages: checked,
-      });
-    } catch (error) {
-      console.error("Error saving languages:", error);
-    }
-  };
-
   // const handleSaveLanguages = async () => {
   //   try {
   //     await AsyncStorage.setItem("selectedLanguages", JSON.stringify(checked));
-  //     // Assuming you have a way to get the labour email dynamically
-  //     const labourEmail = "example@example.com"; // Replace with dynamic value if needed
-
-  //     // Update the labour profile with the selected languages
-  //     await LabourProfileService.updateLabourProfile(
-  //       "", // Assuming you don't update aboutMe and gender here
-  //       "", // Assuming you don't update aboutMe and gender here
-  //       Object.keys(checked).filter((key) => checked[key]), // Filter out only checked languages
-  //       labourEmail
-  //     );
-
+  //     // alert("Languages saved successfully!");
   //     navigation.navigate("Labour_profile_page", {
   //       selectedLanguages: checked,
   //     });
@@ -75,6 +53,40 @@ const Languages = ({ navigation }) => {
   // };
 
 
+   const handleSaveLanguages = async () => {
+     try {
+       await AsyncStorage.setItem("selectedLanguages", JSON.stringify(checked));
+       const selectedLanguages = Object.keys(checked).filter(
+         (language) => checked[language]
+       );
+
+       // Assuming you have a way to get the labour email dynamically
+       const labourEmail = "lehaan@example.com"; // Replace with dynamic value if needed
+
+       console.log("Selected languages to save:", selectedLanguages);
+
+
+       // Update the labour profile with the selected languages
+       await LabourProfileService.updateLabourProfile(
+         "", // Assuming you don't update aboutMe here
+         "", // Assuming you don't update gender here
+         selectedLanguages, // Pass the selected languages
+         labourEmail
+       );
+
+       console.log("Languages updated successfully in backend");
+
+       navigation.navigate("Labour_profile_page", {
+         selectedLanguages: checked,
+       });
+     } catch (error) {
+       console.error("Error saving languages:", error);
+     }
+   };
+
+
+
+ 
 
 
 
