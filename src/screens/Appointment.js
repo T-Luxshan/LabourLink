@@ -1,3 +1,102 @@
+// import React, { useState, useEffect } from "react";
+// import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+// import { Card } from "react-native-paper";
+// import { getPendingAppointments } from "../services/BookingService";
+
+// const Appointment = ({ navigation }) => {
+//   const [pendingBookings, setPendingBookings] = useState([]);
+//   const [appointments, setAppointments] = useState([]);
+//   const labourEmail = "lehaan@example.com"; // Replace with dynamic value if needed
+
+//   useEffect(() => {
+//     const fetchPendingAppointments = async () => {
+//       try {
+//         // Assuming your service function getPendingAppointments is correctly implemented
+//         const response = await getPendingAppointments(labourEmail);
+//         setPendingBookings(response); // Assuming response is an array of pending bookings
+//         console.log("Pending Appointments:", response); // Log fetched data
+//       } catch (error) {
+//         console.error("Error fetching pending appointments:", error);
+//         setPendingBookings([]); // Ensure state is updated even on error
+//       }
+//     };
+
+//     fetchPendingAppointments();
+//   }, [labourEmail]); // Dependency array ensures useEffect runs when labourEmail changes
+
+//   const handleViewAppointment = (appointment) => {
+//     navigation.navigate("Appointment_page", {
+//       appointmentId: appointment.id,
+//       removeAppointment: handleRemoveAppointment,
+//     });
+//   };
+
+//   const handleRemoveAppointment = (id) => {
+//     // Implement removal logic if needed
+//     setAppointments(
+//       appointments.filter((appointment) => appointment.id !== id)
+//     );
+//     console.log("Removing appointment with id:", id);
+//   };
+
+//   return (
+//     <ScrollView>
+//       <View style={{ marginTop: 10 }}>
+//         {pendingBookings.map((appointment, index) => (
+//           <Card key={index} style={styles.card}>
+//             <Card.Content>
+//               <Text style={styles.appointmentDetail}>{appointment.customerName}</Text>
+//               <Text style={styles.appointmentJob}>{appointment.jobDescription}</Text>
+//               <TouchableOpacity
+//                 style={styles.viewTextContainer}
+//                 onPress={() => handleViewAppointment(appointment)}
+//               >
+//                 <Text style={styles.viewText}>View</Text>
+//               </TouchableOpacity>
+//             </Card.Content>
+//           </Card>
+//         ))}
+//       </View>
+//     </ScrollView>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   card: {
+//     marginHorizontal: 20,
+//     marginVertical: 10,
+//     borderRadius: 8,
+//     padding: 10,
+//     backgroundColor: "#fff",
+//     elevation: 2,
+//   },
+//   appointmentDetail: {
+//     fontSize: 15,
+//     fontWeight: "500",
+//     color: "#2F3239",
+//   },
+//   appointmentJob: {
+//     fontSize: 13,
+//     color: "#2F3239",
+//     marginTop: 5,
+//   },
+//   viewTextContainer: {
+//     position: "absolute",
+//     bottom: 10,
+//     right: 10,
+//   },
+//   viewText: {
+//     color: "blue",
+//     fontSize: 14,
+//   },
+// });
+
+// export default Appointment;
+
+
+
+
+
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -7,72 +106,53 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Card } from "react-native-paper";
-import LabourService from "../services/LabourService";
+import { getPendingAppointments } from "../services/BookingService";
 
 const Appointment = ({ navigation }) => {
-    const [name, setName] = useState("");
-    const [jobRole, setJobRole] = useState("");
+  const [pendingBookings, setPendingBookings] = useState([]);
+  const labourEmail = "lehaan@example.com"; // Replace with dynamic value if needed
 
+  useEffect(() => {
+    const fetchPendingAppointments = async () => {
+      try {
+        const response = await getPendingAppointments(labourEmail);
+        setPendingBookings(response); // Assuming response is an array of pending bookings
+        console.log("Pending Appointments:", response); // Log fetched data
+      } catch (error) {
+        console.error("Error fetching pending appointments:", error);
+        setPendingBookings([]); // Ensure state is updated even on error
+      }
+    };
 
-    useEffect(() => {
-      const email = "example@example.com"; // Replace with dynamic value if needed
-      LabourService.getLabourById(email)
-        .then((response) => {
-          const data = response.data;
-          setName(data.name);
-          setJobRole(data.jobRole);
-          const updatedAppointments = Array.from(
-            { length: 12 },
-            (_, index) => ({
-              id: index + 1,
-              name: data.name,
-              job: `I need a ${data.jobRole} on 2024-07-23`,
-            })
-          );
-          setAppointments(updatedAppointments);
-        })
-        .catch((error) => {
-          console.error("Error fetching labour data:", error);
-        });
-    }, []);
-
-
-  const [appointments, setAppointments] = useState([
-    { id: 1, name: "Mr.Shanthan", job: "I need a Driver on 2024-07-23" },
-    { id: 2, name: "Mrs.Shaar", job: "I need a Driver on 2024-07-23" },
-    { id: 3, name: "Mrs.Kulam", job: "I need a Driver on 2024-07-23" },
-    { id: 4, name: "Mr.Shanthan", job: "I need a Driver on 2024-07-23" },
-    { id: 5, name: "Mr.Shanthan", job: "I need a Driver on 2024-07-23" },
-    { id: 6, name: "Mrs.Shaar", job: "I need a Driver on 2024-07-23" },
-    { id: 7, name: "Mrs.Kulam", job: "I need a Driver on 2024-07-23" },
-    { id: 8, name: "Mr.Shanthan", job: "I need a Driver on 2024-07-23" },
-    { id: 9, name: "Mr.Shanthan", job: "I need a Driver on 2024-07-23" },
-    { id: 10, name: "Mrs.Shaar", job: "I need a Driver on 2024-07-23" },
-    { id: 11, name: "Mrs.Kulam", job: "I need a Driver on 2024-07-23" },
-    { id: 12, name: "Mr.Shanthan", job: "I need a Driver on 2024-07-23" },
-  ]);
+    fetchPendingAppointments();
+  }, [labourEmail]); // Dependency array ensures useEffect runs when labourEmail changes
 
   const handleViewAppointment = (appointment) => {
     navigation.navigate("Appointment_page", {
-      appointment: appointment,
+      appointmentId: appointment.id,
       removeAppointment: handleRemoveAppointment,
     });
   };
 
   const handleRemoveAppointment = (id) => {
-    setAppointments(
-      appointments.filter((appointment) => appointment.id !== id)
+    setPendingBookings(
+      pendingBookings.filter((appointment) => appointment.id !== id)
     );
+    console.log("Removing appointment with id:", id);
   };
 
   return (
     <ScrollView>
       <View style={{ marginTop: 10 }}>
-        {appointments.map((appointment, index) => (
+        {pendingBookings.map((appointment, index) => (
           <Card key={index} style={styles.card}>
             <Card.Content>
-              <Text style={styles.appointmentDetail}>{appointment.name}</Text>
-              <Text style={styles.appointmentJob}>{appointment.job}</Text>
+              <Text style={styles.appointmentDetail}>
+                {appointment.customerName}
+              </Text>
+              <Text style={styles.appointmentJob}>
+                {appointment.jobDescription}
+              </Text>
               <TouchableOpacity
                 style={styles.viewTextContainer}
                 onPress={() => handleViewAppointment(appointment)}
@@ -95,7 +175,6 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: "#fff",
     elevation: 2,
-    position: "relative",
   },
   appointmentDetail: {
     fontSize: 15,
@@ -119,7 +198,3 @@ const styles = StyleSheet.create({
 });
 
 export default Appointment;
-
-
-
-

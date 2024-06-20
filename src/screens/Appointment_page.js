@@ -1,63 +1,351 @@
+// import React, { useState, useEffect } from "react";
+// import { View, Text, StyleSheet, ScrollView } from "react-native";
+// import { Button, Surface, Icon, Avatar } from "react-native-paper";
+// import { getBookingDetailsByLabourEmail } from "../services/BookingService";
+
+// const Appointment_page = ({ route, navigation }) => {
+//   const { appointmentId, removeAppointment } = route.params;
+//   const [bookingDetails, setBookingDetails] = useState(null);
+//   const [error, setError] = useState(null);
+//   const labourEmail = "lehaan@example.com"; // Replace with dynamic value if needed
+
+//   useEffect(() => {
+//     const fetchBookingDetails = async () => {
+//       try {
+//         const response = await getBookingDetailsByLabourEmail(labourEmail);
+//         console.log("API Response:", response);
+//         if (response) {
+//           const relevantAppointment = response.find(
+//             (appointment) => appointment.id === appointmentId
+//           );
+//           if (relevantAppointment) {
+//             setBookingDetails(relevantAppointment);
+//           } else {
+//             setError("No relevant appointment found.");
+//           }
+//         } else {
+//           setError("Empty response or missing data fields.");
+//         }
+//       } catch (error) {
+//         console.error("Error fetching booking data:", error);
+//         setError("Error fetching booking data. Please try again.");
+//       }
+//     };
+
+//     fetchBookingDetails();
+//   }, [labourEmail, appointmentId]); // Dependency array ensures useEffect runs when labourEmail or appointmentId changes
+
+//   const handleAccept = () => {
+//     removeAppointment(appointmentId);
+//     navigation.goBack();
+//   };
+
+//   const handleIgnore = () => {
+//     removeAppointment(appointmentId);
+//     navigation.goBack();
+//   };
+
+//   // Function to format date as "Monday December 31, 2023"
+//   const formatDate = (dateString) => {
+//     const options = { weekday: "long", month: "long", day: "numeric", year: "numeric" };
+//     const formattedDate = new Date(dateString).toLocaleDateString("en-US", options);
+//     return formattedDate;
+//   };
+
+//   // Rendering the component
+//   return (
+//     <View style={styles.container}>
+//       <ScrollView contentContainerStyle={styles.scrollContainer}>
+//         {/* Logo and app name */}
+//         <View style={{ flexDirection: "column", alignItems: "center" }}>
+//           <Avatar.Image
+//             size={50}
+//             source={require("../assets/Images/icon1.jpg")}
+//             style={{ marginLeft: 0, marginTop: 30 }}
+//           />
+//           <Text style={{ fontSize: 30, fontWeight: "700", marginTop: 10 }}>
+//             <Text style={{ color: "#0A0909" }}>Lab</Text>
+//             <Text style={{ color: "#FF7600" }}> App</Text>
+//           </Text>
+//         </View>
+
+//         {/* Schedule Appointment */}
+//         <View>
+//           <Text
+//             style={{
+//               color: "#FF7600",
+//               marginTop: 40,
+//               marginLeft: 20,
+//               fontWeight: "bold",
+//               fontSize: 18,
+//             }}
+//           >
+//             Schedule Appointment
+//           </Text>
+//         </View>
+
+//         {/* Appointment details */}
+//         {bookingDetails && (
+//           <>
+//             <View
+//               style={{
+//                 flexDirection: "row",
+//                 alignItems: "center",
+//                 paddingLeft: 20,
+//                 marginTop: 10,
+//               }}
+//             >
+//               <Icon source="calendar" size={20} />
+//               <Text style={{ fontSize: 14, padding: 10, color: "#344154" }}>
+//                 {formatDate(bookingDetails.date)}
+//               </Text>
+//             </View>
+//             <View
+//               style={{
+//                 flexDirection: "row",
+//                 alignItems: "center",
+//                 paddingLeft: 20,
+//               }}
+//             >
+//               <Icon source="clock-outline" size={20} />
+//               <Text style={{ fontSize: 14, padding: 10, color: "#344154" }}>
+//                 {bookingDetails.startTime}
+//               </Text>
+//             </View>
+
+//             {/* Client information */}
+//             <View style={{ marginTop: 15 }}>
+//               <Surface
+//                 style={{
+//                   ...styles.surface,
+//                   borderRadius: 20,
+//                   marginLeft: 15,
+//                   marginTop: 25,
+//                   padding: 5,
+//                   height: 270,
+//                   width: 345,
+//                   alignItems: "flexStart",
+//                   justifyContent: "flexStart",
+//                   marginBottom: 10,
+//                 }}
+//                 elevation={1}
+//               >
+//                 <Text
+//                   style={{
+//                     color: "#FF7600",
+//                     fontWeight: "bold",
+//                     fontSize: 16,
+//                     marginTop: 10,
+//                     marginLeft: 10,
+//                   }}
+//                 >
+//                   Client Information
+//                 </Text>
+//                 {/* Client details */}
+//                 <Text style={{ paddingTop: 15, paddingLeft: 10 }}>
+//                   <Text style={{ fontWeight: 600, color: "#0A090A" }}>
+//                     Full Name :
+//                   </Text>
+//                   <Text style={{ color: "#0A090A" }}>
+//                     {" "}
+//                     {bookingDetails.customerName}
+//                   </Text>
+//                 </Text>
+
+//                 <Text
+//                   style={{
+//                     fontWeight: 600,
+//                     paddingTop: 10,
+//                     color: "#0A090A",
+//                     paddingLeft: 10,
+//                   }}
+//                 >
+//                   Job Description :
+//                 </Text>
+//                 <Text
+//                   style={{
+//                     paddingTop: 5,
+//                     lineHeight: 20,
+//                     color: "#2F3239",
+//                     paddingLeft: 10,
+//                   }}
+//                 >
+//                   {bookingDetails.jobDescription}
+//                 </Text>
+//               </Surface>
+//             </View>
+//           </>
+//         )}
+
+//         {/* Action buttons */}
+//         <View>
+//           <View
+//             style={{
+//               flexDirection: "row",
+//               justifyContent: "space-between",
+//               marginBottom: 50,
+//             }}
+//           >
+//             {/* Accept button */}
+//             <Button
+//               icon="phone-outline"
+//               mode="contained"
+//               onPress={handleAccept}
+//               style={{
+//                 backgroundColor: "#00204A",
+//                 borderRadius: 10,
+//                 height: 40,
+//                 marginTop: 10,
+//                 width: 160,
+//                 marginLeft: 15,
+//               }}
+//               contentStyle={{ flexDirection: "row-reverse" }}
+//               textColor="#FFFFFF"
+//               fontWeight="600"
+//               fontSize="13"
+//             >
+//               Accept
+//             </Button>
+
+//             {/* Ignore button */}
+//             <Button
+//               icon="comment-outline"
+//               mode="contained"
+//               onPress={handleIgnore}
+//               style={{
+//                 backgroundColor: "#00204A",
+//                 borderRadius: 10,
+//                 height: 40,
+//                 marginTop: 10,
+//                 width: 160,
+//                 marginRight: 15,
+//               }}
+//               contentStyle={{ flexDirection: "row-reverse" }}
+//               textColor="#FFFFFF"
+//               fontWeight="600"
+//               fontSize="13"
+//             >
+//               Ignore
+//             </Button>
+//           </View>
+//         </View>
+
+//         {/* Error handling */}
+//         {error && (
+//           <View style={styles.errorContainer}>
+//             <Text style={styles.errorText}>{error}</Text>
+//           </View>
+//         )}
+//       </ScrollView>
+//     </View>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: "#F2F2F2",
+//   },
+//   scrollContainer: {
+//     flexGrow: 1,
+//     paddingVertical: 20,
+//   },
+//   surface: {
+//     padding: 8,
+//     height: 80,
+//     width: 80,
+//     alignItems: "center",
+//     justifyContent: "center",
+//   },
+//   errorContainer: {
+//     alignItems: "center",
+//     justifyContent: "center",
+//     marginTop: 20,
+//   },
+//   errorText: {
+//     color: "red",
+//     fontSize: 16,
+//     fontWeight: "bold",
+//   },
+// });
+
+// export default Appointment_page;
+
+
+
+
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { Button, Surface, Icon, Avatar } from "react-native-paper";
-import { getCustomerById } from "../services/CustomerService";
+import { getBookingDetailsByLabourEmail } from "../services/BookingService";
 
-
-
-// Functional component definition
 const Appointment_page = ({ route, navigation }) => {
-  const { appointment, removeAppointment } = route.params;
-   const [customerName, setCustomerName] = useState("");
-  
- const email = "aruran@example.com"; 
+  const { appointmentId, removeAppointment } = route.params;
+  const [bookingDetails, setBookingDetails] = useState(null);
+  const [error, setError] = useState(null);
+  const labourEmail = "lehaan@example.com"; // Replace with dynamic value if needed
 
- useEffect(() => {
-   getCustomerById(email)
-     .then((response) => {
-       const data = response.data;
-       setCustomerName(data.name);
-       console.log(response.data);
-     })
-     .catch((error) => {
-       console.error("Error fetching customer name data:", error);
-     });
- }, []);
-  
- 
-  
+  useEffect(() => {
+    const fetchBookingDetails = async () => {
+      try {
+        const response = await getBookingDetailsByLabourEmail(labourEmail);
+        console.log("API Response:", response);
+        if (response) {
+          const relevantAppointment = response.find(
+            (appointment) => appointment.id === appointmentId
+          );
+          if (relevantAppointment) {
+            setBookingDetails(relevantAppointment);
+          } else {
+            setError("No relevant appointment found.");
+          }
+        } else {
+          setError("Empty response or missing data fields.");
+        }
+      } catch (error) {
+        console.error("Error fetching booking data:", error);
+        setError("Error fetching booking data. Please try again.");
+      }
+    };
+
+    fetchBookingDetails();
+  }, [labourEmail, appointmentId]); // Dependency array ensures useEffect runs when labourEmail or appointmentId changes
+
   const handleAccept = () => {
-    removeAppointment(appointment.id);
-    navigation.goBack();
+    removeAppointment(appointmentId);
+    navigation.navigate("Appointment"); // Navigate back to Appointment screen
   };
-
- 
 
   const handleIgnore = () => {
-    removeAppointment(appointment.id);
-    navigation.goBack();
-  };
-  // State for search query
-  const [searchQuery, setSearchQuery] = React.useState("");
-
-  // Function to handle languages press
-  const handleLanguagesPress = () => {
-    console.log("Languages section pressed");
+    removeAppointment(appointmentId);
+    navigation.navigate("Appointment"); // Navigate back to Appointment screen
   };
 
-  // Component rendering
+  const formatDate = (dateString) => {
+    const options = {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    };
+    const formattedDate = new Date(dateString).toLocaleDateString(
+      "en-US",
+      options
+    );
+    return formattedDate;
+  };
+
   return (
     <View style={styles.container}>
-      {/* ScrollView for scrolling content /} */}
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {/* {/ Logo and app name */}
+        {/* Logo and app name */}
         <View style={{ flexDirection: "column", alignItems: "center" }}>
           <Avatar.Image
             size={50}
             source={require("../assets/Images/icon1.jpg")}
             style={{ marginLeft: 0, marginTop: 30 }}
           />
-          <Text style={{ fontSize: 30, fontWeight: 700, marginTop: 10 }}>
+          <Text style={{ fontSize: 30, fontWeight: "700", marginTop: 10 }}>
             <Text style={{ color: "#0A0909" }}>Lab</Text>
             <Text style={{ color: "#FF7600" }}> App</Text>
           </Text>
@@ -77,91 +365,100 @@ const Appointment_page = ({ route, navigation }) => {
             Schedule Appointment
           </Text>
         </View>
-        {/* Appointment details */}
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            paddingLeft: 20,
-            marginTop: 10,
-          }}
-        >
-          <Icon source="calendar" size={20} />
-          <Text style={{ fontSize: 14, padding: 10, color: "#344154" }}>
-            Monday December 31, 2023
-          </Text>
-        </View>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            paddingLeft: 20,
-          }}
-        >
-          <Icon source="clock-outline" size={20} />
-          <Text style={{ fontSize: 14, padding: 10, color: "#344154" }}>
-            11:00 AM
-          </Text>
-        </View>
-        {/* Client information */}
-        <View style={{ marginTop: 15 }}>
-          <Surface
-            style={{
-              ...styles.surface,
-              borderRadius: 20,
-              marginLeft: 15,
-              marginTop: 25,
-              padding: 5,
-              height: 310,
-              width: 345,
-              alignItems: "flexStart",
-              justifyContent: "flexStart",
-              marginBottom: 10,
-            }}
-            elevation={1}
-          >
-            <Text
-              style={{
-                color: "#FF7600",
-                fontWeight: "bold",
-                fontSize: 16,
-                marginTop: 10,
-                marginLeft: 10,
-              }}
-            >
-              Client Information
-            </Text>
-            {/* Client details */}
-            <Text style={{ paddingTop: 15, paddingLeft: 10 }}>
-              <Text style={{ fontWeight: 600, color: "#0A090A" }}>
-                Full Name : 
-              </Text>
-              <Text style={{ color: "#0A090A" }}> {customerName}</Text>
-            </Text>
 
-            <Text
+        {/* Appointment details */}
+        {bookingDetails && (
+          <>
+            <View
               style={{
-                fontWeight: 600,
-                paddingTop: 10,
-                color: "#0A090A",
-                paddingLeft: 10,
+                flexDirection: "row",
+                alignItems: "center",
+                paddingLeft: 20,
+                marginTop: 10,
               }}
             >
-              Job Description :
-            </Text>
-            <Text
+              <Icon source="calendar" size={20} />
+              <Text style={{ fontSize: 14, padding: 10, color: "#344154" }}>
+                {formatDate(bookingDetails.date)}
+              </Text>
+            </View>
+            <View
               style={{
-                paddingTop: 5,
-                lineHeight: 20,
-                color: "#2F3239",
-                paddingLeft: 10,
+                flexDirection: "row",
+                alignItems: "center",
+                paddingLeft: 20,
               }}
             >
-            {aboutMe || `I have a commitment in Colombo on the 31st of December and I need a professional Driver.`}
-              
-            </Text>
-          </Surface>
-        </View>
+              <Icon source="clock-outline" size={20} />
+              <Text style={{ fontSize: 14, padding: 10, color: "#344154" }}>
+                {bookingDetails.startTime}
+              </Text>
+            </View>
+
+            {/* Client information */}
+            <View style={{ marginTop: 15 }}>
+              <Surface
+                style={{
+                  ...styles.surface,
+                  borderRadius: 20,
+                  marginLeft: 15,
+                  marginTop: 25,
+                  padding: 5,
+                  height: 270,
+                  width: 345,
+                  alignItems: "flexStart",
+                  justifyContent: "flexStart",
+                  marginBottom: 10,
+                }}
+                elevation={1}
+              >
+                <Text
+                  style={{
+                    color: "#FF7600",
+                    fontWeight: "bold",
+                    fontSize: 16,
+                    marginTop: 10,
+                    marginLeft: 10,
+                  }}
+                >
+                  Client Information
+                </Text>
+                {/* Client details */}
+                <Text style={{ paddingTop: 15, paddingLeft: 10 }}>
+                  <Text style={{ fontWeight: 600, color: "#0A090A" }}>
+                    Full Name :
+                  </Text>
+                  <Text style={{ color: "#0A090A" }}>
+                    {" "}
+                    {bookingDetails.customerName}
+                  </Text>
+                </Text>
+
+                <Text
+                  style={{
+                    fontWeight: 600,
+                    paddingTop: 10,
+                    color: "#0A090A",
+                    paddingLeft: 10,
+                  }}
+                >
+                  Job Description :
+                </Text>
+                <Text
+                  style={{
+                    paddingTop: 5,
+                    lineHeight: 20,
+                    color: "#2F3239",
+                    paddingLeft: 10,
+                  }}
+                >
+                  {bookingDetails.jobDescription}
+                </Text>
+              </Surface>
+            </View>
+          </>
+        )}
+
         {/* Action buttons */}
         <View>
           <View
@@ -214,16 +511,27 @@ const Appointment_page = ({ route, navigation }) => {
             </Button>
           </View>
         </View>
+
+        {/* Error handling */}
+        {error && (
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorText}>{error}</Text>
+          </View>
+        )}
       </ScrollView>
     </View>
   );
 };
 
-// Exporting the component as default
-export default Appointment_page;
-
-// Styles for the component
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#F2F2F2",
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    paddingVertical: 20,
+  },
   surface: {
     padding: 8,
     height: 80,
@@ -231,8 +539,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  errorContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 20,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
 });
 
-
-
-
+export default Appointment_page;

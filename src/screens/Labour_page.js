@@ -9,14 +9,17 @@ import {
 import { Button, Surface, Avatar, Icon } from "react-native-paper";
 import { getLabourProfileById } from "../services/LabourProfileService";
 import { getLabourById } from "../services/LabourService";
+import { getRating } from "../services/LabourReviewService";
+import { getCompletedAppointments } from "../services/BookingService";
 
 // Functional component definition
 const Labour_page = ({ navigation }) => {
   // State for search query
   const [searchQuery, setSearchQuery] = React.useState("");
   const [labour, setLabour] = useState("");
-   const [labourProfile, setLabourProfile] = useState("");
- 
+  const [labourProfile, setLabourProfile] = useState("");
+  const [rating, setRating] = useState(0);
+  const [completedBookings, setCompletedBookings] = useState([]);
 
   const email = "lehaan@example.com"; // Replace with dynamic value if needed
   const labourEmail = "lehaan@example.com";
@@ -26,13 +29,12 @@ const Labour_page = ({ navigation }) => {
       .then((response) => {
         const data = response.data;
         setLabour(data);
-       console.log(response.data)
+        console.log(response.data);
       })
       .catch((error) => {
         console.error("Error fetching labour data:", error);
       });
   }, []);
-
 
   useEffect(() => {
     getLabourProfileById(labourEmail)
@@ -46,13 +48,43 @@ const Labour_page = ({ navigation }) => {
       });
   }, []);
 
+   
+
+  useEffect(() => {
+    const fetchRating = async () => {
+      try {
+        const ratingData = await getRating(email);
+        setRating(ratingData); // Set the rating state with the fetched data
+      } catch (error) {
+        console.error("Error fetching rating:", error);
+      }
+    };
+
+    fetchRating();
+  }, []);
+
+ useEffect(() => {
+   getCompletedAppointments(labourEmail)
+     .then((data) => {
+       const mostRecentBookings = data.slice(0, 3);
+       setCompletedBookings(mostRecentBookings);
+     })
+     .catch((error) => {
+       console.error("Error fetching completed appointments:", error);
+     });
+ }, [email, labourEmail]);
+
+  const totalServices = completedBookings.length;
+
   // Function to handle languages press
   const handleLanguagesPress = () => {
     console.log("Languages section pressed");
   };
 
   const handleViewAllPress = () => {
-    navigation.navigate("Previous_Work_History");
+    navigation.navigate("Previous_Work_History", {
+      completedBookings: completedBookings,
+    });
   };
 
   const handleAppointmentPress = () => {
@@ -105,7 +137,7 @@ const Labour_page = ({ navigation }) => {
                 <Text
                   style={{ fontSize: 16, fontWeight: 500, color: "#464255" }}
                 >
-                  180
+                  {totalServices}
                 </Text>
                 <Text style={{ fontSize: 13 }}>Total Services</Text>
               </View>
@@ -114,7 +146,7 @@ const Labour_page = ({ navigation }) => {
                 <Text
                   style={{ fontSize: 16, fontWeight: 500, color: "#464255" }}
                 >
-                  4.5
+                  {rating}
                 </Text>
                 <Text style={{ fontSize: 13 }}>Rating</Text>
               </View>
@@ -287,69 +319,27 @@ const Labour_page = ({ navigation }) => {
             </Text>
 
             {/* Previous work details */}
-            <Text
-              style={{
-                paddingTop: 10,
-                marginLeft: 30,
-                fontSize: 15,
-                fontWeight: 500,
-                color: "#2F3239",
-              }}
-            >
-              Customer Name: Mr.Shanthan
-            </Text>
+            {completedBookings.slice(0, 2).map((booking, index) => (
+              <View key={index}>
+                <Text
+                  style={{
+                    paddingTop: 10,
+                    marginLeft: 30,
+                    fontSize: 15,
+                    fontWeight: 500,
+                    color: "#2F3239",
+                  }}
+                >
+                  Customer Name: {booking.customerName}
+                </Text>
 
-            <Text style={{ marginLeft: 30, fontSize: 13, color: "#2F3239" }}>
-              @20.12.2023| 10 am-2 p.m
-            </Text>
-
-            <Text
-              style={{
-                paddingTop: 15,
-                marginLeft: 30,
-                fontSize: 15,
-                fontWeight: 500,
-                color: "#2F3239",
-              }}
-            >
-              Customer Name: Mrs.Shaar
-            </Text>
-
-            <Text style={{ marginLeft: 30, fontSize: 13, color: "#2F3239" }}>
-              @02.01.2023| 8 am-1 p.m
-            </Text>
-
-            <Text
-              style={{
-                paddingTop: 15,
-                marginLeft: 30,
-                fontSize: 15,
-                fontWeight: 500,
-                color: "#2F3239",
-              }}
-            >
-              Customer Name: Mrs.Kulam
-            </Text>
-
-            <Text style={{ marginLeft: 30, fontSize: 13, color: "#2F3239" }}>
-              @01.12.2023| 02 pm-07 p.m
-            </Text>
-
-            <Text
-              style={{
-                paddingTop: 15,
-                marginLeft: 30,
-                fontSize: 15,
-                fontWeight: 500,
-                color: "#2F3239",
-              }}
-            >
-              Customer Name: Mr.Shanthan
-            </Text>
-
-            <Text style={{ marginLeft: 30, fontSize: 13, color: "#2F3239" }}>
-              @11.11.2023| 11 am-03 p.m
-            </Text>
+                <Text
+                  style={{ marginLeft: 30, fontSize: 13, color: "#2F3239" }}
+                >
+                  @{booking.date} | {booking.startTime}
+                </Text>
+              </View>
+            ))}
           </Surface>
         </View>
       </ScrollView>

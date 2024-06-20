@@ -8,3 +8,11 @@ export const getAllReviews = () => {
   return axios.get(`${BASE_URL}/getAllReview`);
 };
 
+export const getRating = async (email) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/rating/${email}`);
+    return response.data; // Return the rating data
+  } catch (error) {
+    throw error; // Throw the error for handling in the component
+  }
+};

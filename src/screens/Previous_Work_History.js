@@ -1,73 +1,73 @@
-import React from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, ScrollView, FlatList } from "react-native";
 import { Card } from "react-native-paper";
 
-const Previous_Work_History = () => {
-  const workDetails = [
-    { name: "Mr.Shanthan", time: "@20.12.2023 | 10 am-2 p.m" },
-    { name: "Mrs.Shaar", time: "@02.01.2023 | 8 am-1 p.m" },
-    { name: "Mrs.Kulam", time: "@01.12.2023 | 02 pm-07 p.m" },
-    { name: "Mr.Shanthan", time: "@11.11.2023 | 11 am-03 p.m" },
-    { name: "Mr.Shanthan", time: "@20.12.2023 | 10 am-2 p.m" },
-    { name: "Mrs.Shaar", time: "@02.01.2023 | 8 am-1 p.m" },
-    { name: "Mrs.Kulam", time: "@01.12.2023 | 02 pm-07 p.m" },
-    { name: "Mr.Shanthan", time: "@11.11.2023 | 11 am-03 p.m" },
-    { name: "Mr.Shanthan", time: "@20.12.2023 | 10 am-2 p.m" },
-    { name: "Mrs.Shaar", time: "@02.01.2023 | 8 am-1 p.m" },
-    { name: "Mrs.Kulam", time: "@01.12.2023 | 02 pm-07 p.m" },
-    { name: "Mr.Shanthan", time: "@11.11.2023 | 11 am-03 p.m" },
-  ];
+
+const Previous_Work_History = ({route}) => {
+   const { completedBookings } = route.params;
+   const labourEmail = "lehaan@example.com"; // Replace with dynamic value if needed
+
+   
+
+   const renderBooking = ({ item }) => (
+     <View style={styles.bookingContainer}>
+       <Text style={styles.customerName}>
+         Customer Name: {item.customerName}
+       </Text>
+       <Text style={styles.bookingDetails}>
+         @{item.date} | {item.startTime}
+       </Text>
+     </View>
+   );
+ 
+ 
+
+    
+  
 
   return (
-    <ScrollView>
-      <View style={{ marginTop: 10 }}>
-        {/* <View style={styles.header}>
-          <Text style={styles.title}>Previous Work History</Text>
-        </View> */}
-
-        {workDetails.map((work, index) => (
-          <Card key={index} style={styles.card}>
-            <Card.Content>
-              <Text style={styles.workDetail}>Customer Name: {work.name}</Text>
-              <Text style={styles.workTime}>{work.time}</Text>
-            </Card.Content>
-          </Card>
-        ))}
-      </View>
-    </ScrollView>
+    
+      
+   <View style={styles.container}>
+      {/* <Text style={styles.header}>Previous Work History</Text> */}
+      <FlatList
+        data={completedBookings}
+        renderItem={renderBooking}
+        keyExtractor={(item, index) => index.toString()}
+      />
+    </View>
+      
   );
 };
 
+
+
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#FFF",
+    padding: 20,
+  },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  title: {
-    marginLeft: 10,
-    marginBottom: 30,
-    color: "#FF7600",
+    fontSize: 24,
     fontWeight: "bold",
-    fontSize: 22,
-    paddingLeft: 10,
+    marginBottom: 20,
+    color: "#FF7600",
   },
-  card: {
-    marginHorizontal: 20,
-    marginVertical: 10,
-    borderRadius: 8,
-    padding: 10,
-    backgroundColor: "#fff",
-    elevation: 2,
+  bookingContainer: {
+    marginBottom: 15,
+    padding: 15,
+    backgroundColor: "#F8F8F8",
+    borderRadius: 10,
   },
-  workDetail: {
-    fontSize: 15,
-    fontWeight: "500",
+  customerName: {
+    fontSize: 18,
+    fontWeight: "bold",
     color: "#2F3239",
   },
-  workTime: {
-    fontSize: 13,
+  bookingDetails: {
+    fontSize: 16,
     color: "#2F3239",
-    marginTop: 5,
   },
 });
 
