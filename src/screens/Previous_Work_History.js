@@ -7,7 +7,11 @@ const Previous_Work_History = ({route}) => {
    const { completedBookings } = route.params;
    const labourEmail = "lehaan@example.com"; // Replace with dynamic value if needed
 
-   
+   const [bookings, setBookings] = useState([]);
+
+   useEffect(() => {
+     setBookings(completedBookings);
+   }, [completedBookings]);
 
    const renderBooking = ({ item }) => (
      <View style={styles.bookingContainer}>

@@ -5,6 +5,20 @@ import axios from "axios";
 const BASE_URL = "http://172.20.10.3:8080/api/bookings";
 
 
+export const updateBookingStage = async (id, bookingStage) => {
+  try {
+    const response = await axios.patch(`${BASE_URL}/updateStage/${id}`, {
+      bookingStage: bookingStage,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error updating booking stage:", error);
+    throw error; // Ensure the error is re-thrown for the caller to handle
+  }
+};
+
+
+
 export const getPendingAppointments = async (labourEmail) => {
   try {
     const response = await axios.get(

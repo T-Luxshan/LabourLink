@@ -10,16 +10,21 @@ import { Button, Surface, Avatar, Icon } from "react-native-paper";
 import { getLabourProfileById } from "../services/LabourProfileService";
 import { getLabourById } from "../services/LabourService";
 import { getRating } from "../services/LabourReviewService";
-import { getCompletedAppointments } from "../services/BookingService";
+import {
+  getCompletedAppointments,
+  getAcceptedAppointments,
+  updateBookingStage,
+} from "../services/BookingService";
 
 // Functional component definition
-const Labour_page = ({ navigation }) => {
+const Labour_page = ({ navigation, route }) => {
   // State for search query
   const [searchQuery, setSearchQuery] = React.useState("");
   const [labour, setLabour] = useState("");
   const [labourProfile, setLabourProfile] = useState("");
   const [rating, setRating] = useState(0);
   const [completedBookings, setCompletedBookings] = useState([]);
+  const [acceptedAppointments, setAcceptedAppointments] = useState([]);
 
   const email = "lehaan@example.com"; // Replace with dynamic value if needed
   const labourEmail = "lehaan@example.com";
@@ -48,8 +53,6 @@ const Labour_page = ({ navigation }) => {
       });
   }, []);
 
-   
-
   useEffect(() => {
     const fetchRating = async () => {
       try {
@@ -64,17 +67,56 @@ const Labour_page = ({ navigation }) => {
   }, []);
 
  useEffect(() => {
-   getCompletedAppointments(labourEmail)
-     .then((data) => {
-       const mostRecentBookings = data.slice(0, 3);
-       setCompletedBookings(mostRecentBookings);
-     })
-     .catch((error) => {
-       console.error("Error fetching completed appointments:", error);
-     });
- }, [email, labourEmail]);
+    const fetchCompletedAppointments = async () => {
+      try {
+        const completedAppointments = await getCompletedAppointments(labourEmail);
+        setCompletedBookings(completedAppointments);
+      } catch (error) {
+        console.error("Error fetching completed appointments:", error);
+      }
+    };
+
+    fetchCompletedAppointments();
+  }, []);
+
+
+   useEffect(() => {
+     const fetchAcceptedAppointments = async () => {
+       try {
+         const acceptedAppointmentsData = await getAcceptedAppointments(
+           labourEmail
+         );
+         setAcceptedAppointments(acceptedAppointmentsData);
+        //  console.log("Accepted appointments:", acceptedAppointmentsData);
+       } catch (error) {
+         console.error("Error fetching accepted appointments:", error);
+       }
+     };
+
+     fetchAcceptedAppointments();
+   }, [labourEmail]);
 
   const totalServices = completedBookings.length;
+
+  const handleMarkAsCompleted = async (appointmentId) => {
+    try {
+      await updateBookingStage(appointmentId, "COMPLETED");
+
+      // Update acceptedAppointments state after marking appointment as completed
+      setAcceptedAppointments((prevAppointments) =>
+        prevAppointments.filter(
+          (appointment) => appointment.id !== appointmentId
+        )
+      );
+      const updatedCompletedAppointments = await getCompletedAppointments(
+        labourEmail
+      );
+    
+      setCompletedBookings(updatedCompletedAppointments);
+    } catch (error) {
+      console.error("Error marking appointment as completed:", error);
+    }
+  };
 
   // Function to handle languages press
   const handleLanguagesPress = () => {
@@ -88,7 +130,17 @@ const Labour_page = ({ navigation }) => {
   };
 
   const handleAppointmentPress = () => {
-    navigation.navigate("Appointment");
+    navigation.navigate("Appointment", {
+      acceptedAppointments: acceptedAppointments,
+      setAcceptedAppointments: setAcceptedAppointments,
+    });
+  };
+
+  const removeAppointment = (appointmentId) => {
+    const updatedAcceptedAppointments = acceptedAppointments.filter(
+      (appointment) => appointment.id !== appointmentId
+    );
+    setAcceptedAppointments(updatedAcceptedAppointments);
   };
 
   // Component rendering
@@ -224,7 +276,7 @@ const Labour_page = ({ navigation }) => {
               marginLeft: 15,
               marginTop: 25,
               padding: 5,
-              height: 150,
+              height: "auto",
               width: 345,
               alignItems: "flexStart",
               justifyContent: "flexStart",
@@ -243,38 +295,40 @@ const Labour_page = ({ navigation }) => {
               Appointments
             </Text>
 
-            {/* Appointment details */}
-            <Text
-              style={{
-                paddingTop: 10,
-                marginLeft: 30,
-                fontSize: 15,
-                fontWeight: 500,
-                color: "#2F3239",
-              }}
-            >
-              Customer Name: Mr.Perera
-            </Text>
+            {/* Render accepted appointments */}
+            {acceptedAppointments.map((appointment, index) => (
+              <View key={index}>
+                <Text
+                  style={{
+                    paddingTop: 10,
+                    marginLeft: 30,
+                    fontSize: 15,
+                    fontWeight: 500,
+                    color: "#2F3239",
+                  }}
+                >
+                  Customer Name: {appointment.customerName}
+                </Text>
 
-            <Text style={{ marginLeft: 30, fontSize: 13, color: "#2F3239" }}>
-              @29.12.2023| 10 am-2 p.m
-            </Text>
-
-            <Text
-              style={{
-                paddingTop: 15,
-                marginLeft: 30,
-                fontSize: 15,
-                fontWeight: 500,
-                color: "#2F3239",
-              }}
-            >
-              Customer Name: Mr.Haru
-            </Text>
-
-            <Text style={{ marginLeft: 30, fontSize: 13, color: "#2F3239" }}>
-              @02.01.2024| 8 am-1 p.m
-            </Text>
+                <Text
+                  style={{ marginLeft: 30, fontSize: 13, color: "#2F3239" }}
+                >
+                  @{appointment.date} | {appointment.startTime}
+                </Text>
+                <Button
+                  mode="contained"
+                  onPress={() => handleMarkAsCompleted(appointment.id)}
+                  style={{
+                    marginLeft: 30,
+                    marginTop: 10,
+                    backgroundColor: "#FF7600",
+                    width: 200,
+                  }}
+                >
+                  Completed
+                </Button>
+              </View>
+            ))}
           </Surface>
         </View>
 
@@ -319,7 +373,7 @@ const Labour_page = ({ navigation }) => {
             </Text>
 
             {/* Previous work details */}
-            {completedBookings.slice(0, 2).map((booking, index) => (
+            {completedBookings.slice(0, 3).map((booking, index) => (
               <View key={index}>
                 <Text
                   style={{
@@ -387,8 +441,6 @@ const Labour_page = ({ navigation }) => {
   );
 };
 
-
-
 // Styles for the component
 const styles = StyleSheet.create({
   container: {
@@ -414,3 +466,4 @@ const styles = StyleSheet.create({
 
 // Exporting the component as default
 export default Labour_page;
+
