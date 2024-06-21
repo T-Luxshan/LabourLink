@@ -108,11 +108,17 @@ const Labour_page = ({ navigation, route }) => {
           (appointment) => appointment.id !== appointmentId
         )
       );
-      const updatedCompletedAppointments = await getCompletedAppointments(
-        labourEmail
-      );
+      // const updatedCompletedAppointments = await getCompletedAppointments(
+      //   labourEmail
+      // );
     
-      setCompletedBookings(updatedCompletedAppointments);
+      // setCompletedBookings(updatedCompletedAppointments);
+      getCompletedAppointments(labourEmail)
+          .then(res=>{
+            console.log(res.data);
+            setCompletedBookings(res.data);
+          })
+          .catch(err=>console.log("Failed to fetch completed appointments", err));
     } catch (error) {
       console.error("Error marking appointment as completed:", error);
     }
