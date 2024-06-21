@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Modal, Button } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation , useRoute } from '@react-navigation/native';
 import { getLabourByReview } from "../services/LabourDetailsService";
 
 
@@ -15,7 +15,7 @@ const imageMapping = {
   "profile_photo5.png": require('../assets/Images/profile_photo2.png'),
 };
 
-const ScrollReviewer = () => {
+const ScrollReviewer = ({email,jobRole}) => {
   const [reviews, setReviews] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -27,9 +27,13 @@ const ScrollReviewer = () => {
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
-  const navigation = useNavigation(); // Get navigation object using useNavigation hook
-  let email = "thana@example.com";
-  let jobRole = "Electrician";
+  //const navigation = useNavigation(); // Get navigation object using useNavigation hook
+  //  let email = "olivia@example.com";
+  //  let jobRole = "Electrician";
+  // Get navigation object using useNavigation hook
+  // const route = useRoute();
+  // const { customerEmail, JobRole } = route.params;
+   //const jobRole = JobRole.toUpperCase();
 
   // const [LabourReview, setReview] =useState('')
 
@@ -62,9 +66,9 @@ const ScrollReviewer = () => {
           <View key={index} style={styles.reviewItemContainer}>
             {/* <Image source={imageMapping[review.reviewerPhoto]} style={styles.reviewerPhoto} /> */}
             <View style={styles.reviewDetailsContainer}>
-              <Text style={styles.reviewerName}>{review.customerName}</Text>
-              <Text style={styles.reviewText}>{review.description}</Text>
-              <Text style={styles.reviewRating}>Rating: {review.rating}</Text>
+              <Text style={styles.reviewerName}>Name{review ? review.customerName: "Name not found"}</Text>
+              <Text style={styles.reviewText}>{review ? review.description:"description not found"}</Text>
+              <Text style={styles.reviewRating}>Rating: {review ? review.rating:"rating not found"}</Text>
             </View>
           </View>
         ))}
