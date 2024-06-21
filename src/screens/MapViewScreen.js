@@ -2,12 +2,13 @@
 
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, Callout } from "react-native-maps";
 import * as Location from "expo-location";
 import LabourProfileComponent from "../components/LabourProfileComponent";
-import LabourData from "../services/Labours.json";
+import { useNavigation } from '@react-navigation/native'; 
+import { getLabourByJobRole, getLocationsByJobRole } from "../services/LabourDetailsService";
 
-const MapViewScreen = ({ navigation }) => {
+const MapViewScreen = () => {
   const initialRegion = {
     latitude: 6.79503,
     longitude: 79.90168,
@@ -18,7 +19,45 @@ const MapViewScreen = ({ navigation }) => {
   const [region, setRegion] = useState(initialRegion);
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
-  const [Labours, setLabours] = useState([]);
+  const [LabourLocation, setLabourLocation] = useState([]);
+  const navigation = useNavigation();
+  const [labourcard, setLabourCard] = useState([]);
+
+ 
+
+  let jobRole = "ELECTRICIAN";
+
+  useEffect(() => {
+    fetchLabour(jobRole);
+  }, [jobRole]);
+
+  const fetchLabour = (jobRole) => {
+    getLabourByJobRole(jobRole)
+      .then(response => {
+        console.log(response);
+        setLabourCard(response.data);
+       
+  
+      })
+      .catch(error => {
+        console.log("Error in fetching labour", error);
+      });
+  };
+
+  useEffect(() => {
+    fetchLocation(jobRole);
+  }, [jobRole]);
+
+  const fetchLocation = (jobRole) => {
+    getLocationsByJobRole(jobRole)
+      .then(response => {
+        console.log(response.data);
+        setLabourLocation(response.data);
+      })
+      .catch(error => {
+        console.log("Error in fetching locations", error);
+      });
+  };
 
   useEffect(() => {
     (async () => {
@@ -36,14 +75,17 @@ const MapViewScreen = ({ navigation }) => {
         longitude: location.coords.longitude,
       });
     })();
-    setLabours(LabourData);
   }, []);
 
-  const handleProfileClick = (Labour) => {
+  const handleProfileClick = (labourEmail) => {
     navigation.navigate('LabourInfo', {
-      Labour,
+      email: labourEmail,
+      JobRole:jobRole ,
     });
   };
+  
+  
+
 
   return (
     <View style={styles.Mapcomponentcontainer}>
@@ -68,37 +110,50 @@ const MapViewScreen = ({ navigation }) => {
                 pinColor="blue"
               />
             )}
-            {Labours.length > 0 &&
-              Labours.map((Labour, index) => (
+            {LabourLocation.length > 0 &&
+              LabourLocation.map((labourLocation, index) => (
                 <Marker
                   key={index}
                   coordinate={{
-                    latitude: Labour.latitude,
-                    longitude: Labour.longitude,
+                    latitude: labourLocation.latitude,
+                    longitude: labourLocation.longitude,
                   }}
-                  title={Labour.name}
-                  description={Labour.jobRole}
                 >
                   <Image
-                    source={require('../assets/Labour.png')} // Update the image path as needed
+                    source={require('../assets/Labour.png')}
                     style={styles.markerImage}
                   />
+                    <Callout onPress={() => handleProfileClick(labourLocation.labourId)}>
+                    <View style={styles.calloutContainer}>
+                     
+                      <Text style={styles.labourName}>{labourLocation.labourName}</Text>
+                       <Text style={styles.labourJobRole}>Rating:{labourLocation.rating}</Text> 
+                      {/* <TouchableOpacity onPress={() => handleProfileClick(labourLocation.labourEmail)}>
+                        <Text style={styles.viewProfileText}>View Profile</Text>
+                      </TouchableOpacity> */}
+                    </View>
+                  </Callout>
+                 
+
+                 
                 </Marker>
               ))}
+        
           </MapView>
           <ScrollView>
-            {Labours.length > 0 ? 
-              Labours.map((Labour, index) => (
-                <TouchableOpacity key={index} onPress={() => handleProfileClick(Labour)}>
+            {labourcard.length > 0 ? (
+              labourcard.map((labour, index) => (
+                <TouchableOpacity key={index} onPress={() => handleProfileClick(labour.labourEmail)}>
                   <LabourProfileComponent 
-                    name={Labour.name}
-                    jobTitle={Labour.jobRole}
-                    rating={Labour.rating}
+                    name={labour.labourName}
+                    jobTitle={labour.jobRole.join(" | ")}
+                    rating={labour.rating}
                   />
                 </TouchableOpacity>
-              )) : 
+              ))
+            ) : (
               <Text style={styles.noLabourText}>There is no Labour</Text>
-            }
+            )}
           </ScrollView>
         </View>
       )}
@@ -109,7 +164,7 @@ const MapViewScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   Mapcomponentcontainer: {
     flex: 1,
-    backgroundColor:"white",
+    backgroundColor: "white",
   },
   mapStyle: {
     width: "100%",
@@ -129,11 +184,23 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   markerImage: {
-    width: 30, // Set the width of the image
-    height: 30, // Set the height of the image
-    resizeMode: 'contain', // Ensure the image is contained within the bounds
+    width: 30,
+    height: 30,
+    resizeMode: 'contain',
   },
-
+  calloutContainer: {
+    width: 150,
+    padding: 5,
+    backgroundColor: 'white',
+    borderRadius: 5,
+  },
+  labourName: {
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  labourJobRole: {
+    fontSize: 14,
+  },
 });
 
 export default MapViewScreen;
