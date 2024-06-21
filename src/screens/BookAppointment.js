@@ -32,7 +32,8 @@ const bookingSchema = Yup.object().shape({
 const BookAppointment = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const {labourId, jobRole} = route.params;
+  const { labourId, jobRole, labourName, labourJobTitle, labourRating, profileImage } = route.params;
+
 
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState(new Date());
@@ -98,10 +99,10 @@ const BookAppointment = () => {
 
             <View style={styles.Labourprofile}>
               <LabourProfileComponent 
-                profileImage={require('../assets/Images/profile_photo2.png')}
-                name="Thanakaran"
-                jobTitle="Plumber"
-                rating={4} 
+                profileImage={profileImage}
+                name={labourName}
+                jobTitle= {labourJobTitle}
+                rating={labourRating} 
               /> 
             </View>
 
@@ -115,32 +116,40 @@ const BookAppointment = () => {
                 [selectedDate]: { selected: true, selectedColor: 'blue' },
               }}
             />
-            {selectedDate && (
+            {/* {selectedDate && (
               <Text style={styles.selectedDateText}>
-                Selected Date: {selectedDate}
+                 Selected Date: {selectedDate} 
               </Text>
-            )}
-
-            <TouchableOpacity onPress={showTimePickerModal}>
-              <Text style={styles.label2}>Select Hour:</Text>
-            </TouchableOpacity>
+            )} */}
+<View style={styles.Time}>
+             <TouchableOpacity onPress={showTimePickerModal}>
+              
+              <Text style={styles.label2}>Select Time:</Text>
+             </TouchableOpacity>
             {showTimePicker && (
               <DateTimePicker
+                style={styles.Timepicker}
                 value={selectedTime}
                 mode="time"
                 is24Hour={false}
-                display="default"
-                onChange={(event, date) => {
+                // display="default"
+                 onChange={(event, date) => {
                   handleTimeChange(event, date);
-                  setFieldValue('startTime', date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));  // Set Formik field value
+                   setFieldValue('startTime', date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));  // Set Formik field value
+                  
                 }}
               />
+            
+              
             )}
-            {timePicked && (
+            </View>
+              
+            
+            {/* {timePicked && (
               <Text style={styles.selectedTimeText}>
                 Selected Time: {selectedTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               </Text>
-            )}
+            )} */}
 
             <View style={styles.jobDetailsContainer}>
               <Text style={styles.jobDetailsHeader}>Job Detail :</Text>
@@ -220,7 +229,7 @@ const styles = StyleSheet.create({
   submitButton: {
     backgroundColor: 'orange',
     padding: 15,
-    borderRadius: 5,
+    borderRadius: 50,
     alignItems: 'center',
     marginTop: 20,
   },
@@ -242,4 +251,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 5,
   },
+  Timepicker:{
+    marginRight:170,
+  
+  },
+  Time:{
+    flexDirection:"row"
+  }
 });
