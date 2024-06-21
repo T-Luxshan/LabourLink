@@ -26,7 +26,7 @@ const LabourProfileComponent = (props) => {
             {props.rating % 1 !== 0 && !hasHalfStar && (
               <Icon name="star" size={20} color="#FFD700" />
             )}
-            <Text style={styles.ratingText}> {props.rating.toFixed(1)}</Text>
+            <Text style={styles.ratingText}> {props.rating}</Text>
           </View>
         </View>
       </View>
