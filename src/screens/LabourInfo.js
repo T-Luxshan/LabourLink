@@ -1,7 +1,7 @@
 // Importing necessary modules from React and React Native
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet,ScrollView } from "react-native";
-import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
+import { useNavigation, useRoute } from '@react-navigation/native'; // Import useNavigation hook
 import AppBar from "../components/AppBar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import LabourProfileComponent from "../components/LabourProfileComponent";
@@ -21,8 +21,10 @@ import { Button } from 'react-native-paper';
 const LabourInfo = () => {
   // console.props(props);
    const navigation = useNavigation(); // Get navigation object using useNavigation hook
-   let email = "thana@example.com";
-   let jobRole = "ELECTRICIAN";
+   const route = useRoute();
+   const {email, JobRole } = route.params;
+   const jobRole = JobRole.toUpperCase();
+   
 
    
    
@@ -31,12 +33,7 @@ const LabourInfo = () => {
   
 
 
-  // Function to handle navigation to BookAppointment screen
-  // const handleBookNow = () => {
-  //   navigation.navigate('BookAppointment'); // Navigate to BookAppointment screen
-  // };
-
-  // Rendering JSX
+  
 
      useEffect(() => {
      fetchLabour(email);
@@ -51,6 +48,8 @@ const LabourInfo = () => {
   const [labourrating, setrating] = useState('');
   const [labourTotalservice, setTotalServices] = useState('');
   const [labourcard, setLabourCard] = useState([]);
+
+  // const [labourId, setEmail] = useState(labourEmail);
 
   const fetchLabour = (email) =>{
     getLabourByEmail(email)
@@ -103,28 +102,21 @@ const LabourInfo = () => {
     };
   
   
-  // useEffect(() => {
-  //   fetchAbout(email,jobRole);
-  //    },[email])
-  // const fetchReview = (email,jobRole) =>{
-  //   getLabourByReview(email,jobRole)
-  //     .then(respose=>{
-  //       console.log(respose);
-  //       setReview(respose.data);
-  //     })
-  //     .catch(error=>{
-  //       console.log("Error in fetching About", error);
-  //     })
-  // }
+  
 
   const handlePress = () => {
     // Navigate to 'BookAppointment' screen
     navigation.navigate("BookAppointment",{
       labourId: email,
       jobRole: jobRole,
-      labourCard: {}
+      labourCard: {},
+      labourName: labour.name,
+      labourJobTitle: labour.jobRole.join(" | "),
+      labourRating: labourrating,
+      profileImage: require("../assets/Images/profile_photo3.png")
     });
   };
+
 
   return (
     // Wrapping the entire component with SafeAreaProvider to handle safe areas for different devices
@@ -138,9 +130,9 @@ const LabourInfo = () => {
         {/* Labour profile component */}
         <LabourProfileComponent
           profileImage={require("../assets/Images/profile_photo3.png")} // Profile image
-           name = { labour ? labour.name : "Name not found" }  // Name of the labour
+          name = { labour ? labour.name : "Name not found" }  // Name of the labour
           jobTitle={labour ? labour.jobRole.join(" | ") : "Role not found"} // Job title
-          rating={4.6} // Rating
+          rating={labourrating} // Rating
         />
         
         {/* Container for displaying service information */}
@@ -158,7 +150,11 @@ const LabourInfo = () => {
               <Text style={styles.info}>Name: {labour ? labour.name : "Name not found"}</Text> 
 
           <Text style={styles.info}>Gender: {Labourfrofile ? Labourfrofile.gender : "Name not found"}</Text> 
-          <Text style={styles.info}>language: {Labourfrofile ? Labourfrofile.languages.join(", ") : "languages not found"}</Text> 
+          {Labourfrofile.languages ?
+            <Text style={styles.info}>language: {Labourfrofile ? Labourfrofile.languages.join(", ") : "languages not found"}</Text> 
+          :
+          <Text style={styles.info}>language: languages not found</Text> 
+          }
           {/* Container for displaying about information */}
           <View style={styles.about}>
             {/* Title for about section */}
@@ -175,7 +171,7 @@ const LabourInfo = () => {
         {/* Container for displaying scroll reviewer and page button */}
         <View>
           {/* ScrollReviewer component for displaying reviews */}
-          <ScrollReviewer />
+          <ScrollReviewer email={email} jobRole={jobRole}/>
           {/* PageButton component for navigating to different pages */}
           {/* <PageButton screen="BookAppointment"/> */}
           <Button
