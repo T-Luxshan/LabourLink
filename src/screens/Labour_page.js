@@ -70,7 +70,9 @@ const Labour_page = ({ navigation, route }) => {
     const fetchCompletedAppointments = async () => {
       try {
         const completedAppointments = await getCompletedAppointments(labourEmail);
+       
         setCompletedBookings(completedAppointments);
+    
       } catch (error) {
         console.error("Error fetching completed appointments:", error);
       }
@@ -123,6 +125,34 @@ const Labour_page = ({ navigation, route }) => {
       console.error("Error marking appointment as completed:", error);
     }
   };
+
+// const handleMarkAsCompleted = async (appointmentId) => {
+//   try {
+//     await updateBookingStage(appointmentId, "COMPLETED");
+
+//     // Update acceptedAppointments state after marking appointment as completed
+//     setAcceptedAppointments((prevAppointments) =>
+//       prevAppointments.filter((appointment) => appointment.id !== appointmentId)
+//     );
+
+//     // Optionally update completed appointments if needed
+//     // const updatedCompletedAppointments = await getCompletedAppointments(labourEmail);
+//     // setCompletedBookings(updatedCompletedAppointments);
+
+//     getCompletedAppointments(labourEmail)
+//       .then((res) => {
+//         console.log(res.data);
+//         setCompletedBookings(res.data);
+//       })
+//       .catch((err) =>
+//         console.log("Failed to fetch completed appointments", err)
+//       );
+//   } catch (error) {
+//     console.error("Error marking appointment as completed:", error);
+//   }
+// };
+
+
 
   // Function to handle languages press
   const handleLanguagesPress = () => {
@@ -362,7 +392,7 @@ const Labour_page = ({ navigation, route }) => {
                   fontWeight: "bold",
                   fontSize: 16,
                   marginTop: 10,
-                  marginLeft: 20,
+                  marginLeft: 20, 
                   paddingLeft: 20,
                 }}
               >
@@ -379,27 +409,29 @@ const Labour_page = ({ navigation, route }) => {
             </Text>
 
             {/* Previous work details */}
-            {completedBookings.slice(0, 3).map((booking, index) => (
-              <View key={index}>
-                <Text
-                  style={{
-                    paddingTop: 10,
-                    marginLeft: 30,
-                    fontSize: 15,
-                    fontWeight: 500,
-                    color: "#2F3239",
-                  }}
-                >
-                  Customer Name: {booking.customerName}
-                </Text>
+            {completedBookings
+              .slice(0, 3)
+              .map((booking, index) => (
+                <View key={index}>
+                  <Text
+                    style={{
+                      paddingTop: 10,
+                      marginLeft: 30,
+                      fontSize: 15,
+                      fontWeight: 500,
+                      color: "#2F3239",
+                    }}
+                  >
+                    Customer Name: {booking.customerName}
+                  </Text>
 
-                <Text
-                  style={{ marginLeft: 30, fontSize: 13, color: "#2F3239" }}
-                >
-                  @{booking.date} | {booking.startTime}
-                </Text>
-              </View>
-            ))}
+                  <Text
+                    style={{ marginLeft: 30, fontSize: 13, color: "#2F3239" }}
+                  >
+                    @{booking.date} | {booking.startTime}
+                  </Text>
+                </View>
+              ))}
           </Surface>
         </View>
       </ScrollView>
@@ -472,4 +504,5 @@ const styles = StyleSheet.create({
 
 // Exporting the component as default
 export default Labour_page;
+
 

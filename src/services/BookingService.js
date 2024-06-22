@@ -55,22 +55,22 @@ export const getDeclinedAppointments = async (labourEmail) => {
   }
 };
 
-export const getCompletedAppointments = (labourEmail) => {
-  return axios.get(`${BASE_URL}/labour/${labourEmail}/COMPLETED`)
-};
-
-
-// export const getCompletedAppointments = async (labourEmail) => {
-//   try {
-//     const response = await axios.get(
-//       `${BASE_URL}/labour/${labourEmail}/COMPLETED`
-//     );
-//     return response.data;
-//   } catch (error) {
-//     console.error("Error fetching completed appointments:", error);
-//     throw error; // Ensure the error is re-thrown for the caller to handle
-//   }
+// export const getCompletedAppointments = (labourEmail) => {
+//   return axios.get(`${BASE_URL}/labour/${labourEmail}/COMPLETED`)
 // };
+
+
+export const getCompletedAppointments = async (labourEmail) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/labour/${labourEmail}/COMPLETED`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching completed appointments:", error);
+    throw error; // Ensure the error is re-thrown for the caller to handle
+  }
+};
 
 export const getBookingDetailsByLabourEmail = async (labourEmail) => {
   try {

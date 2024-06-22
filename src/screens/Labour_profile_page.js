@@ -24,7 +24,7 @@ const Labour_profile_page = ({ navigation, route }) => {
  const [labour, setLabour] = useState("");
  const [labourProfile, setLabourProfile] = useState("");
  const [image, setImage] = useState(null);
-
+const [name, setName] = useState("");
 
 
 

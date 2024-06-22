@@ -13,7 +13,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Edit_Profile = ({ navigation }) => {
 
-  const [name, setName] = useState("Ayshmankura shan");
+  const [name, setName] = useState("");
   const [image, setImage] = useState(null);
 
    useEffect(() => {
