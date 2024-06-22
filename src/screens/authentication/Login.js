@@ -69,6 +69,9 @@ const Login = () => {
              response = await loginCustomer(role, lowercasedEmail, password); 
              AsyncStorage.setItem("token", response.data.accessToken);
              AsyncStorage.setItem("refreshToken", response.data.refreshToken);
+             AsyncStorage.setItem("email", email);
+             AsyncStorage.setItem('role',role);
+            
              navigation.navigate('AuthTestSignup');
              console.log("cus")
           }
