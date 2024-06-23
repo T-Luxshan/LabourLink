@@ -209,6 +209,8 @@ import Personal_Details from "./src/screens/Personal_Details";
 import Change_Password from "./src/screens/Change_Password";
 import Customer_Personal_Details from "./src/screens/Customer_Personal_Details";
 import Customer_profile_page from "./src/screens/Customer_profile_page";
+import Work_History from "./src/screens/Work_History";
+import Upcoming_Services from "./src/screens/Upcoming_Services";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -233,6 +235,29 @@ function MainStack() {
       />
       <Stack.Screen name="Appointment_page" component={Appointment_page} />
       </Stack.Navigator>
+  );
+}
+
+function CustomerStack() {
+  return (
+    <Stack.Navigator initialRouteName="CustomerMain">
+      <Stack.Screen
+        name="CustomerMain"
+        component={Customer_page}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Work_History"
+        component={Work_History}
+        options={{ headerBackTitle: "Back" }}
+      />
+      <Stack.Screen
+        name="Upcoming_Services"
+        component={Upcoming_Services}
+        options={{ headerBackTitle: "Back" }}
+      />
+      
+    </Stack.Navigator>
   );
 }
 
