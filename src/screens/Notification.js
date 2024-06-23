@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Button } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import registerNNPushToken from 'native-notify';
 import { saveNotifications, findNotifications, updateNotificationReadStatus } from '../service/NoificationSevice';
@@ -7,7 +7,7 @@ import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 
 const Notification = ({ navigation }) => {
-  const email = "johndoe@example.com";
+  const email = "kirushanthan06@gmail.com";
   const [notifications, setNotifications] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   let stompClient = null;
@@ -28,9 +28,9 @@ const Notification = ({ navigation }) => {
     fetchNotifications();
 
     // WebSocket connection
-    const socket = new SockJS('http://172.20.10.7:8080/ws');
+    const socket = new SockJS('http://localhost:8080/ws');
     stompClient = new Client({
-      brokerURL: 'ws://172.20.10.7:8080/ws',
+      brokerURL: 'ws://localhost:8080/ws',
       connectHeaders: {
         login: 'guest',
         passcode: 'guest',
@@ -137,16 +137,20 @@ const Notification = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
-        {/* <Button title="Click to Notify" onPress={handleNotification} /> */}
+        <Button title="Click to Notify" onPress={handleNotification} />
         <Text style={styles.heading}>Notifications</Text>
       </View>
-      <ScrollView style={styles.scrollContainer}>
-        
+      <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent}>
         {notifications.map((notification, index) => (
-          <TouchableOpacity key={index} onPress={() => markAsRead(notification.id)}>
+          <TouchableOpacity 
+            key={index} 
+            onPress={() => {
+              markAsRead(notification.id);
+              navigation.navigate('NotificationDetail', { notification });
+            }}
+          >
             <View style={[styles.notification, notification.read && styles.readNotification]}>
               <Text style={styles.title}>{notification.title || 'No Title'}</Text>
-              <Text style={styles.message}>{notification.message || 'No Message'}</Text>
               <Text style={styles.date}>{new Date(notification.createdAt).toLocaleString()}</Text>
             </View>
           </TouchableOpacity>
@@ -167,7 +171,6 @@ const styles = StyleSheet.create({
   buttonContainer: {
     marginVertical: 20,
     width: '80%',
-    // backgroundColor: '',
     borderRadius: 8,
   },
   buttonText: {
@@ -185,7 +188,12 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     width: '100%',
-    paddingHorizontal: 20,
+    // Added height and flexGrow to enable scrolling
+    maxHeight: '80%',
+    flexGrow: 1,
+  },
+  scrollContent: {
+    paddingBottom: 20,
   },
   notification: {
     marginBottom: 15,

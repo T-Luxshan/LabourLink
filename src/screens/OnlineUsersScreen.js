@@ -30,7 +30,7 @@ const OnlineUsersScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Online Users</Text>
+      <Text style={styles.title}>Connected Users</Text>
       <ScrollView>
         {connectedUsers.map((user, index) => (
           <List.Item
@@ -54,24 +54,37 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 70,
     paddingHorizontal: 20,
+    backgroundColor: "#FFFFFF", // Background color for the entire screen
   },
   title: {
     textAlign: "center",
-    fontSize: 24,
+    fontSize: 26,
     marginBottom: 20,
     color: "#00204A",
+    fontWeight: "bold",
+    // fontFamily: "Roboto", // Updated font for a more professional look
+    textShadowColor: "rgba(0, 0, 0, 0.2)",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 1,
   },
   userItem: {
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#F1F1F1",
     marginBottom: 10,
     borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    elevation: 1, // Adds a subtle shadow for a cleaner look
   },
   userItemTitle: {
     color: "#00204A",
+    fontSize: 18,
+    fontWeight: "500",
   },
   avatar: {
     marginLeft: 10,
+    backgroundColor: "#FF7D29", // Avatar background color
   },
 });
+
 
 export default OnlineUsersScreen;

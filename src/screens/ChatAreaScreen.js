@@ -62,7 +62,7 @@ const ChatAreaScreen = ({ route }) => {
         webSocketRef.current.close();
       }
     };
-  }, [SelectedUserEmail]);
+  }, [messages]);
 
   const fetchAndDisplayUserChat = async (SelectedUserEmail) => {
     try {
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
   },
   theirMessage: {
-    backgroundColor: "#ecf0f1",
+    backgroundColor: "#102C57",
     alignSelf: "flex-start",
   },
   messageText: {

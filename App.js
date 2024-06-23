@@ -22,7 +22,8 @@ import SignInWithGoogle from "./src/components/SignInWithGoogle";
 import ChatAreaScreen from "./src/screens/ChatAreaScreen";
 import OnlineUsersScreen from "./src/screens/OnlineUsersScreen";
 import registerNNPushToken from "native-notify";
-import Notification from "./src/screens/Notification"
+import Notification from "../LabourLink/src/screens/Notification";
+import NotificationDetail from "../LabourLink/src/screens/NotificationDetail";
 
 const Stack = createStackNavigator();
 
@@ -64,7 +65,7 @@ export default function App() {
           options={{ title: "back" }}
         /> */}
 
-        <Stack.Screen
+        {/* <Stack.Screen
           name="OnlineUsersScreen"
           component={OnlineUsersScreen}
           // options={{ title: "back" }}
@@ -74,7 +75,7 @@ export default function App() {
           name="ChatAreaScreen"
           component={ChatAreaScreen}
           options={{ title: "back" }}
-        />
+        /> */}
 
         {/* <Stack.Screen
           name="Notification"
@@ -82,7 +83,13 @@ export default function App() {
           // options={{ title: "back" }}
           options={{ headerShown: false }}
         /> */}
-
+          <Stack.Screen name="Notification" component={Notification} />
+          <Stack.Screen
+            name="NotificationDetail"
+            component={NotificationDetail}
+          />
+        
+        
         {/* <Stack.Screen 
             name="GettingStarted" 
             component={GettingStarted} />
@@ -147,16 +154,14 @@ export default function App() {
             component={LabourPerfomanceModel}
             options={{headerShown: false}}
         /> */}
-        
+
         {/* <Stack.Screen 
             name="BottomNavigation" 
             component={BottomNavigationBar} 
             options={{ headerShown: false }} 
         /> */}
-
-       </Stack.Navigator>
-     </NavigationContainer>
-    
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 

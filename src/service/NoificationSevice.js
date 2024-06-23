@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = 'http://172.20.10.7:8080/api/notifications';
+const BASE_URL = 'http://localhost:8080/api/notifications';
 
 export const findNotifications = (email) => {
   return axios.get(`${BASE_URL}/user/${email}`);
