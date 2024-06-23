@@ -99,7 +99,7 @@ const LabourSignUpForm = () => {
 
     const handleJobRoles = (jobRoles) => {
       setJobRoles(jobRoles)
-      console.log(jobRoles);
+      // console.log(jobRoles);
     }
 
     const handleSignUp = async () => {
@@ -110,13 +110,13 @@ const LabourSignUpForm = () => {
         setErrors({});
         
         try {
-          console.log("Document URI is : ", fileURI);
-          console.log("These are the job roles : ", jobRoles)
+          // console.log("Document URI is : ", fileURI);
+          // console.log("These are the job roles : ", jobRoles)
           const response = await registerLabour(name, lowercasedEmail, password, mobileNumber, nic, fileURI, jobRoles);
           
           setRegError("");
-          console.log(response);
-          console.log(response.data.accessToken);
+          // console.log(response);
+          // console.log(response.data.accessToken);
           
 
           // Store the tokens in localStorage or secure cookie for later use
@@ -131,7 +131,7 @@ const LabourSignUpForm = () => {
 
 
         } catch (e) {
-          console.log("The error is ", e);
+          // console.log("The error is ", e);
           setRegError("An account with this email or mobile number already exist.");
         }
 

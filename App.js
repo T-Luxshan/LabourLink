@@ -95,17 +95,6 @@ export default function App() {
             name="Home" 
             component={Home}
             options={{ headerShown: false }} />
-        // <Stack.Screen 
-        //     name="AuthTestSignup" 
-        //     component={AuthTestSignup}
-        //     options={{ headerShown: false }} />
-
-        <Stack.Screen 
-            name="AuthTestLogin" 
-            component={AuthTestLogin}
-            options={{ headerShown: false }} />
-            
-          
         <Stack.Screen 
             name="SignInWithGoogle" 
             component={SignInWithGoogle}
@@ -142,28 +131,32 @@ export default function App() {
             name="WaitingPage" 
             component={WaitingPage} 
             options={{ headerShown: false }} 
+        /> 
+        <Stack.Screen 
+            name="ReviewModel" 
+            component={ReviewModel} 
+            options={{ headerShown: false }} 
         />
+        <Stack.Screen 
+            name="ReportModel" 
+            component={ReportModel} 
+            options={{ headerShown: false }} 
+        />
+        {/* <Stack.Screen
+            name="LabourPerfomance"
+            component={LabourPerfomanceModel}
+            options={{headerShown: false}}
+        /> */}
+        
+        {/* <Stack.Screen 
+            name="BottomNavigation" 
+            component={BottomNavigationBar} 
+            options={{ headerShown: false }} 
+        /> */}
+
        </Stack.Navigator>
      </NavigationContainer>
-   
-        /> */}
-      </Stack.Navigator>
-    </NavigationContainer>
-
-    // <SafeAreaProvider>
-    //   <View style={styles.container}>
-
-    //     {/* <ForgotPassword /> */}
-    //     {/* <OTPVerification /> */}
-    //     <ChangePassword />
-    //     {/* <Test /> */}
-    //     <View style={{ flex: 1 }}>
-    //       {/* <ChatApplication /> */}
-    //       <PastUsers/>
-    //     </View>
-    //     <StatusBar style="auto" />
-    //   </View>
-    // </SafeAreaProvider>
+    
   );
 }
 
