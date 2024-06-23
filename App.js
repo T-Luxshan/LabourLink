@@ -228,20 +228,38 @@ function MainStack() {
         options={{ headerBackTitle: "Back" }}
       />
       <Stack.Screen name="Appointment_page" component={Appointment_page} />
+      </Stack.Navigator>
+  );
+}
+
+function ProfileStack() {
+  return (
+    <Stack.Navigator initialRouteName="ProfileMain">
+      <Stack.Screen
+        name="ProfileMain"
+        component={Labour_profile_page}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name="Languages"
         component={Languages}
-        options={{ title: "Languages" }}
+        options={{ title: "Languages", headerBackTitle: "Back" }}
+      />
+      <Stack.Screen
+        name="Edit_Profile"
+        component={Edit_Profile}
+        options={{ headerBackTitle: "Back" }}
       />
       <Stack.Screen
         name="About_Us"
         component={About_Us}
-        options={{ title: "About Us" }}
+        options={{ title: "About Us", headerBackTitle: "Back" }}
       />
-      <Stack.Screen name="Edit_Profile" component={Edit_Profile} />
     </Stack.Navigator>
   );
 }
+
+
 
 function CustomBottomNavigationBar() {
   return (
@@ -290,7 +308,7 @@ function CustomBottomNavigationBar() {
       />
       <Tab.Screen
         name="Profile"
-        component={Labour_profile_page}
+        component={ProfileStack}
         options={{ headerShown: false }}
       />
     </Tab.Navigator>
