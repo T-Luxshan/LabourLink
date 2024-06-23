@@ -85,10 +85,11 @@ const Labour_page = ({ navigation, route }) => {
    useEffect(() => {
      const fetchAcceptedAppointments = async () => {
        try {
-         const acceptedAppointmentsData = await getAcceptedAppointments(
+         const acceptedAppointments = await getAcceptedAppointments(
            labourEmail
          );
-         setAcceptedAppointments(acceptedAppointmentsData);
+         
+         setAcceptedAppointments(acceptedAppointments);
         //  console.log("Accepted appointments:", acceptedAppointmentsData);
        } catch (error) {
          console.error("Error fetching accepted appointments:", error);
@@ -96,7 +97,9 @@ const Labour_page = ({ navigation, route }) => {
      };
 
      fetchAcceptedAppointments();
-   }, [labourEmail]);
+   }, []);
+
+
 
   const totalServices = completedBookings.length;
 
@@ -110,47 +113,16 @@ const Labour_page = ({ navigation, route }) => {
           (appointment) => appointment.id !== appointmentId
         )
       );
-      // const updatedCompletedAppointments = await getCompletedAppointments(
-      //   labourEmail
-      // );
-    
-      // setCompletedBookings(updatedCompletedAppointments);
-      getCompletedAppointments(labourEmail)
-          .then(res=>{
-            console.log(res.data);
-            setCompletedBookings(res.data);
-          })
-          .catch(err=>console.log("Failed to fetch completed appointments", err));
+
+      
+      const updatedCompletedAppointments = await getCompletedAppointments(
+        labourEmail
+      );
+      setCompletedBookings(updatedCompletedAppointments); // Ensure it defaults to [] if undefined
     } catch (error) {
       console.error("Error marking appointment as completed:", error);
     }
   };
-
-// const handleMarkAsCompleted = async (appointmentId) => {
-//   try {
-//     await updateBookingStage(appointmentId, "COMPLETED");
-
-//     // Update acceptedAppointments state after marking appointment as completed
-//     setAcceptedAppointments((prevAppointments) =>
-//       prevAppointments.filter((appointment) => appointment.id !== appointmentId)
-//     );
-
-//     // Optionally update completed appointments if needed
-//     // const updatedCompletedAppointments = await getCompletedAppointments(labourEmail);
-//     // setCompletedBookings(updatedCompletedAppointments);
-
-//     getCompletedAppointments(labourEmail)
-//       .then((res) => {
-//         console.log(res.data);
-//         setCompletedBookings(res.data);
-//       })
-//       .catch((err) =>
-//         console.log("Failed to fetch completed appointments", err)
-//       );
-//   } catch (error) {
-//     console.error("Error marking appointment as completed:", error);
-//   }
-// };
 
 
 
@@ -392,7 +364,7 @@ const Labour_page = ({ navigation, route }) => {
                   fontWeight: "bold",
                   fontSize: 16,
                   marginTop: 10,
-                  marginLeft: 20, 
+                  marginLeft: 20,
                   paddingLeft: 20,
                 }}
               >
@@ -409,9 +381,7 @@ const Labour_page = ({ navigation, route }) => {
             </Text>
 
             {/* Previous work details */}
-            {completedBookings
-              .slice(0, 3)
-              .map((booking, index) => (
+            {completedBookings.slice(0, 3).map((booking, index) => (
                 <View key={index}>
                   <Text
                     style={{

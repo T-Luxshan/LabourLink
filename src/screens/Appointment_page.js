@@ -38,14 +38,13 @@ const Appointment_page = ({ route, navigation }) => {
     fetchBookingDetails();
   }, [labourEmail, appointmentId]); // Dependency array ensures useEffect runs when labourEmail or appointmentId changes
 
-  // const handleAccept = () => {
-  //   removeAppointment(appointmentId);
-  //   navigation.navigate("Appointment"); // Navigate back to Appointment screen
-  // };
+  
 
   const handleAccept = async () => {
     try {
       await updateBookingStage(appointmentId, "ACCEPTED");
+
+      
       removeAppointment(appointmentId);
       navigation.navigate("Appointment"); // Navigate back to Appointment screen
     } catch (error) {
@@ -54,6 +53,7 @@ const Appointment_page = ({ route, navigation }) => {
     }
   };
 
+  
 const handleIgnore = async () => {
   try {
     await updateBookingStage(appointmentId, "DECLINED");
