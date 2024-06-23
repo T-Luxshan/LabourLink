@@ -7,73 +7,27 @@ import {
   ScrollView,
 } from "react-native";
 import { Button, Surface, Avatar } from "react-native-paper";
-import Icon from "react-native-vector-icons/FontAwesome"; 
+import Icon from "react-native-vector-icons/FontAwesome";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import {
-  faChevronRight,
-} from "@fortawesome/free-solid-svg-icons";
-import { getLabourProfileById } from "../services/LabourProfileService";
-import { getLabourById } from "../services/LabourService";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 
 
 
-const Labour_profile_page = ({ navigation, route }) => {
-    
+const Customer_profile_page = ({ navigation, route }) => {
   // Function to handle press event for the "Languages" section
- const [labour, setLabour] = useState("");
- const [labourProfile, setLabourProfile] = useState("");
- const [image, setImage] = useState(null);
-const [name, setName] = useState("");
+  const [customer, setCustomer] = useState("");
+  const [customerProfile, setCustomerProfile] = useState("");
+  const [image, setImage] = useState(null);
+  const [name, setName] = useState("");
 
-
-
-const labourEmail = "aruran@example.com"; // Replace with dynamic value if needed
-const email2 = "lehaan@example.com";
-useEffect(() => {
-  getLabourProfileById(labourEmail)
-    .then((response) => {
-      const data = response.data;
-      setLabourProfile(data);
-      console.log(response.data);
-    })
-    .catch((error) => {
-      console.error("Error fetching labourProfile name data:", error);
-    });
-
-  getLabourById(email2)
-    .then((response) => {
-      const data = response.data;
-      setLabour(data);
-      // setJobRole(data.jobRole);
-      console.log(response.data);
-    })
-    .catch((error) => {
-      console.error("Error fetching labour profile data:", error);
-    });
-}, []);
-
-
-useEffect(() => {
-  if (route.params?.image) {
-    setImage(route.params.image);
-  }
-}, [route.params?.image]);
-
-
-const handleEditProfile = () => {
-  navigation.navigate("Edit_Profile", { name, image});
-};
-
-
-  const handleSelectLanguages = () => {
-    navigation.navigate("Languages");
+  const handleEditProfile = () => {
+    navigation.navigate("Edit_Profile", { name, image });
   };
 
   const handleAboutUs = () => {
     navigation.navigate("About_Us");
   };
-
 
   const handleLogout = async () => {
     try {
@@ -102,16 +56,14 @@ const handleEditProfile = () => {
     }
   };
 
-   const handlePersonalDetails = () => {
-  navigation.navigate("Personal_Details");
-};
+  const handlePersonalDetails = () => {
+    navigation.navigate("Customer_Personal_Details");
+  };
 
-const handlePassword = () => {
-  navigation.navigate("Change_Password");
-};
+  const handlePassword = () => {
+    navigation.navigate("Change_Password");
+  };
 
-
-   
   return (
     <View>
       <ScrollView>
@@ -148,7 +100,7 @@ const handlePassword = () => {
           {/* User details */}
           <View style={{ marginLeft: 15 }}>
             <Text style={{ fontSize: 18, fontWeight: "700", color: "#222222" }}>
-              {labour.name}
+             Ayush
             </Text>
             <Text style={{ fontSize: 14, fontWeight: "400", color: "#888888" }}>
               Joined since{" "}
@@ -211,43 +163,7 @@ const handlePassword = () => {
             Settings
           </Text>
 
-          {/* Languages option */}
-
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              paddingLeft: 10,
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                paddingLeft: 10,
-              }}
-            >
-              <Icon
-                name="globe"
-                size={20}
-                color="#505151"
-                style={{ marginRight: 10 }}
-              />
-              <Text style={{ fontSize: 16, padding: 10, color: "#888888" }}>
-                Languages
-              </Text>
-            </View>
-            <TouchableOpacity onPress={handleSelectLanguages}>
-              {/* Button to navigate to language settings */}
-              {/* <View style={{ flex: 1, alignItems: "flex-end" }}> */}
-              <FontAwesomeIcon
-                icon={faChevronRight}
-                size={18}
-                style={{ marginLeft: 143 }}
-              />
-            </TouchableOpacity>
-            {/* </View> */}
-          </View>
+         
           <View
             style={{
               flexDirection: "row",
@@ -397,7 +313,7 @@ const handlePassword = () => {
   );
 };
 
-export default Labour_profile_page;
+export default Customer_profile_page;
 
 // Styles for different surfaces
 const styles = StyleSheet.create({
@@ -424,3 +340,4 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
 });
+

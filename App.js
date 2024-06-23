@@ -205,6 +205,10 @@ import Appointment_page from "./src/screens/Appointment_page";
 import Languages from "./src/screens/Languages";
 import About_Us from "./src/screens/About_Us";
 import Edit_Profile from "./src/screens/Edit_Profile";
+import Personal_Details from "./src/screens/Personal_Details";
+import Change_Password from "./src/screens/Change_Password";
+import Customer_Personal_Details from "./src/screens/Customer_Personal_Details";
+import Customer_profile_page from "./src/screens/Customer_profile_page";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -251,9 +255,51 @@ function ProfileStack() {
         options={{ headerBackTitle: "Back" }}
       />
       <Stack.Screen
+        name="Personal_Details"
+        component={Personal_Details}
+        options={{ headerBackTitle: "Back" }}
+      />
+      <Stack.Screen
+        name="Change_Password"
+        component={Change_Password}
+        options={{ headerBackTitle: "Back" }}
+      />
+      <Stack.Screen
         name="About_Us"
         component={About_Us}
         options={{ title: "About Us", headerBackTitle: "Back" }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function CustomerProfileStack() {
+  return (
+    <Stack.Navigator initialRouteName="CustomerProfileMain">
+      <Stack.Screen
+        name="CustomerProfileMain"
+        component={Customer_profile_page}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Customer_Personal_Details"
+        component={Customer_Personal_Details}
+        options={{ headerBackTitle: "Back" }}
+      />
+      <Stack.Screen
+        name="Edit_Profile"
+        component={Edit_Profile}
+        options={{ headerBackTitle: "Back" }}
+      />
+      <Stack.Screen
+        name="Change_Password"
+        component={Change_Password}
+        options={{ headerBackTitle: "Back" }}
+      />
+      <Stack.Screen
+        name="About_Us"
+        component={About_Us}
+        options={{ headerBackTitle: "Back" }}
       />
     </Stack.Navigator>
   );
@@ -298,7 +344,7 @@ function CustomBottomNavigationBar() {
       />
       <Tab.Screen
         name="Notification"
-        component={Notification_customer_page}
+        component={CustomerProfileStack}
         options={{ headerShown: false }}
       />
       <Tab.Screen

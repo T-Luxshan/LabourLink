@@ -21,7 +21,9 @@ const Customer_page = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = React.useState("");
   const [customerName, setCustomerName] = useState("");
   const [labour, setLabour] = useState("");
-  const [employeeOfTheMonth, setEmployeeOfTheMonth] = useState(null);
+  const [topRatedEmployee, setTopRatedEmployee] = useState(null);
+   const [completedBookings, setCompletedBookings] = useState([]);
+   const [upcomingServices, setUpcomingServices] = useState([]);
 
   // const email = AsyncStorage.getItem('userEmail')
 
@@ -88,7 +90,7 @@ const Customer_page = ({ navigation }) => {
           {}
         );
 
-        setEmployeeOfTheMonth(topRatedLabour);
+        setTopRatedEmployee(topRatedLabour);
       } catch (error) {
         console.error("Error fetching data:", error);
         // Handle specific error scenarios, e.g., display error message to user
@@ -105,6 +107,18 @@ const Customer_page = ({ navigation }) => {
 
   const handleJobPress = (jobCategory) => {
     console.log(`Job category pressed: ${jobCategory}`);
+  };
+
+  const handleViewAllPress = () => {
+    navigation.navigate("Work_History", {
+     
+    });
+  };
+
+  const handleViewPress = () => {
+    navigation.navigate("Upcoming_Services", {
+     
+    });
   };
 
   // Component rendering
@@ -132,63 +146,99 @@ const Customer_page = ({ navigation }) => {
           </View>
         </View>
 
-        {/* Special offer section */}
-        <View style={{ marginTop: 30 }}>
-          <Surface
-            style={{
-              ...styles.surface,
-              width: 350,
-              marginLeft: 12,
-              borderRadius: 20,
-              backgroundColor: "#FEE0C5",
-              height: 150,
-              flexDirection: "row",
-            }}
-            elevation={4}
-          >
-            <View
+        {/* Employee of the month section */}
+        <Text
+          style={{
+            fontWeight: 700,
+            fontSize: 16,
+            marginTop: 40,
+            marginLeft: 15,
+          }}
+        >
+          Top Rated Employee
+        </Text>
+
+        <View style={{ marginTop: 15, marginBottom: 30 }}>
+          {topRatedEmployee && (
+            <Surface
               style={{
-                alignSelf: "flex-start",
-                paddingLeft: 10,
-                paddingTop: 20,
+                ...styles.surface,
+                width: 350,
+                marginLeft: 12,
+                borderRadius: 20,
+                height: 150,
+                backgroundColor: "#FEE0C5",
               }}
+              elevation={4}
             >
-              <Text>
-                <Text style={{ fontSize: 18, fontWeight: 700 }}>
-                  Get{" "}
-                  <Text style={{ color: "#F30A49", fontSize: 26 }}>25% </Text>
-                  Off on all
-                </Text>
-              </Text>
-              <Text style={{ fontSize: 18, fontWeight: 700 }}>Car rides</Text>
-              <TouchableOpacity onPress={handleLanguagesPress}>
-                <LinearGradient
-                  colors={["#F41650", "#FB9E9F"]}
-                  start={{ x: 0, y: 0.5 }}
-                  end={{ x: 1, y: 0.5 }}
-                  style={{
-                    borderRadius: 30,
-                    marginTop: 10,
-                    marginLeft: 0,
-                    width: 150,
-                  }}
-                ></LinearGradient>
-              </TouchableOpacity>
-            </View>
-            <View style={{ alignSelf: "flex-end", flex: 1 }}>
               <View
                 style={{
-                  marginBottom: 20,
-                  marginLeft: 10,
+                  flexDirection: "row",
+                  alignItems: "center",
                 }}
               >
-                <Image
-                  source={require("../assets/Images/vehicle.png")}
-                  style={{ width: 160, height: 140 }}
+                <Avatar.Image
+                  size={90}
+                  source={require("../assets/Images/boy.png")}
+                  style={{ marginLeft: 25 }}
                 />
+
+                <View
+                  style={{
+                    marginLeft: 35,
+                    marginTop: 20,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontWeight: "700",
+                      color: "#1D1617",
+                    }}
+                  >
+                    {topRatedEmployee.labourName}
+                  </Text>
+                  <Text
+                    style={{
+                      fontSize: 13,
+                      fontWeight: "400",
+                      color: "#7B6F72",
+                    }}
+                  >
+                    {topRatedEmployee.labourRole}
+                  </Text>
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    {Array.from({ length: 5 }, (_, index) => (
+                      <AntDesign
+                        key={index}
+                        name={
+                          index <
+                          topRatedEmployee.totalRating /
+                            topRatedEmployee.reviewCount
+                            ? "star"
+                            : "staro"
+                        }
+                        size={24}
+                        color="#FF7600"
+                      />
+                    ))}
+                    <Text> {topRatedEmployee.totalRating}</Text>
+                  </View>
+                </View>
+                <View style={{ marginTop: 20, marginLeft: 15 }}>
+                  <View style={{ marginLeft: 10 }}>
+                    <Icon source="heart" size={20} color="#FF0000" />
+                  </View>
+                </View>
               </View>
-            </View>
-          </Surface>
+            </Surface>
+          )}
         </View>
 
         {/* Categories */}
@@ -203,7 +253,7 @@ const Customer_page = ({ navigation }) => {
             style={{
               fontWeight: 700,
               fontSize: 16,
-              marginTop: 35,
+              marginTop: 10,
               marginLeft: 15,
               color: "#101828",
             }}
@@ -302,99 +352,132 @@ const Customer_page = ({ navigation }) => {
           </LinearGradient>
         </View>
 
-        {/* Employee of the month section */}
-        <Text
-          style={{
-            fontWeight: 700,
-            fontSize: 16,
-            marginTop: 25,
-            marginLeft: 15,
-          }}
-        >
-          Employee of the Month
-        </Text>
-
-        <View style={{ marginTop: 15, marginBottom: 30 }}>
-          {employeeOfTheMonth && (
-            <Surface
-              style={{
-                ...styles.surface,
-                width: 350,
-                marginLeft: 12,
-                borderRadius: 20,
-                height: 150,
-                backgroundColor: "#FFFFFF",
-              }}
-              elevation={4}
-            >
-              <View
+        <View style={{ marginTop: 15 }}>
+          <Surface
+            style={{
+              ...styles.surface,
+              borderRadius: 20,
+              marginLeft: 15,
+              marginTop: 25,
+              padding: 5,
+              height: 250,
+              width: 345,
+              alignItems: "flexStart",
+              justifyContent: "flexStart",
+              marginBottom: 30,
+            }}
+            elevation={1}
+          >
+            <Text style={{ marginLeft: 20 }}>
+              <Text
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  color: "#FF7600",
+                  fontWeight: "bold",
+                  fontSize: 16,
+                  marginTop: 10,
+                  marginLeft: 20,
+                  paddingLeft: 20,
                 }}
               >
-                <Avatar.Image
-                  size={90}
-                  source={require("../assets/Images/boy.png")}
-                  style={{ marginLeft: 25 }}
-                />
+                Upcoming Services
+              </Text>
+              {"\t"}
+              <TouchableOpacity onPress={handleViewPress}>
+                <Text
+                  style={{ color: "#25A9D2", textDecorationLine: "underline" }}
+                >
+                  View All
+                </Text>
+              </TouchableOpacity>
+            </Text>
 
-                <View
+            {/* Previous work details */}
+            {upcomingServices.slice(0, 3).map((booking, index) => (
+              <View key={index}>
+                <Text
                   style={{
-                    marginLeft: 35,
-                    marginTop: 20,
+                    paddingTop: 10,
+                    marginLeft: 30,
+                    fontSize: 15,
+                    fontWeight: 500,
+                    color: "#2F3239",
                   }}
                 >
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      fontWeight: "700",
-                      color: "#1D1617",
-                    }}
-                  >
-                    {employeeOfTheMonth.labourName}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 13,
-                      fontWeight: "400",
-                      color: "#7B6F72",
-                    }}
-                  >
-                    {employeeOfTheMonth.labourRole}
-                  </Text>
-                  <View
-                    style={{
-                      flex: 1,
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
-                    {Array.from({ length: 5 }, (_, index) => (
-                      <AntDesign
-                        key={index}
-                        name={
-                          index <
-                          employeeOfTheMonth.totalRating /
-                            employeeOfTheMonth.reviewCount
-                            ? "star"
-                            : "staro"
-                        }
-                        size={24}
-                        color="gold"
-                      />
-                    ))}
-                    <Text> {employeeOfTheMonth.totalRating}</Text>
-                  </View>
-                </View>
-                <View style={{ marginTop: 20, marginLeft: 15 }}>
-                  <View style={{ marginLeft: 10 }}>
-                    <Icon source="heart" size={20} color="#FF0000" />
-                  </View>
-                </View>
+                  Labour Name: {booking.labourName}
+                </Text>
+
+                <Text
+                  style={{ marginLeft: 30, fontSize: 13, color: "#2F3239" }}
+                >
+                  @{booking.date} | {booking.startTime}
+                </Text>
               </View>
-            </Surface>
-          )}
+            ))}
+          </Surface>
+        </View>
+
+        <View style={{ marginTop: 15 }}>
+          <Surface
+            style={{
+              ...styles.surface,
+              borderRadius: 20,
+              marginLeft: 15,
+              marginTop: 25,
+              padding: 5,
+              height: 250,
+              width: 345,
+              alignItems: "flexStart",
+              justifyContent: "flexStart",
+              marginBottom: 30,
+            }}
+            elevation={1}
+          >
+            <Text style={{ marginLeft: 20 }}>
+              <Text
+                style={{
+                  color: "#FF7600",
+                  fontWeight: "bold",
+                  fontSize: 16,
+                  marginTop: 10,
+                  marginLeft: 20,
+                  paddingLeft: 20,
+                }}
+              >
+                Work History
+              </Text>
+              {"\t"}
+              <TouchableOpacity onPress={handleViewAllPress}>
+                <Text
+                  style={{ color: "#25A9D2", textDecorationLine: "underline" }}
+                >
+                  View All
+                </Text>
+              </TouchableOpacity>
+            </Text>
+
+            {/* Previous work details */}
+            {completedBookings.slice(0, 3).map((booking, index) => (
+              <View key={index}>
+                <Text
+                  style={{
+                    paddingTop: 10,
+                    marginLeft: 30,
+                    fontSize: 15,
+                    fontWeight: 500,
+                    color: "#2F3239",
+                  }}
+                >
+                  Labour Name: {booking.labourName}
+                </Text>
+
+                <Text
+                  style={{ marginLeft: 30, fontSize: 13, color: "#2F3239" }}
+                >
+                  @{booking.date} | {booking.startTime}
+                </Text>
+              </View>
+            ))}
+          </Surface>
         </View>
       </View>
     </ScrollView>
