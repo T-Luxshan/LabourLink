@@ -195,6 +195,12 @@ import Appointment_page from "./src/screens/Appointment_page";
 import Languages from "./src/screens/Languages";
 import About_Us from "./src/screens/About_Us";
 import Edit_Profile from "./src/screens/Edit_Profile";
+import Personal_Details from "./src/screens/Personal_Details";
+import Change_Password from "./src/screens/Change_Password";
+import Customer_Personal_Details from "./src/screens/Customer_Personal_Details";
+import Customer_profile_page from "./src/screens/Customer_profile_page";
+import Work_History from "./src/screens/Work_History";
+import Upcoming_Services from "./src/screens/Upcoming_Services";
 
 import MainNavigator from "./src/utils/MainNavigator";
 import LoginProvider from "./src/context/LoginProvider";
