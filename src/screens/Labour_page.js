@@ -29,73 +29,123 @@ const Labour_page = ({ navigation, route }) => {
   const email = "lehaan@example.com"; // Replace with dynamic value if needed
   const labourEmail = "lehaan@example.com";
 
-  useEffect(() => {
-    getLabourById(email)
-      .then((response) => {
-        const data = response.data;
-        setLabour(data);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching labour data:", error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   getLabourById(email)
+  //     .then((response) => {
+  //       const data = response.data;
+  //       setLabour(data);
+  //       console.log(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching labour data:", error);
+  //     });
+  // }, []);
 
-  useEffect(() => {
-    getLabourProfileById(labourEmail)
-      .then((response) => {
-        const data = response.data;
-        setLabourProfile(data);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching labourProfile data:", error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   getLabourProfileById(labourEmail)
+  //     .then((response) => {
+  //       const data = response.data;
+  //       setLabourProfile(data);
+  //       console.log(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching labourProfile data:", error);
+  //     });
+  // }, []);
 
-  useEffect(() => {
-    const fetchRating = async () => {
-      try {
-        const ratingData = await getRating(email);
-        setRating(ratingData); // Set the rating state with the fetched data
-      } catch (error) {
-        console.error("Error fetching rating:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchRating = async () => {
+  //     try {
+  //       const ratingData = await getRating(email);
+  //       setRating(ratingData); // Set the rating state with the fetched data
+  //     } catch (error) {
+  //       console.error("Error fetching rating:", error);
+  //     }
+  //   };
 
-    fetchRating();
-  }, []);
+  //   fetchRating();
+  // }, []);
 
-  useEffect(() => {
-    const fetchCompletedAppointments = async () => {
-      try {
-        const completedAppointments = await getCompletedAppointments(
-          labourEmail
-        );
+  // useEffect(() => {
+  //   const fetchCompletedAppointments = async () => {
+  //     try {
+  //       const completedAppointments = await getCompletedAppointments(
+  //         labourEmail
+  //       );
 
-        setCompletedBookings(completedAppointments);
-      } catch (error) {
-        console.error("Error fetching completed appointments:", error);
-      }
-    };
+  //       setCompletedBookings(completedAppointments);
+  //     } catch (error) {
+  //       console.error("Error fetching completed appointments:", error);
+  //     }
+  //   };
 
-    fetchCompletedAppointments();
-  }, []);
+  //   fetchCompletedAppointments();
+  // }, []);
 
-  useEffect(() => {
-    const fetchAcceptedAppointments = async () => {
-      try {
-        const acceptedAppointments = await getAcceptedAppointments(labourEmail);
+  // useEffect(() => {
+  //   const fetchAcceptedAppointments = async () => {
+  //     try {
+  //       const acceptedAppointments = await getAcceptedAppointments(labourEmail);
 
-        setAcceptedAppointments(acceptedAppointments);
-        //  console.log("Accepted appointments:", acceptedAppointmentsData);
-      } catch (error) {
-        console.error("Error fetching accepted appointments:", error);
-      }
-    };
+  //       setAcceptedAppointments(acceptedAppointments);
+  //       //  console.log("Accepted appointments:", acceptedAppointmentsData);
+  //     } catch (error) {
+  //       console.error("Error fetching accepted appointments:", error);
+  //     }
+  //   };
 
-    fetchAcceptedAppointments();
-  }, []);
+  //   fetchAcceptedAppointments();
+  // }, []);
+
+   useEffect(() => {
+     const fetchData = async () => {
+       try {
+         const labourResponse = await getLabourById(labourEmail);
+         console.log("Labour Data:", labourResponse.data);
+         setLabour(labourResponse.data);
+       } catch (error) {
+         console.error("Error fetching labour data:", error);
+       }
+
+       try {
+         const labourProfileResponse = await getLabourProfileById(labourEmail);
+         console.log("Labour Profile Data:", labourProfileResponse.data);
+         setLabourProfile(labourProfileResponse.data);
+       } catch (error) {
+         console.error("Error fetching labour profile data:", error);
+       }
+
+       try {
+         const ratingData = await getRating(labourEmail);
+         console.log("Rating Data:", ratingData);
+         setRating(ratingData);
+       } catch (error) {
+         console.error("Error fetching rating:", error);
+       }
+
+       try {
+         const completedAppointments = await getCompletedAppointments(
+           labourEmail
+         );
+         console.log("Completed Appointments:", completedAppointments);
+         setCompletedBookings(completedAppointments);
+       } catch (error) {
+         console.error("Error fetching completed appointments:", error);
+       }
+
+       try {
+         const acceptedAppointments = await getAcceptedAppointments(
+           labourEmail
+         );
+         console.log("Accepted Appointments:", acceptedAppointments);
+         setAcceptedAppointments(acceptedAppointments);
+       } catch (error) {
+         console.error("Error fetching accepted appointments:", error);
+       }
+     };
+
+     fetchData();
+   }, []);
 
   const totalServices = completedBookings.length;
 

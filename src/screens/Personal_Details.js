@@ -6,18 +6,26 @@ import {
   Button,
   StyleSheet, TouchableOpacity,
 } from "react-native";
-
+import { updateLabour } from "../services/LabourService";
 
 const Personal_Details = ({ navigation }) => {
-  const [nicNumber, setNicNumber] = useState("");
+  const [nic, setNic] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
 
-  const handleSave = () => {
-    // Handle the save action here, e.g., form validation, API call, etc.
-    console.log("NIC Number:", nicNumber);
-    console.log("Mobile Number:", mobileNumber);
+  const email = "lehaan@example.com";
 
-    navigation.navigate("Labour_profile_page");
+  const handleSave = () => {
+    console.log("NIC:", nic);
+    console.log("Mobile Number:", mobileNumber);
+    console.log("Email:", email);
+    updateLabour(nic, mobileNumber, email) // Assuming "Active" as status
+      .then((response) => {
+        console.log("Labour updated:", response.data);
+        navigation.navigate("Labour_profile_page");
+      })
+      .catch((error) => {
+        console.error("Error updating labour data:", error);
+      });
   };
 
   return (
@@ -26,8 +34,8 @@ const Personal_Details = ({ navigation }) => {
         <Text style={styles.label}>NIC Number</Text>
         <TextInput
           style={styles.input}
-          value={nicNumber}
-          onChangeText={setNicNumber}
+          value={nic}
+          onChangeText={setNic}
           placeholder="Enter NIC Number"
         />
         <Text style={styles.label}>Mobile Number</Text>

@@ -5,25 +5,56 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from "react-native";
 import { Button, Surface, Avatar } from "react-native-paper";
 import Icon from "react-native-vector-icons/FontAwesome";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { deleteCustomer } from "../services/CustomerService";
 
 
 
 const Customer_profile_page = ({ navigation, route }) => {
   // Function to handle press event for the "Languages" section
   const [customer, setCustomer] = useState("");
-  const [customerProfile, setCustomerProfile] = useState("");
-  const [image, setImage] = useState(null);
-  const [name, setName] = useState("");
+ 
+ const handleDeleteAccount = () => {
+   // Show confirmation alert
+   Alert.alert(
+     "Delete Account",
+     "Are you sure you want to delete your account?",
+     [
+       {
+         text: "No",
+         style: "cancel",
+       },
+       {
+         text: "Yes",
+         onPress: () => {
+           // Call deleteCustomer API
+           deleteCustomer("aruran@example.com")
+             .then((response) => {
+               console.log("Account deleted successfully:", response.data);
+               // Handle navigation or other actions after deletion
+               navigation.navigate("Login");
+             })
+             .catch((error) => {
+               console.error("Error deleting account:", error);
+               // Handle error gracefully
+               Alert.alert(
+                 "Error",
+                 "Failed to delete account. Please try again later."
+               );
+             });
+         },
+       },
+     ]
+   );
+ };
 
-  const handleEditProfile = () => {
-    navigation.navigate("Edit_Profile", { name, image });
-  };
+  
 
   const handleAboutUs = () => {
     navigation.navigate("About_Us");
@@ -85,40 +116,8 @@ const Customer_profile_page = ({ navigation, route }) => {
           </Text>
         </View>
 
-        {/* User information section */}
-        <View
-          style={{ flexDirection: "row", alignItems: "center", marginTop: 15 }}
-        >
-          {/* User avatar */}
-          <Avatar.Image
-            size={60}
-            source={
-              image ? { uri: image } : require("../assets/Images/boy.png")
-            }
-            style={{ marginLeft: 15 }}
-          />
-          {/* User details */}
-          <View style={{ marginLeft: 15 }}>
-            <Text style={{ fontSize: 18, fontWeight: "700", color: "#222222" }}>
-             Ayush
-            </Text>
-            <Text style={{ fontSize: 14, fontWeight: "400", color: "#888888" }}>
-              Joined since{" "}
-              <Text style={{ fontWeight: "600", color: "#232323" }}>
-                27 Dec 2020
-              </Text>{" "}
-            </Text>
-          </View>
-          {/* Button to edit profile */}
-          <TouchableOpacity onPress={handleEditProfile}>
-            <Button
-              mode="contained"
-              style={{ width: 90, marginLeft: 10, backgroundColor: "#00204A" }}
-            >
-              Edit
-            </Button>
-          </TouchableOpacity>
-        </View>
+       
+        
 
         <Surface style={styles.surface} elevation={1}>
           <View
@@ -300,7 +299,7 @@ const Customer_profile_page = ({ navigation, route }) => {
                 color="#F15C5C"
                 style={{ marginRight: 10 }}
               />
-              <TouchableOpacity onPress={handleLogout}>
+              <TouchableOpacity onPress={handleDeleteAccount}>
                 <Text style={{ fontSize: 16, padding: 10, color: "#888888" }}>
                   Delete Account
                 </Text>
@@ -326,6 +325,7 @@ const styles = StyleSheet.create({
     width: 345,
     alignItems: "",
     justifyContent: "flexStart",
+    backgroundColor: "#fff",
   },
 
   thirdSurface: {
@@ -338,6 +338,7 @@ const styles = StyleSheet.create({
     alignItems: "",
     justifyContent: "flexStart",
     marginBottom: 30,
+    backgroundColor: "#fff",
   },
 });
 

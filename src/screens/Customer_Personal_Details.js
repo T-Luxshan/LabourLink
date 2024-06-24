@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,43 +6,62 @@ import {
   Button,
   StyleSheet,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
+import { updateCustomer } from "../services/CustomerService";
 
 const Customer_Personal_Details = ({ navigation }) => {
+  const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
 
-  const handleSave = () => {
-    // Handle the save action here, e.g., form validation, API call, etc.
-    console.log("Address:", address);
-    console.log("Mobile Number:", mobileNumber);
+  const email =  "aruran@example.com";
 
-    navigation.navigate("Customer_profile_page");
+
+
+  const handleSave = () => {
+    updateCustomer(name, address, mobileNumber, email) // Assuming "Active" as status
+      .then((response) => {
+        console.log("Customer updated:", response.data);
+        navigation.navigate("Customer_profile_page");
+      })
+      .catch((error) => {
+        console.error("Error updating customer data:", error);
+      });
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.card}>
-        <Text style={styles.label}>Address</Text>
-        <TextInput
-          style={styles.input}
-          value={address}
-          onChangeText={setAddress}
-          placeholder="Enter Address"
-        />
-        <Text style={styles.label}>Mobile Number</Text>
-        <TextInput
-          style={styles.input}
-          value={mobileNumber}
-          onChangeText={setMobileNumber}
-          placeholder="Enter Mobile Number"
-          keyboardType="phone-pad"
-        />
-        <TouchableOpacity style={styles.button} onPress={handleSave}>
-          <Text style={styles.buttonText}>Save</Text>
-        </TouchableOpacity>
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={styles.card}>
+          <Text style={styles.label}>Name</Text>
+          <TextInput
+            style={styles.input}
+            value={name}
+            onChangeText={setName}
+            placeholder="Enter Name"
+          />
+          <Text style={styles.label}>Address</Text>
+          <TextInput
+            style={styles.input}
+            value={address}
+            onChangeText={setAddress}
+            placeholder="Enter Address"
+          />
+          <Text style={styles.label}>Mobile Number</Text>
+          <TextInput
+            style={styles.input}
+            value={mobileNumber}
+            onChangeText={setMobileNumber}
+            placeholder="Enter Mobile Number"
+            keyboardType="phone-pad"
+          />
+          <TouchableOpacity style={styles.button} onPress={handleSave}>
+            <Text style={styles.buttonText}>Save</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -52,6 +71,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#f5f5f5",
+    marginTop: 20,
   },
   card: {
     width: "90%",
@@ -79,7 +99,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   button: {
-    backgroundColor: "#007bff",
+    backgroundColor: "blue",
     borderRadius: 20,
     height: 40,
     alignItems: "center",

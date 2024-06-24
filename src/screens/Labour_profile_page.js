@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from "react-native";
 import { Button, Surface, Avatar } from "react-native-paper";
 import Icon from "react-native-vector-icons/FontAwesome"; 
@@ -14,7 +15,7 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { getLabourProfileById } from "../services/LabourProfileService";
-import { getLabourById } from "../services/LabourService";
+import { getLabourById, deleteLabour } from "../services/LabourService";
 
 
 
@@ -55,11 +56,13 @@ useEffect(() => {
 
 
 useEffect(() => {
+  if (route.params?.name) {
+    setName(route.params.name);
+  }
   if (route.params?.image) {
     setImage(route.params.image);
   }
-}, [route.params?.image]);
-
+}, [route.params?.name, route.params?.image]);
 
 const handleEditProfile = () => {
   navigation.navigate("Edit_Profile", { name, image});
@@ -107,10 +110,38 @@ const handleEditProfile = () => {
 };
 
 const handlePassword = () => {
-  navigation.navigate("Change_Password");
+  navigation.navigate("Labour_Change_Password");
 };
 
+const handleDeleteAccount = () => {
+  Alert.alert(
+    "Delete Account",
+    "Are you sure you want to delete your account?",
+    [
+      {
+        text: "No",
+        style: "cancel",
+      },
+      {
+        text: "Yes",
+        onPress: () => deleteAccountConfirmed(),
+      },
+    ]
+  );
+};
 
+const deleteAccountConfirmed = () => {
+  deleteLabour(labour.email)
+    .then((response) => {
+      console.log("Account deleted successfully:", response.data);
+      // Navigate to login or any other desired screen after deletion
+      navigation.navigate("Login");
+    })
+    .catch((error) => {
+      console.error("Error deleting account:", error);
+      Alert.alert("Error", "Failed to delete account. Please try again.");
+    });
+};
    
   return (
     <View>
@@ -384,7 +415,7 @@ const handlePassword = () => {
                 color="#F15C5C"
                 style={{ marginRight: 10 }}
               />
-              <TouchableOpacity onPress={handleLogout}>
+              <TouchableOpacity onPress={handleDeleteAccount}>
                 <Text style={{ fontSize: 16, padding: 10, color: "#888888" }}>
                   Delete Account
                 </Text>

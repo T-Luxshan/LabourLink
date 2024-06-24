@@ -1,80 +1,85 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
-import Labour_page from "../screens/Labour_page";
 import Notification_customer_page from "../screens/Notification_customer_page";
 import Customer_page from "../screens/Customer_page";
-import Labour_profile_page from "../screens/Labour_profile_page";
-import Previous_Work_History from "../screens/Previous_Work_History";
-import Appointment from "../screens/Appointment";
-import Appointment_page from "../screens/Appointment_page";
-import Languages from "../screens/Languages";
 import About_Us from "../screens/About_Us";
 import Edit_Profile from "../screens/Edit_Profile";
 import Icon from "react-native-vector-icons/FontAwesome";
+import Work_History from "../screens/Work_History";
+import Upcoming_Services from "../screens/Upcoming_Services";
+import Customer_profile_page from "../screens/Customer_profile_page";
+import Customer_Personal_Details from "../screens/Customer_Personal_Details";
+import Change_Password from "../screens/Change_Password";
+
 
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 
-function MainStack() {
-    return (
-      <Stack.Navigator initialRouteName="Main">
-        <Stack.Screen
-          name="Main"
-          component={Labour_page}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Previous_Work_History"
-          component={Previous_Work_History}
-          options={{ headerBackTitle: "Back" }}
-        />
-        <Stack.Screen
-          name="Appointment"
-          component={Appointment}
-          options={{ headerBackTitle: "Back" }}
-        />
-        <Stack.Screen name="Appointment_page" component={Appointment_page} />
-        </Stack.Navigator>
-    );
-  }
+function CustomerStack() {
+  return (
+    <Stack.Navigator initialRouteName="Customer_page">
+      <Stack.Screen
+        name="Customer_page"
+        component={Customer_page}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Work_History"
+        component={Work_History}
+        options={{ headerBackTitle: "Back" }}
+      />
+      <Stack.Screen
+        name="Upcoming_Services"
+        component={Upcoming_Services}
+        options={{ headerBackTitle: "Back" }}
+      />
+      
+    </Stack.Navigator>
+  );
+}
   
-  function ProfileStack() {
-    return (
-      <Stack.Navigator initialRouteName="ProfileMain">
-        <Stack.Screen
-          name="ProfileMain"
-          component={Labour_profile_page}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Languages"
-          component={Languages}
-          options={{ title: "Languages", headerBackTitle: "Back" }}
-        />
-        <Stack.Screen
-          name="Edit_Profile"
-          component={Edit_Profile}
-          options={{ headerBackTitle: "Back" }}
-        />
-        <Stack.Screen
-          name="About_Us"
-          component={About_Us}
-          options={{ title: "About Us", headerBackTitle: "Back" }}
-        />
-      </Stack.Navigator>
-    );
-  }
+function CustomerProfileStack() {
+  return (
+    <Stack.Navigator initialRouteName="Customer_profile_page">
+      <Stack.Screen
+        name="Customer_profile_page"
+        component={Customer_profile_page}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Customer_Personal_Details"
+        component={Customer_Personal_Details}
+        options={{ headerBackTitle: "Back" }}
+      />
+      <Stack.Screen
+        name="Edit_Profile"
+        component={Edit_Profile}
+        options={{ headerBackTitle: "Back" }}
+      />
+      <Stack.Screen
+        name="Change_Password"
+        component={Change_Password}
+        options={{ headerBackTitle: "Back" }}
+      />
+      <Stack.Screen
+        name="About_Us"
+        component={About_Us}
+        options={{ headerBackTitle: "Back" }}
+      />
+    </Stack.Navigator>
+  );
+}
+
   
   
   
   function CustomBottomNavigationBar() {
     return (
       <Tab.Navigator
-        initialRouteName="Labour_page"
+        initialRouteName="Customer_page"
         screenOptions={({ route }) => ({
           tabBarIcon: ({ color, size }) => {
             let iconName;
@@ -103,7 +108,7 @@ function MainStack() {
       >
         <Tab.Screen
           name="Home"
-          component={MainStack}
+          component={CustomerStack}
           options={{ headerShown: false }}
         />
         <Tab.Screen
@@ -118,7 +123,7 @@ function MainStack() {
         />
         <Tab.Screen
           name="Profile"
-          component={ProfileStack}
+          component={CustomerProfileStack}
           options={{ headerShown: false }}
         />
       </Tab.Navigator>

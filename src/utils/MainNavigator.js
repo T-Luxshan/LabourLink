@@ -80,7 +80,7 @@ const MainNavigator = () => {
   const { userRole } = useLogin();
   return isLoggedIn ? 
     (
-      userRole == "CUSTOMER" ? <HomeCustomerNavigator /> : <HomeLabourNavigator />
+      userRole === "LABOUR" ? <HomeLabourNavigator /> : <HomeCustomerNavigator />
     ) : <AuthNavigator />
 }
 

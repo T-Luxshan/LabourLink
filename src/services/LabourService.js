@@ -13,13 +13,13 @@ export const getLabourById = (email) => {
 
 
 // API for updating a labour's information
-export const updateLabour = (name, nic, documentUri, mobileNumber, jobRole, email) => {
+export const updateLabour = ( nic, mobileNumber, email) => {
   return axios.put(`${BASE_URL}/${email}`, {
-    name,
+   
     nic,
-    documentUri,
+    
     mobileNumber,
-    jobRole,
+    
   });
 };
 

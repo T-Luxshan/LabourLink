@@ -29,29 +29,7 @@ const Customer_page = ({ navigation }) => {
 
   const email = "aruran@example.com"; // Replace with dynamic value if needed
   const email2 = "lehaan@example.com";
-  // useEffect(() => {
-  //   getCustomerById(email)
-  //     .then((response) => {
-  //       const data = response.data;
-  //       setCustomerName(data.name);
-  //       console.log(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching customer name data:", error);
-  //     });
-
-  //   getLabourById(email2)
-  //     .then((response) => {
-  //       const data = response.data;
-  //       setLabour(data);
-  //       // setJobRole(data.jobRole);
-  //       console.log(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching labour profile data:", error);
-  //     });
-
-  // }, []);
+  
 
   // Updated useEffect with error handling
   useEffect(() => {
@@ -167,7 +145,7 @@ const Customer_page = ({ navigation }) => {
                 marginLeft: 12,
                 borderRadius: 20,
                 height: 150,
-                backgroundColor: "#FEE0C5",
+                backgroundColor: "#fff",
               }}
               elevation={4}
             >
@@ -384,7 +362,7 @@ const Customer_page = ({ navigation }) => {
               {"\t"}
               <TouchableOpacity onPress={handleViewPress}>
                 <Text
-                  style={{ color: "#25A9D2", textDecorationLine: "underline" }}
+                  style={{ color: "blue" }}
                 >
                   View All
                 </Text>
@@ -448,7 +426,7 @@ const Customer_page = ({ navigation }) => {
               {"\t"}
               <TouchableOpacity onPress={handleViewAllPress}>
                 <Text
-                  style={{ color: "#25A9D2", textDecorationLine: "underline" }}
+                  style={{ color: "blue" }}
                 >
                   View All
                 </Text>

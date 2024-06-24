@@ -70,7 +70,7 @@ export const getCompletedAppointments = async (labourEmail) => {
     console.error("Error fetching completed appointments:", error);
     throw error; // Ensure the error is re-thrown for the caller to handle
   }
-};
+}; 
 
 export const getBookingDetailsByLabourEmail = async (labourEmail) => {
   try {

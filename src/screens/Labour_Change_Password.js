@@ -9,9 +9,9 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
-import { updateCustomerPassword } from "../services/CustomerService";
+import { updateLabourPassword } from "../services/LabourService";
 
-const Change_Password = ({ navigation }) => {
+const Labour_Change_Password = ({ navigation }) => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -29,7 +29,7 @@ const Change_Password = ({ navigation }) => {
       return;
     }
 
-    updateCustomerPassword("aruran@example.com", newPassword)
+    updateLabourPassword("lehaan@example.com", newPassword)
       .then((response) => {
         console.log("Password updated successfully:", response.data);
         Alert.alert(
@@ -40,7 +40,7 @@ const Change_Password = ({ navigation }) => {
         setNewPassword("");
         setConfirmPassword("");
         setErrorMessage("");
-        navigation.navigate("Customer_profile_page"); // Navigate to desired screen
+        navigation.navigate("Labour_profile_page"); // Navigate to desired screen
       })
       .catch((error) => {
         console.error("Error updating password:", error);
@@ -50,8 +50,6 @@ const Change_Password = ({ navigation }) => {
         );
       });
   };
-
-
 
   return (
     <View style={styles.container}>
@@ -125,4 +123,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Change_Password;
+export default Labour_Change_Password;
