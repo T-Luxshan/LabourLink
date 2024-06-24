@@ -20,7 +20,7 @@ import {
 const Labour_page = ({ navigation, route }) => {
   // State for search query
   const [searchQuery, setSearchQuery] = React.useState("");
-  const [labour, setLabour] = useState("");
+  const [labour, setLabour] = useState( "" );
   const [labourProfile, setLabourProfile] = useState("");
   const [rating, setRating] = useState(0);
   const [completedBookings, setCompletedBookings] = useState([]);
@@ -66,13 +66,14 @@ const Labour_page = ({ navigation, route }) => {
     fetchRating();
   }, []);
 
- useEffect(() => {
+  useEffect(() => {
     const fetchCompletedAppointments = async () => {
       try {
-        const completedAppointments = await getCompletedAppointments(labourEmail);
-       
+        const completedAppointments = await getCompletedAppointments(
+          labourEmail
+        );
+
         setCompletedBookings(completedAppointments);
-    
       } catch (error) {
         console.error("Error fetching completed appointments:", error);
       }
@@ -81,25 +82,20 @@ const Labour_page = ({ navigation, route }) => {
     fetchCompletedAppointments();
   }, []);
 
+  useEffect(() => {
+    const fetchAcceptedAppointments = async () => {
+      try {
+        const acceptedAppointments = await getAcceptedAppointments(labourEmail);
 
-   useEffect(() => {
-     const fetchAcceptedAppointments = async () => {
-       try {
-         const acceptedAppointments = await getAcceptedAppointments(
-           labourEmail
-         );
-         
-         setAcceptedAppointments(acceptedAppointments);
+        setAcceptedAppointments(acceptedAppointments);
         //  console.log("Accepted appointments:", acceptedAppointmentsData);
-       } catch (error) {
-         console.error("Error fetching accepted appointments:", error);
-       }
-     };
+      } catch (error) {
+        console.error("Error fetching accepted appointments:", error);
+      }
+    };
 
-     fetchAcceptedAppointments();
-   }, []);
-
-
+    fetchAcceptedAppointments();
+  }, []);
 
   const totalServices = completedBookings.length;
 
@@ -114,7 +110,6 @@ const Labour_page = ({ navigation, route }) => {
         )
       );
 
-      
       const updatedCompletedAppointments = await getCompletedAppointments(
         labourEmail
       );
@@ -123,8 +118,6 @@ const Labour_page = ({ navigation, route }) => {
       console.error("Error marking appointment as completed:", error);
     }
   };
-
-
 
   // Function to handle languages press
   const handleLanguagesPress = () => {
@@ -150,7 +143,7 @@ const Labour_page = ({ navigation, route }) => {
     );
     setAcceptedAppointments(updatedAcceptedAppointments);
   };
-
+ 
   // Component rendering
   return (
     <View style={styles.container}>
@@ -161,19 +154,43 @@ const Labour_page = ({ navigation, route }) => {
       >
         {/* Header section with user information */}
         <View style={styles.fixedHeader}>
-          <View style={{ flexDirection: "column", alignItems: "center" }}>
+          <View
+            style={{
+              flexDirection: "column",
+              alignItems: "center",
+              alignSelf: "center",
+            }}
+          >
             <Avatar.Image
               size={150}
               source={require("../assets/Images/boy.png")}
-              style={{ marginLeft: 0, marginTop: 35 }}
+              style={{
+              
+                marginTop: 35,
+              }}
             />
 
-            <Text style={{ fontSize: 18, fontWeight: 500, marginTop: 5 }}>
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: 500,
+                marginTop: 5,
+                justifyContent: "center",
+              }}
+            >
               {labour.name}
             </Text>
 
-            <Text style={{ fontSize: 20, fontWeight: 200, marginLeft: 20 }}>
-              {labour.jobRole} <Icon source="pencil-outline" size={20} />
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: 200,
+                marginLeft: 50,
+                justifyContent: "center",
+              }}
+            >
+              {labour && labour.jobRole ? `${labour.jobRole}\t` : " "}
+              <Icon source="pencil-outline" size={20} />
             </Text>
           </View>
         </View>
@@ -223,10 +240,11 @@ const Labour_page = ({ navigation, route }) => {
               marginLeft: 15,
               marginTop: 25,
               padding: 5,
-              height: 250,
+              height: "auto",
               width: 345,
               alignItems: "flexStart",
               justifyContent: "flexStart",
+              backgroundColor: "#fff",
             }}
             elevation={1}
           >
@@ -288,6 +306,7 @@ const Labour_page = ({ navigation, route }) => {
               width: 345,
               alignItems: "flexStart",
               justifyContent: "flexStart",
+              backgroundColor: "#fff",
             }}
             elevation={1}
           >
@@ -349,11 +368,12 @@ const Labour_page = ({ navigation, route }) => {
               marginLeft: 15,
               marginTop: 25,
               padding: 5,
-              height: 250,
+              height: "auto",
               width: 345,
               alignItems: "flexStart",
               justifyContent: "flexStart",
               marginBottom: 30,
+              backgroundColor: "#fff",
             }}
             elevation={1}
           >
@@ -373,7 +393,7 @@ const Labour_page = ({ navigation, route }) => {
               {"\t"}
               <TouchableOpacity onPress={handleViewAllPress}>
                 <Text
-                  style={{ color: "#25A9D2", textDecorationLine: "underline" }}
+                  style={{ color: "blue" }}
                 >
                   View All
                 </Text>
@@ -382,26 +402,26 @@ const Labour_page = ({ navigation, route }) => {
 
             {/* Previous work details */}
             {completedBookings.slice(0, 3).map((booking, index) => (
-                <View key={index}>
-                  <Text
-                    style={{
-                      paddingTop: 10,
-                      marginLeft: 30,
-                      fontSize: 15,
-                      fontWeight: 500,
-                      color: "#2F3239",
-                    }}
-                  >
-                    Customer Name: {booking.customerName}
-                  </Text>
+              <View key={index}>
+                <Text
+                  style={{
+                    paddingTop: 10,
+                    marginLeft: 30,
+                    fontSize: 15,
+                    fontWeight: 500,
+                    color: "#2F3239",
+                  }}
+                >
+                  Customer Name: {booking.customerName}
+                </Text>
 
-                  <Text
-                    style={{ marginLeft: 30, fontSize: 13, color: "#2F3239" }}
-                  >
-                    @{booking.date} | {booking.startTime}
-                  </Text>
-                </View>
-              ))}
+                <Text
+                  style={{ marginLeft: 30, fontSize: 13, color: "#2F3239" }}
+                >
+                  @{booking.date} | {booking.startTime}
+                </Text>
+              </View>
+            ))}
           </Surface>
         </View>
       </ScrollView>
@@ -463,6 +483,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
     zIndex: 10,
+    alignItems: "center",
+    justifyContent: "center",
+   
   },
 
   surface: {

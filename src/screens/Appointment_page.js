@@ -154,6 +154,7 @@ const handleIgnore = async () => {
                   alignItems: "flexStart",
                   justifyContent: "flexStart",
                   marginBottom: 10,
+                  backgroundColor: "#fff",
                 }}
                 elevation={1}
               >
