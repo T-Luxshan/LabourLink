@@ -16,6 +16,7 @@ const Login = () => {
 
     const navigation = useNavigation();
     const { setIsLoggedIn } = useLogin();
+    const { setUserRole } = useLogin();
 
     const [email, setEmail] = useState(''); // Need to change the state named for email.
     const [password, setPassword] = useState(''); // state for password field.
@@ -49,6 +50,7 @@ const Login = () => {
 
     const handleLogin = () => {
       setIsLoggedIn(true);
+      setUserRole("CUSTOMER");
       // try {
       //   await schema.validate({ email, password, role }, { abortEarly: false });
       //   const lowercasedEmail = email.toLowerCase();

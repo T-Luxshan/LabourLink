@@ -12,7 +12,9 @@ import OTPVerification from '../screens/authentication/OTPVerification';
 import ChangePassword from '../screens/authentication/ChangePassword';
 import WaitingPage from '../screens/authentication/WaitingPage';
 import { useLogin } from "../context/LoginProvider";
-import HomeNavigator from "./HomeNavigator";
+import HomeCustomerNavigator from "./HomeCustomerNavigator";
+import HomeLabourNavigator from "./HomeLabourNavigator";
+
 
 const Stack = createStackNavigator();
 
@@ -75,7 +77,11 @@ const AuthNavigator = () => {
 
 const MainNavigator = () => {
   const { isLoggedIn } = useLogin();
-  return isLoggedIn ? <HomeNavigator /> : <AuthNavigator />
+  const { userRole } = useLogin();
+  return isLoggedIn ? 
+    (
+      userRole == "CUSTOMER" ? <HomeCustomerNavigator /> : <HomeLabourNavigator />
+    ) : <AuthNavigator />
 }
 
 export default MainNavigator;

@@ -7,7 +7,7 @@ import Notification_customer_page from "../screens/Notification_customer_page";
 import Customer_page from "../screens/Customer_page";
 import Labour_profile_page from "../screens/Labour_profile_page";
 import Previous_Work_History from "../screens/Previous_Work_History";
-import Appointment from "../screens/Appointment";
+import Appointment from "../screens/Appointments";
 import Appointment_page from "../screens/Appointment_page";
 import Languages from "../screens/Languages";
 import About_Us from "../screens/About_Us";
@@ -125,11 +125,11 @@ function MainStack() {
     );
   }
 
-  const HomeNavigator = () => {
+  const HomeLabourNavigator = () => {
       return <CustomBottomNavigationBar />
   }
 
-  export default HomeNavigator;
+  export default HomeLabourNavigator;
   
   
   
