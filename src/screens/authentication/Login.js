@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { TextInput, Button, Title, ToggleButton, Checkbox, Image } from 'react-native-paper';
 import { TouchableRipple, IconButton } from 'react-native-paper';
@@ -9,11 +9,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import * as yup from 'yup';
 import { getUserRole, loginCustomer, loginLabour } from '../../services/AuthService';
+import { useLogin } from '../../context/LoginProvider';
 
 
 const Login = () => {
 
     const navigation = useNavigation();
+    const { setIsLoggedIn } = useLogin();
+    const { setUserRole } = useLogin();
 
     const [email, setEmail] = useState(''); // Need to change the state named for email.
     const [password, setPassword] = useState(''); // state for password field.
@@ -45,61 +48,63 @@ const Login = () => {
 
 
 
-    const handleLogin = async () => {
-      try {
-        await schema.validate({ email, password, role }, { abortEarly: false });
-        const lowercasedEmail = email.toLowerCase();
-        setErrors({});
+    const handleLogin = () => {
+      setIsLoggedIn(true);
+      setUserRole("CUSTOMER");
+      // try {
+      //   await schema.validate({ email, password, role }, { abortEarly: false });
+      //   const lowercasedEmail = email.toLowerCase();
+      //   setErrors({});
        
 
-        try {
-          let response = null;
-          let userRoleResponse = await getUserRole(lowercasedEmail);
-          let userRole = userRoleResponse.data.role;
-          let userRoleStatus = userRoleResponse.data.verified;
-          console.log(userRoleResponse);
-          console.log(userRole);
-          console.log(userRoleStatus);
+      //   try {
+      //     let response = null;
+      //     let userRoleResponse = await getUserRole(lowercasedEmail);
+      //     let userRole = userRoleResponse.data.role;
+      //     let userRoleStatus = userRoleResponse.data.verified;
+      //     console.log(userRoleResponse);
+      //     console.log(userRole);
+      //     console.log(userRoleStatus);
 
       
-          if(role != userRole )
-            throw new Error('Invalid email or password.');
+      //     if(role != userRole )
+      //       throw new Error('Invalid email or password.');
 
-          if(role == "CUSTOMER" ){
-             response = await loginCustomer(role, lowercasedEmail, password); 
-             AsyncStorage.setItem("token", response.data.accessToken);
-             AsyncStorage.setItem("refreshToken", response.data.refreshToken);
-             AsyncStorage.setItem("userEmail", email);
-             navigation.navigate('GettingStarted');
-          }
-          else{
-            response = await loginLabour(role, lowercasedEmail, password);   
-            AsyncStorage.setItem("token", response.data.accessToken);
-            AsyncStorage.setItem("refreshToken", response.data.refreshToken);
-            AsyncStorage.setItem("userEmail", email);
-            if(userRoleStatus)
-              navigation.navigate('GettingStarted');
-            else
-              navigation.navigate('WaitingPage')
-          }
+      //     if(role == "CUSTOMER" ){
+      //        response = await loginCustomer(role, lowercasedEmail, password); 
+      //        AsyncStorage.setItem("token", response.data.accessToken);
+      //        AsyncStorage.setItem("refreshToken", response.data.refreshToken);
+      //        AsyncStorage.setItem("userEmail", email);
+      //        navigation.navigate('GettingStarted');
+      //     }
+      //     else{
+      //       response = await loginLabour(role, lowercasedEmail, password);   
+      //       AsyncStorage.setItem("token", response.data.accessToken);
+      //       AsyncStorage.setItem("refreshToken", response.data.refreshToken);
+      //       AsyncStorage.setItem("userEmail", email);
+      //       if(userRoleStatus)
+      //         navigation.navigate('GettingStarted');
+      //       else
+      //         navigation.navigate('WaitingPage')
+      //     }
           
-          setLogError("");
-          console.log(response);
-          console.log(response.data.accessToken);
+      //     setLogError("");
+      //     console.log(response);
+      //     console.log(response.data.accessToken);
           
-        } catch (e) {
-          setLogError("Invalid email or password.");
-        }
+      //   } catch (e) {
+      //     setLogError("Invalid email or password.");
+      //   }
 
        
-      } catch (error) {
-        // Validation failed, set errors state
-        const validationErrors = {};
-        error.inner.forEach(err => {
-          validationErrors[err.path] = err.message;
-        });
-        setErrors(validationErrors);
-      }
+      // } catch (error) {
+      //   // Validation failed, set errors state
+      //   const validationErrors = {};
+      //   error.inner.forEach(err => {
+      //     validationErrors[err.path] = err.message;
+      //   });
+      //   setErrors(validationErrors);
+      // }
     };
 
     
