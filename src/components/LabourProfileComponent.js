@@ -9,7 +9,7 @@ const LabourProfileComponent = (props) => {
 
   return (
     <View style={[styles.boxBar, {backgroundColor:"#ECECEC"}]}>
-      <Avatar.Image size={48} source={props.profileImage }/>
+      <Avatar.Image size={48} source={props.profileImage}/>
        {/* <Image
         source={{uri:props.profileImage}}
         style={styles.profilePhoto}

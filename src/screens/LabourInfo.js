@@ -24,6 +24,7 @@ const LabourInfo = () => {
    const route = useRoute();
    const {email, JobRole, ProfileImage } = route.params;
    const jobRole = JobRole.toUpperCase();
+   const tempProfile = "https://firebasestorage.googleapis.com/v0/b/labourlink-e7ecf.appspot.com/o/ProfilePhoto%2Fboy.png?alt=media&token=b9013246-c51f-4bb8-b68b-1465e24e8583"
    
    
 
@@ -131,7 +132,7 @@ const LabourInfo = () => {
 
         {/* Labour profile component */}
         <LabourProfileComponent
-          profileImage= {{ uri : ProfileImage }} style={styles.profileImage}// Profile image
+          profileImage= {{ uri : ProfileImage  ? ProfileImage : tempProfile}} style={styles.profileImage}// Profile image
           name = { labour ? labour.name : "Name not found" }  // Name of the labour
           jobTitle={labour ? labour.jobRole.join(" | ") : "Role not found"} // Job title
           rating={labourrating} // Rating

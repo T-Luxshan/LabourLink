@@ -39,6 +39,8 @@ const BookAppointment = () => {
   const [selectedTime, setSelectedTime] = useState(new Date());
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [timePicked, setTimePicked] = useState(false);
+  const tempProfile = "https://firebasestorage.googleapis.com/v0/b/labourlink-e7ecf.appspot.com/o/ProfilePhoto%2Fboy.png?alt=media&token=b9013246-c51f-4bb8-b68b-1465e24e8583"
+   
   // const labourId = "thana@example.com";
   const customerId = "thanakaran@gmail.com";
   const bookingStage = "PENDING";
@@ -99,7 +101,7 @@ const BookAppointment = () => {
 
             <View style={styles.Labourprofile}>
               <LabourProfileComponent 
-                profileImage={{uri:profileImage}}
+                profileImage={{uri:profileImage ? profileImage : tempProfile  }}
                 name={labourName}
                 jobTitle= {labourJobTitle}
                 rating={labourRating} 

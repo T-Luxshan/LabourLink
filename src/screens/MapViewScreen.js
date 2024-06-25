@@ -23,6 +23,7 @@ const MapViewScreen = () => {
   const [LabourLocation, setLabourLocation] = useState([]);
   const navigation = useNavigation();
   const [labourcard, setLabourCard] = useState([]);
+  const tempProfile = "https://firebasestorage.googleapis.com/v0/b/labourlink-e7ecf.appspot.com/o/ProfilePhoto%2Fboy.png?alt=media&token=b9013246-c51f-4bb8-b68b-1465e24e8583"
   // const [ProfileImage, setProfileImage] =useState([]);
 
  
@@ -152,7 +153,7 @@ const MapViewScreen = () => {
                 <TouchableOpacity key={index} onPress={() => handleProfileClick(labour.labourEmail,labour.profileUri)}>
                   <LabourProfileComponent
                     profileImage={{
-                      uri: labour.profileUri,
+                      uri: labour.profileUri ? labour.profileUri : tempProfile
                     }}
                     name={labour.labourName}
                     jobTitle={labour.jobRole.join(" | ")}
