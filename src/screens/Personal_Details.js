@@ -1,56 +1,97 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   TextInput,
   Button,
   StyleSheet, TouchableOpacity,
+  Alert,
 } from "react-native";
-import { updateLabour } from "../services/LabourService";
+import { getLabourById, updateLabour } from "../services/LabourService";
+import { ScrollView } from "react-native-gesture-handler";
 
 const Personal_Details = ({ navigation }) => {
   const [nic, setNic] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
+  const [name, setName] = useState("");
+  
+  const email = "Vanaiyan@example.com";
 
-  const email = "lehaan@example.com";
+ 
 
-  const handleSave = () => {
-    console.log("NIC:", nic);
-    console.log("Mobile Number:", mobileNumber);
-    console.log("Email:", email);
-    updateLabour(nic, mobileNumber, email) // Assuming "Active" as status
-      .then((response) => {
-        console.log("Labour updated:", response.data);
-        navigation.navigate("Labour_profile_page");
-      })
-      .catch((error) => {
-        console.error("Error updating labour data:", error);
-      });
+  useEffect(() => {
+    // Fetch existing Labour data when component mounts
+    fetchLabourData();
+  }, []);
+
+  const fetchLabourData = async () => {
+    try {
+      const response = await getLabourById("Vanaiyan@example.com"); // Replace with actual email or dynamic value
+      const { name, mobileNumber, nic} = response.data;
+      setName(name);
+     setMobileNumber(mobileNumber);
+     setNic(nic);
+     
+     
+    } catch (error) {
+      console.error("Error fetching Labour data:", error);
+      Alert.alert("Error", "Failed to fetch Labour details.");
+    }
   };
 
+  const handleSave = async () => {
+    try {
+      const response = await updateLabour(
+        email,
+        nic,
+        mobileNumber,
+        name,
+       
+      );
+      console.log("Labour updated:", response.data);
+      Alert.alert("Success", "Labour details updated successfully.");
+      navigation.navigate("Labour_profile_page");
+    } catch (error) {
+      console.error("Error updating labour data:", error);
+      Alert.alert("Error", "Failed to update labour details.");
+    }
+  };
+  
+
   return (
-    <View style={styles.container}>
-      <View style={styles.card}>
-        <Text style={styles.label}>NIC Number</Text>
-        <TextInput
-          style={styles.input}
-          value={nic}
-          onChangeText={setNic}
-          placeholder="Enter NIC Number"
-        />
-        <Text style={styles.label}>Mobile Number</Text>
-        <TextInput
-          style={styles.input}
-          value={mobileNumber}
-          onChangeText={setMobileNumber}
-          placeholder="Enter Mobile Number"
-          keyboardType="phone-pad"
-        />
-        <TouchableOpacity style={styles.button} onPress={handleSave}>
-          <Text style={styles.buttonText}>Save</Text>
-        </TouchableOpacity>
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={styles.card}>
+          <Text style={styles.label}>Name</Text>
+          <TextInput
+            style={styles.input}
+            value={name}
+            onChangeText={setName}
+            placeholder="Enter Name"
+            
+          />
+          <Text style={styles.label}>NIC Number</Text>
+          <TextInput
+            style={styles.input}
+            value={nic}
+            onChangeText={setNic}
+            placeholder="Enter NIC Number"
+          />
+          <Text style={styles.label}>Mobile Number</Text>
+          <TextInput
+            style={styles.input}
+            value={mobileNumber}
+            onChangeText={setMobileNumber}
+            placeholder="Enter Mobile Number"
+            keyboardType="phone-pad"
+          />
+          
+          <TouchableOpacity style={styles.button} onPress={handleSave}>
+            <Text style={styles.buttonText}>Save</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

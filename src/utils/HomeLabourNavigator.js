@@ -14,6 +14,7 @@ import Edit_Profile from "../screens/Edit_Profile";
 import Icon from "react-native-vector-icons/FontAwesome";
 import Personal_Details from "../screens/Personal_Details";
 import Labour_Change_Password from "../screens/Labour_Change_Password";
+import Edit from "../screens/Edit";
 
 
 const Stack = createStackNavigator();
@@ -38,8 +39,17 @@ function LabourStack() {
           component={Appointment}
           options={{ headerBackTitle: "Back" }}
         />
-        <Stack.Screen name="Appointment_page" component={Appointment_page} />
-        </Stack.Navigator>
+        <Stack.Screen
+          name="Appointment_page"
+          component={Appointment_page}
+          options={{ headerBackTitle: "Back" }}
+        />
+        <Stack.Screen
+          name="Edit"
+          component={Edit}
+          options={{ headerBackTitle: "Back" }}
+        />
+      </Stack.Navigator>
     );
   }
   

@@ -9,7 +9,7 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
-import { updateLabourPassword } from "../services/LabourService";
+import { updateLabourPassword, getLabourById } from "../services/LabourService";
 
 const Labour_Change_Password = ({ navigation }) => {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -17,39 +17,86 @@ const Labour_Change_Password = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleChangePassword = () => {
-    // Basic validation
-    if (!currentPassword || !newPassword || !confirmPassword) {
-      setErrorMessage("Please fill in all fields.");
-      return;
-    }
+  // const handleChangePassword = () => {
+  //   // Basic validation
+  //   if (!currentPassword || !newPassword || !confirmPassword) {
+  //     setErrorMessage("Please fill in all fields.");
+  //     return;
+  //   }
 
-    if (newPassword !== confirmPassword) {
-      setErrorMessage("New password and confirm password must match.");
-      return;
-    }
+  //   if (newPassword !== confirmPassword) {
+  //     setErrorMessage("New password and confirm password must match.");
+  //     return;
+  //   }
 
-    updateLabourPassword("lehaan@example.com", newPassword)
-      .then((response) => {
-        console.log("Password updated successfully:", response.data);
-        Alert.alert(
-          "Password Updated",
-          "Your password has been updated successfully."
-        );
-        setCurrentPassword("");
-        setNewPassword("");
-        setConfirmPassword("");
-        setErrorMessage("");
-        navigation.navigate("Labour_profile_page"); // Navigate to desired screen
-      })
-      .catch((error) => {
-        console.error("Error updating password:", error);
-        Alert.alert(
-          "Error",
-          "Failed to update password. Please try again later."
-        );
-      });
-  };
+  //   updateLabourPassword("lehaan@example.com", newPassword)
+  //     .then((response) => {
+  //       console.log("Password updated successfully:", response.data);
+  //       Alert.alert(
+  //         "Password Updated",
+  //         "Your password has been updated successfully."
+  //       );
+  //       setCurrentPassword("");
+  //       setNewPassword("");
+  //       setConfirmPassword("");
+  //       setErrorMessage("");
+  //       navigation.navigate("Labour_profile_page"); // Navigate to desired screen
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error updating password:", error);
+  //       Alert.alert(
+  //         "Error",
+  //         "Failed to update password. Please try again later."
+  //       );
+  //     });
+  // };
+
+
+ const handleChangePassword = () => {
+   // Basic validation
+   if (!currentPassword || !newPassword || !confirmPassword) {
+     setErrorMessage("Please fill in all fields.");
+     return;
+   }
+
+   if (newPassword !== confirmPassword) {
+     setErrorMessage("New password and confirm password must match.");
+     return;
+   }
+
+   updateLabourPassword("lehaan@example.com", newPassword)
+     .then((response) => {
+       console.log("Password updated successfully:", response.data);
+       Alert.alert(
+         "Password Updated",
+         "Your password has been updated successfully."
+       );
+
+       // Fetch the updated user data to confirm password update
+       getLabourById("lehaan@example.com")
+         .then((response) => {
+           console.log("Updated user data:", response.data);
+         })
+         .catch((error) => {
+           console.error("Error fetching updated user data:", error);
+         });
+
+       setCurrentPassword("");
+       setNewPassword("");
+       setConfirmPassword("");
+       setErrorMessage("");
+       navigation.navigate("Labour_profile_page"); // Navigate to desired screen
+     })
+     .catch((error) => {
+       console.error("Error updating password:", error);
+       Alert.alert(
+         "Error",
+         "Failed to update password. Please try again later."
+       );
+     });
+ };
+
+
 
   return (
     <View style={styles.container}>

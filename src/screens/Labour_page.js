@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { Button, Surface, Avatar, Icon } from "react-native-paper";
+import { Button, Surface, Avatar, IconButton } from "react-native-paper";
 import { getLabourProfileById } from "../services/LabourProfileService";
 import { getLabourById } from "../services/LabourService";
 import { getRating } from "../services/LabourReviewService";
@@ -15,6 +15,7 @@ import {
   getAcceptedAppointments,
   updateBookingStage,
 } from "../services/BookingService";
+import { useFocusEffect } from "@react-navigation/native";
 
 // Functional component definition
 const Labour_page = ({ navigation, route }) => {
@@ -26,78 +27,12 @@ const Labour_page = ({ navigation, route }) => {
   const [completedBookings, setCompletedBookings] = useState([]);
   const [acceptedAppointments, setAcceptedAppointments] = useState([]);
 
-  const email = "lehaan@example.com"; // Replace with dynamic value if needed
-  const labourEmail = "lehaan@example.com";
+  const email = "Vanaiyan@example.com"; // Replace with dynamic value if needed
+  const labourEmail = "Vanaiyan@example.com";
 
-  // useEffect(() => {
-  //   getLabourById(email)
-  //     .then((response) => {
-  //       const data = response.data;
-  //       setLabour(data);
-  //       console.log(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching labour data:", error);
-  //     });
-  // }, []);
 
-  // useEffect(() => {
-  //   getLabourProfileById(labourEmail)
-  //     .then((response) => {
-  //       const data = response.data;
-  //       setLabourProfile(data);
-  //       console.log(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching labourProfile data:", error);
-  //     });
-  // }, []);
-
-  // useEffect(() => {
-  //   const fetchRating = async () => {
-  //     try {
-  //       const ratingData = await getRating(email);
-  //       setRating(ratingData); // Set the rating state with the fetched data
-  //     } catch (error) {
-  //       console.error("Error fetching rating:", error);
-  //     }
-  //   };
-
-  //   fetchRating();
-  // }, []);
-
-  // useEffect(() => {
-  //   const fetchCompletedAppointments = async () => {
-  //     try {
-  //       const completedAppointments = await getCompletedAppointments(
-  //         labourEmail
-  //       );
-
-  //       setCompletedBookings(completedAppointments);
-  //     } catch (error) {
-  //       console.error("Error fetching completed appointments:", error);
-  //     }
-  //   };
-
-  //   fetchCompletedAppointments();
-  // }, []);
-
-  // useEffect(() => {
-  //   const fetchAcceptedAppointments = async () => {
-  //     try {
-  //       const acceptedAppointments = await getAcceptedAppointments(labourEmail);
-
-  //       setAcceptedAppointments(acceptedAppointments);
-  //       //  console.log("Accepted appointments:", acceptedAppointmentsData);
-  //     } catch (error) {
-  //       console.error("Error fetching accepted appointments:", error);
-  //     }
-  //   };
-
-  //   fetchAcceptedAppointments();
-  // }, []);
-
-   useEffect(() => {
+  useFocusEffect(
+   useCallback(() => {
      const fetchData = async () => {
        try {
          const labourResponse = await getLabourById(labourEmail);
@@ -145,7 +80,8 @@ const Labour_page = ({ navigation, route }) => {
      };
 
      fetchData();
-   }, []);
+   }, [])
+   );
 
   const totalServices = completedBookings.length;
 
@@ -194,6 +130,11 @@ const Labour_page = ({ navigation, route }) => {
     setAcceptedAppointments(updatedAcceptedAppointments);
   };
  
+
+  const handleEdit = () => {
+    navigation.navigate("Edit");
+  };
+
   // Component rendering
   return (
     <View style={styles.container}>
@@ -215,7 +156,6 @@ const Labour_page = ({ navigation, route }) => {
               size={150}
               source={require("../assets/Images/boy.png")}
               style={{
-              
                 marginTop: 35,
               }}
             />
@@ -240,7 +180,7 @@ const Labour_page = ({ navigation, route }) => {
               }}
             >
               {labour && labour.jobRole ? `${labour.jobRole}\t` : " "}
-              <Icon source="pencil-outline" size={20} />
+              
             </Text>
           </View>
         </View>
@@ -298,6 +238,14 @@ const Labour_page = ({ navigation, route }) => {
             }}
             elevation={1}
           >
+           
+              <IconButton
+                icon="pencil-outline"
+                size={20}
+                onPress={handleEdit}
+                style={{ position: "absolute", top: 10, right: 10 }}
+              />
+            
             <Text
               style={{
                 color: "#FF7600",
@@ -308,7 +256,6 @@ const Labour_page = ({ navigation, route }) => {
               }}
             >
               About Me
-              <Icon source="pencil-outline" size={20} />
             </Text>
 
             {/* Description */}
@@ -318,9 +265,10 @@ const Labour_page = ({ navigation, route }) => {
                 lineHeight: 20,
                 marginLeft: 30,
                 color: "#2F3239",
+                minHeight: 60,
               }}
             >
-              {labourProfile.aboutMe}
+              {labourProfile?.aboutMe}
             </Text>
 
             {/* Contact details */}
@@ -337,9 +285,55 @@ const Labour_page = ({ navigation, route }) => {
             </Text>
 
             <Text style={{ paddingTop: 5, marginLeft: 30, color: "#41434A" }}>
-              <Icon source="phone-outline" size={20} />
-              {labourProfile.mobileNumber}
+              {labour?.mobileNumber}
             </Text>
+
+            <Text
+              style={{
+                color: "#FF7600",
+                fontWeight: "bold",
+                fontSize: 16,
+                marginTop: 10,
+                marginLeft: 20,
+              }}
+            >
+              Gender
+            </Text>
+            <Text style={{ paddingTop: 5, marginLeft: 30, color: "#41434A" }}>
+              {labourProfile?.gender}
+            </Text>
+
+            <Text
+              style={{
+                color: "#FF7600",
+                fontWeight: "bold",
+                fontSize: 16,
+                marginTop: 10,
+                marginLeft: 20,
+                minHeight: 60,
+              }}
+            >
+              Languages
+            </Text>
+            <View
+              style={{ flexDirection: "row", flexWrap: "wrap", marginLeft: 30 }}
+            >
+              {labourProfile?.languages &&
+                labourProfile?.languages.map((language, index) => (
+                  <Text
+                    key={index}
+                    style={{
+                      backgroundColor: "#EFEFEF",
+                      padding: 5,
+                      marginRight: 5,
+                      marginBottom: 5,
+                      borderRadius: 5,
+                    }}
+                  >
+                    {language}
+                  </Text>
+                ))}
+            </View>
           </Surface>
         </View>
 
@@ -367,6 +361,7 @@ const Labour_page = ({ navigation, route }) => {
                 fontSize: 16,
                 marginTop: 10,
                 marginLeft: 20,
+                minHeight: 30,
               }}
             >
               Appointments
@@ -427,7 +422,7 @@ const Labour_page = ({ navigation, route }) => {
             }}
             elevation={1}
           >
-            <Text style={{ marginLeft: 20 }}>
+            <Text style={{ marginLeft: 20, minHeight: 60 }}>
               <Text
                 style={{
                   color: "#FF7600",
@@ -442,16 +437,12 @@ const Labour_page = ({ navigation, route }) => {
               </Text>
               {"\t"}
               <TouchableOpacity onPress={handleViewAllPress}>
-                <Text
-                  style={{ color: "blue" }}
-                >
-                  View All
-                </Text>
+                <Text style={{ color: "blue" }}>View All</Text>
               </TouchableOpacity>
             </Text>
 
             {/* Previous work details */}
-            {completedBookings.slice(0, 3).map((booking, index) => (
+            {completedBookings?.slice(0, 3).map((booking, index) => (
               <View key={index}>
                 <Text
                   style={{
@@ -462,13 +453,13 @@ const Labour_page = ({ navigation, route }) => {
                     color: "#2F3239",
                   }}
                 >
-                  Customer Name: {booking.customerName}
+                  Customer Name: {booking?.customerName}
                 </Text>
 
                 <Text
                   style={{ marginLeft: 30, fontSize: 13, color: "#2F3239" }}
                 >
-                  @{booking.date} | {booking.startTime}
+                  @{booking?.date} | {booking?.startTime}
                 </Text>
               </View>
             ))}
@@ -547,5 +538,4 @@ const styles = StyleSheet.create({
 
 // Exporting the component as default
 export default Labour_page;
-
 

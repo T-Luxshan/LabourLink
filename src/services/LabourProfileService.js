@@ -4,9 +4,23 @@ import axios from "axios";
 const BASE_URL = "http://172.20.10.3:8080/api/labour-profiles";
 
 // API for fetching the profile of a specific labour
-export const getLabourProfileById = (labourEmail) => {
-  return axios.get(`${BASE_URL}/getLabourProfileById/${labourEmail}`);
+// export const getLabourProfileById = (labourEmail) => {
+//   return axios.get(`${BASE_URL}/getLabourProfileById/${labourEmail}`);
+// };
+
+export const getLabourProfileById = async (labourEmail) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/getLabourProfileById/${labourEmail}`
+    );
+    return response.data;
+  } catch (error) {
+   
+    throw error;
+  }
 };
+
+
 
 // API for updating the profile of a specific labour
 export const updateLabourProfile = async (
@@ -16,18 +30,16 @@ export const updateLabourProfile = async (
   labourEmail
 ) => {
   try {
-    const response = await axios.put(`${BASE_URL}/update/${labourEmail}`, {
-      aboutMe,
-      gender,
-      languages,
-    });
-    console.log("Response from update API:", response.data);
+    const response = await axios.put(
+      `${BASE_URL}/update/${labourEmail}`,
+      {
+        aboutMe,
+        gender,
+        languages,
+      }
+    );
     return response.data;
   } catch (error) {
-    console.error(
-      "Error in update API:",
-      error.response ? error.response.data : error.message
-    );
     throw error;
   }
 };

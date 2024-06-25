@@ -7,8 +7,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Alert,
 } from "react-native";
-import { updateCustomer } from "../services/CustomerService";
+import { getCustomerById, updateCustomer } from "../services/CustomerService";
 
 const Customer_Personal_Details = ({ navigation }) => {
   const [name, setName] = useState("");
@@ -18,17 +19,41 @@ const Customer_Personal_Details = ({ navigation }) => {
   const email =  "aruran@example.com";
 
 
+  useEffect(() => {
+    // Fetch existing Labour data when component mounts
+    fetchCustomerData();
+  }, []);
 
-  const handleSave = () => {
-    updateCustomer(name, address, mobileNumber, email) // Assuming "Active" as status
-      .then((response) => {
-        console.log("Customer updated:", response.data);
-        navigation.navigate("Customer_profile_page");
-      })
-      .catch((error) => {
-        console.error("Error updating customer data:", error);
-      });
+  const fetchCustomerData = async () => {
+    try {
+      const response = await getCustomerById("aruran@example.com"); // Replace with actual email or dynamic value
+      const { name, mobileNumber, address } = response.data;
+      setName(name);
+      setMobileNumber(mobileNumber);
+      setNic(nic);
+    } catch (address) {
+      console.error("Error fetching Customer data:", error);
+      Alert.alert("Error", "Failed to fetch Customer details.");
+    }
   };
+
+  const handleSave = async () => {
+    try {
+      const response = await updateCustomer(email, address, mobileNumber, name);
+      console.log("Customer updated:", response.data);
+      Alert.alert("Success", "Customer details updated successfully.");
+      navigation.navigate("Customer_profile_page");
+    } catch (error) {
+      console.error("Error updating customer data:", error);
+      Alert.alert("Error", "Failed to update customer details.");
+    }
+  };
+  
+
+
+
+
+  
 
   return (
     <ScrollView>

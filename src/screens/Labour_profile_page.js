@@ -16,6 +16,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { getLabourProfileById } from "../services/LabourProfileService";
 import { getLabourById, deleteLabour } from "../services/LabourService";
+import { useLogin } from "../context/LoginProvider";
 
 
 
@@ -26,11 +27,12 @@ const Labour_profile_page = ({ navigation, route }) => {
  const [labourProfile, setLabourProfile] = useState("");
  const [image, setImage] = useState(null);
 const [name, setName] = useState("");
+ const { setIsLoggedIn } = useLogin();
 
 
 
 const labourEmail = "aruran@example.com"; // Replace with dynamic value if needed
-const email2 = "lehaan@example.com";
+const email2 = "Vanaiyan@example.com";
 useEffect(() => {
   getLabourProfileById(labourEmail)
     .then((response) => {
@@ -97,6 +99,7 @@ const handleEditProfile = () => {
       // Log to confirm removal
       console.log("After logout - tokens removed");
 
+      setIsLoggedIn(false);
       // Navigate to Login screen
       navigation.navigate("Login");
     } catch (error) {
@@ -113,35 +116,55 @@ const handlePassword = () => {
   navigation.navigate("Labour_Change_Password");
 };
 
-const handleDeleteAccount = () => {
-  Alert.alert(
-    "Delete Account",
-    "Are you sure you want to delete your account?",
-    [
-      {
-        text: "No",
-        style: "cancel",
-      },
-      {
-        text: "Yes",
-        onPress: () => deleteAccountConfirmed(),
-      },
-    ]
-  );
-};
+    const deleteAccountConfirmed = async () => {
+      try {
+        // Delete account using service function
+        await deleteLabour(email2);
 
-const deleteAccountConfirmed = () => {
-  deleteLabour(labour.email)
-    .then((response) => {
-      console.log("Account deleted successfully:", response.data);
-      // Navigate to login or any other desired screen after deletion
-      navigation.navigate("Login");
-    })
-    .catch((error) => {
-      console.error("Error deleting account:", error);
-      Alert.alert("Error", "Failed to delete account. Please try again.");
-    });
-};
+          const tokenValue = await AsyncStorage.getItem("token");
+          const refreshTokenValue = await AsyncStorage.getItem("refreshToken");
+          console.log(
+            "Before logout - token:",
+            tokenValue,
+            "refreshToken:",
+            refreshTokenValue
+          );
+
+          // Clear tokens from AsyncStorage
+          await AsyncStorage.removeItem("token");
+          await AsyncStorage.removeItem("refreshToken");
+
+          // Log to confirm removal
+          console.log("After logout - tokens removed");
+
+        setIsLoggedIn(false);
+        // Navigate to Login screen
+        navigation.navigate("Login");
+      } catch (error) {
+        console.error("Error deleting account:", error);
+        // Handle error gracefully
+        // You can add specific error handling based on different error scenarios here
+        // For example, displaying an alert to the user or logging more details
+        Alert.alert("Error", "Failed to delete account. Please try again.");
+      }
+    };
+
+    const handleDeleteAccount = () => {
+      Alert.alert(
+        "Delete Account",
+        "Are you sure you want to delete your account?",
+        [
+          {
+            text: "No",
+            style: "cancel",
+          },
+          {
+            text: "Yes",
+            onPress: deleteAccountConfirmed,
+          },
+        ]
+      );
+    };
    
   return (
     <View>

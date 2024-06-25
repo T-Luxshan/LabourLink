@@ -13,16 +13,33 @@ export const getLabourById = (email) => {
 
 
 // API for updating a labour's information
-export const updateLabour = ( nic, mobileNumber, email) => {
+// export const updateLabour = ( nic, mobileNumber, email, name, documentUri, jobRole) => {
+//   return axios.put(`${BASE_URL}/${email}`, {
+//    name,
+//     nic,
+//     documentUri,
+//     mobileNumber,
+//     jobRole,
+//   });
+// };
+
+
+export const updateLabour = (
+  email,
+  nic,
+  mobileNumber,
+  name,
+  documentUri,
+  jobRole
+) => {
   return axios.put(`${BASE_URL}/${email}`, {
-   
+    name,
     nic,
-    
+    documentUri,
     mobileNumber,
-    
+    jobRole,
   });
 };
-
 // API for deleting a labour
 export const deleteLabour = (email) => {
   return axios.delete(`${BASE_URL}/${email}`);
