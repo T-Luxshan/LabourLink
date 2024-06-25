@@ -7,35 +7,17 @@ import { getLabourByReview } from "../services/LabourDetailsService";
 // Directly import the JSON data
 import reviewsData from '../services/Reviews.json';
 
-const imageMapping = {
-  "profile_photo1.png": require('../assets/Images/profile_photo1.png'),
-  "profile_photo2.png": require('../assets/Images/profile_photo2.png'),
-  "profile_photo3.png": require('../assets/Images/profile_photo3.png'),
-  "profile_photo4.png": require('../assets/Images/profile_photo1.png'),
-  "profile_photo5.png": require('../assets/Images/profile_photo2.png'),
-};
+
 
 const ScrollReviewer = ({email,jobRole}) => {
   const [reviews, setReviews] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
-  // useEffect(() => {
-  //   // Directly set the imported JSON data to state
-   
-  // }, []);
 
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
-  //const navigation = useNavigation(); // Get navigation object using useNavigation hook
-  //  let email = "olivia@example.com";
-  //  let jobRole = "Electrician";
-  // Get navigation object using useNavigation hook
-  // const route = useRoute();
-  // const { customerEmail, JobRole } = route.params;
-   //const jobRole = JobRole.toUpperCase();
-
-  // const [LabourReview, setReview] =useState('')
+ 
 
   useEffect(() => {
     fetchLabourReview(email,jobRole);
@@ -44,7 +26,7 @@ const ScrollReviewer = ({email,jobRole}) => {
   const fetchLabourReview = (email,jobRole) =>{
     getLabourByReview(email, jobRole)
       .then(respose=>{
-        console.log(respose);
+        // console.log(respose);
         setReviews(respose.data);
       })
       .catch(error=>{
@@ -64,7 +46,6 @@ const ScrollReviewer = ({email,jobRole}) => {
       <ScrollView style={styles.reviewsContainer}>
         {reviews.map((review, index) => ( // Show only first 2 reviews
           <View key={index} style={styles.reviewItemContainer}>
-            {/* <Image source={imageMapping[review.reviewerPhoto]} style={styles.reviewerPhoto} /> */}
             <View style={styles.reviewDetailsContainer}>
               <Text style={styles.reviewerName}>Name{review ? review.customerName: "Name not found"}</Text>
               <Text style={styles.reviewText}>{review ? review.description:"description not found"}</Text>
@@ -87,7 +68,6 @@ const ScrollReviewer = ({email,jobRole}) => {
             <ScrollView style={styles.modalReviewsContainer}>
               {reviews.map((review, index) => (
                 <View key={index} style={styles.modalReviewItemContainer}>
-                  <Image source={imageMapping[review.reviewerPhoto]} style={styles.modalReviewerPhoto} />
                   <View style={styles.modalReviewDetailsContainer}>
                     <Text style={styles.modalReviewerName}>{review.customerName}</Text>
                     <Text style={styles.modalReviewText}>{review.description}</Text>
@@ -123,19 +103,14 @@ const styles = StyleSheet.create({
   },
   reviewsContainer: {
     marginBottom: 10,
-    height: 110,
+    height: 130,
   },
   reviewItemContainer: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     marginBottom: 10,
   },
-  reviewerPhoto: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginRight: 10,
-  },
+
   reviewDetailsContainer: {
     flex: 1,
   },
@@ -187,12 +162,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     marginBottom: 10,
   },
-  modalReviewerPhoto: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginRight: 10,
-  },
+ 
   modalReviewDetailsContainer: {
     flex: 1,
   },
