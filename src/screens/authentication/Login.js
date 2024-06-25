@@ -69,16 +69,15 @@ const Login = () => {
              response = await loginCustomer(role, lowercasedEmail, password); 
              AsyncStorage.setItem("token", response.data.accessToken);
              AsyncStorage.setItem("refreshToken", response.data.refreshToken);
-             AsyncStorage.setItem("userEmail", email);
-             navigation.navigate('GettingStarted');
+             navigation.navigate('AuthTestSignup');
+             console.log("cus")
           }
           else{
             response = await loginLabour(role, lowercasedEmail, password);   
             AsyncStorage.setItem("token", response.data.accessToken);
             AsyncStorage.setItem("refreshToken", response.data.refreshToken);
-            AsyncStorage.setItem("userEmail", email);
             if(userRoleStatus)
-              navigation.navigate('GettingStarted');
+              navigation.navigate('AuthTestSignup');
             else
               navigation.navigate('WaitingPage')
           }
