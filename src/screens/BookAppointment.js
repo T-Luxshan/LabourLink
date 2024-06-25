@@ -99,7 +99,7 @@ const BookAppointment = () => {
 
             <View style={styles.Labourprofile}>
               <LabourProfileComponent 
-                profileImage={profileImage}
+                profileImage={{uri:profileImage}}
                 name={labourName}
                 jobTitle= {labourJobTitle}
                 rating={labourRating} 
