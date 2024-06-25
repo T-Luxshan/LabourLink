@@ -35,6 +35,13 @@
           "iCloudContainerEnvironment": "Production"
         }
       ]
-    ]
+    ],
+    "favicon": "./assets/favicon.png",
+    "extra": {
+      "eas": {
+        "projectId": "8af51114-192a-4a3c-920a-f2c32ffb071b"
+      }
+    },
+    "owner": "kirushanth"
   }
 }
