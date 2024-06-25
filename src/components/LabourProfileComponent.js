@@ -1,6 +1,7 @@
 import React from "react";
 import { View, StyleSheet, Image, Text } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { Avatar } from 'react-native-paper';
 
 const LabourProfileComponent = (props) => {
   const fullStars = Math.floor(props.rating);
@@ -8,10 +9,14 @@ const LabourProfileComponent = (props) => {
 
   return (
     <View style={[styles.boxBar, {backgroundColor:"#ECECEC"}]}>
-      <Image
-        source={props.profileImage}
+      <Avatar.Image size={48} source={props.profileImage }/>
+       {/* <Image
+        source={{uri:props.profileImage}}
         style={styles.profilePhoto}
-      />
+      />  */}
+      {/* {profileImage && (
+        <Image source={{ uri: profileImage }} style={styles.profileImage} />
+      )} */}
 
       <View style={styles.profileDetails}>
         <Text style={styles.detailsContent}>{props.name}</Text>
