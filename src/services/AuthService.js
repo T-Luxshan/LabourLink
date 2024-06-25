@@ -6,9 +6,9 @@ import dayjs from 'dayjs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //  For mobile, use IP address instead of localhost
-const REST_API_BASE_URL_AUTH = "http://192.168.1.56:8080/api/v1/auth";
-const  baseURL = 'http://192.168.1.56:8080/api';
-const FORGOTPASSWORD_BASE_URL = "http://192.168.1.56:8080/forgotPassword";
+const REST_API_BASE_URL_AUTH = "http://localhost:8080/api/v1/auth";
+const  baseURL = 'http://localhost:8080/api';
+const FORGOTPASSWORD_BASE_URL = "http://localhost:8080/forgotPassword";
 // const REST_API_BASE_URL_AUTH = "http://172.20.10.2:8080/api/v1/auth";
 // const  baseURL = 'http://172.20.10.2:8080/api';
 

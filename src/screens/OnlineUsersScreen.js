@@ -1,23 +1,50 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { List, Avatar } from "react-native-paper";
-import { findConnectedLabours } from "../service/userService";
+import { findConnectedLabours,findConnectedCustomers } from "../service/userService";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const OnlineUsersScreen = ({ navigation }) => {
   const [connectedUsers, setConnectedUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [userRole, setUserRole] = useState("");
 
   useEffect(() => {
-    const fetchConnectedUsers = async () => {
+    const fetchRole = async () => {
       try {
-        const response = await findConnectedLabours();
-        setConnectedUsers(response.data);
+        const storedRole = await AsyncStorage.getItem("userRole");
+        setUserRole(storedRole);
+        console.log("Fetched role: " + storedRole);
       } catch (error) {
-        console.log("Error fetching connected users:", error);
+        console.error("Failed to fetch user role from storage", error);
       }
     };
-    fetchConnectedUsers();
+
+    fetchRole();
   }, []);
+
+  useEffect(() => {
+    if (userRole) {
+      const fetchConnectedUsers = async () => {
+        if (userRole == "CUSTOMER") {
+          try {
+            const response = await findConnectedLabours();
+            setConnectedUsers(response.data);
+          } catch (error) {
+            console.log("Error fetching connected users:", error);
+          }
+        } else {
+          try {
+            const response = await findConnectedLabours ();
+            setConnectedUsers(response.data);
+          } catch (error) {
+            console.log("Error fetching connected users:", error);
+          }
+        }
+      };
+      fetchConnectedUsers();
+    }
+  }, [userRole]);
 
   const handleUserClick = (user) => {
     navigation.navigate("ChatAreaScreen", {
@@ -85,6 +112,5 @@ const styles = StyleSheet.create({
     backgroundColor: "#FF7D29", // Avatar background color
   },
 });
-
 
 export default OnlineUsersScreen;

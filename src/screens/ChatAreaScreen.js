@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { TextInput, Button } from "react-native-paper";
-import { findChatMessages, saveChatMessage } from '../service/userService'; // Ensure saveChatMessage is defined in your userService
+import { findChatMessages, saveChatMessage } from "../service/userService"; // Ensure saveChatMessage is defined in your userService
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ChatAreaScreen = ({ route }) => {
   const { SelectedUserName, SelectedUserEmail } = route.params;
@@ -9,10 +10,25 @@ const ChatAreaScreen = ({ route }) => {
   const [messageInput, setMessageInput] = useState("");
   const chatAreaRef = useRef(null);
   const webSocketRef = useRef(null);
+  const [email, setEmail] = useState("");
 
-  const user = {
-    email: "kirushanthan06@gmail.com", // Replace with actual logged-in user's email
-  };
+  useEffect(() => {
+    const fetchEmail = async () => {
+      try {
+        const storedEmail = await AsyncStorage.getItem("userEmail");
+        setEmail(storedEmail);
+        console.log("Fetched Email: " + storedEmail);
+      } catch (error) {
+        console.error("Failed to fetch email from storage", error);
+      }
+    };
+
+    fetchEmail();
+  }, []);
+
+  useEffect(() => {
+    console.log("State Email after setting: " + email); // Log whenever the email state changes
+  }, [email]);
 
   const connect = () => {
     console.log("connect function called");
@@ -23,10 +39,10 @@ const ChatAreaScreen = ({ route }) => {
       onConnected();
     };
 
-    ws.onmessage = (event) => {
+    ws.onmessage = async (event) => {
       const receivedMessage = JSON.parse(event.data);
       if (receivedMessage.type === "CHAT") {
-        setMessages((prevMessages) => [...prevMessages, receivedMessage]);
+        await fetchAndDisplayUserChat(SelectedUserEmail);
       }
     };
 
@@ -42,31 +58,36 @@ const ChatAreaScreen = ({ route }) => {
   };
 
   const onConnected = () => {
-    if (!user.email) {
+    if (!email) {
       console.error("User information is incomplete.");
       return;
     }
     console.log("onConnected called");
 
     webSocketRef.current.send(
-      JSON.stringify({ type: "JOIN", email: user.email })
+      JSON.stringify({ type: "JOIN", email })
     );
   };
 
   useEffect(() => {
-    connect();
-    fetchAndDisplayUserChat(SelectedUserEmail);
+    if (email) {
+      connect();
+      fetchAndDisplayUserChat(SelectedUserEmail);
+    }
 
     return () => {
       if (webSocketRef.current) {
         webSocketRef.current.close();
       }
     };
-  }, [messages]);
+  }, [email]);
 
-  const fetchAndDisplayUserChat = async (SelectedUserEmail) => {
+  const fetchAndDisplayUserChat = async (selectedUserEmail) => {
     try {
-      const userChatResponse = await findChatMessages(user.email, SelectedUserEmail);
+      const userChatResponse = await findChatMessages(
+        email,
+        selectedUserEmail
+      );
       setMessages(userChatResponse.data);
     } catch (error) {
       console.log("Error fetching chat history:", error);
@@ -77,7 +98,7 @@ const ChatAreaScreen = ({ route }) => {
     if (messageInput.trim() && SelectedUserEmail) {
       const chatMessage = {
         type: "CHAT",
-        senderId: user.email,
+        senderId: email,
         recipientId: SelectedUserEmail,
         content: messageInput.trim(),
         timestamp: new Date().toISOString(),
@@ -89,7 +110,7 @@ const ChatAreaScreen = ({ route }) => {
 
         // Send the chat message over WebSocket
         webSocketRef.current.send(JSON.stringify(chatMessage));
-        console.log('Message sent');
+        console.log("Message sent");
 
         // Update the local state to include the new message
         setMessages((prevMessages) => [...prevMessages, chatMessage]);
@@ -98,7 +119,6 @@ const ChatAreaScreen = ({ route }) => {
         console.log("Error sending chat message:", error);
       }
       fetchAndDisplayUserChat(SelectedUserEmail);
-      
     }
   };
 
@@ -117,7 +137,9 @@ const ChatAreaScreen = ({ route }) => {
             key={index}
             style={[
               styles.messageBubble,
-              message.senderId === user.email ? styles.myMessage : styles.theirMessage,
+              message.senderId === email
+                ? styles.myMessage
+                : styles.theirMessage,
             ]}
           >
             <Text style={styles.messageText}>{message.content}</Text>
@@ -131,7 +153,11 @@ const ChatAreaScreen = ({ route }) => {
           value={messageInput}
           onChangeText={setMessageInput}
         />
-        <Button mode="contained" onPress={sendMessage} style={styles.sendButton}>
+        <Button
+          mode="contained"
+          onPress={sendMessage}
+          style={styles.sendButton}
+        >
           Send
         </Button>
       </View>
