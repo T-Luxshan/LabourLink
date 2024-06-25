@@ -22,8 +22,9 @@ const LabourInfo = () => {
   // console.props(props);
    const navigation = useNavigation(); // Get navigation object using useNavigation hook
    const route = useRoute();
-   const {email, JobRole } = route.params;
+   const {email, JobRole, ProfileImage } = route.params;
    const jobRole = JobRole.toUpperCase();
+   
    
 
    
@@ -54,7 +55,7 @@ const LabourInfo = () => {
   const fetchLabour = (email) =>{
     getLabourByEmail(email)
       .then(respose=>{
-        console.log(respose);
+        // console.log(respose);
         setLabour(respose.data);
       })
       .catch(error=>{
@@ -64,7 +65,7 @@ const LabourInfo = () => {
   const fetchAbout = (email) =>{
     getLabourByAbout(email)
       .then(respose=>{
-        console.log(respose);
+        // console.log(respose);
         setAbout(respose.data);
       })
       .catch(error=>{
@@ -78,7 +79,7 @@ const LabourInfo = () => {
      const fetchrating = (email) =>{
       getLabourByRating(email)
         .then(respose=>{
-          console.log(respose);
+          // console.log(respose);
           setrating(respose.data);
         })
         .catch(error=>{
@@ -87,13 +88,14 @@ const LabourInfo = () => {
     }
 
     useEffect(() => {
-    fetchTotalServices(email, "ACCEPTED");  // Fetch total services with a specific stage
+    fetchTotalServices(email, "COMPLETED");  // Fetch total services with a specific stage
   }, [email]);
 
 
     const fetchTotalServices = (email, stage) => {
       getLabourByTotalservice(email, stage)
         .then(response => {
+          console.log(response.data);
           setTotalServices(response.data.length);  // Assuming response.data is an array of services
         })
         .catch(error => {
@@ -113,7 +115,7 @@ const LabourInfo = () => {
       labourName: labour.name,
       labourJobTitle: labour.jobRole.join(" | "),
       labourRating: labourrating,
-      profileImage: require("../assets/Images/profile_photo3.png")
+      profileImage:ProfileImage,
     });
   };
 
@@ -124,12 +126,12 @@ const LabourInfo = () => {
       {/* Main container view */}
       <ScrollView contentContainerStyle={styles.container}>
         {/* AppBar component with title */}
-        <AppBar Title={labour.name}/>
+        {/* <AppBar Title={labour.name}/> */}
 
 
         {/* Labour profile component */}
         <LabourProfileComponent
-          profileImage={require("../assets/Images/profile_photo3.png")} // Profile image
+          profileImage= {{ uri : ProfileImage }} style={styles.profileImage}// Profile image
           name = { labour ? labour.name : "Name not found" }  // Name of the labour
           jobTitle={labour ? labour.jobRole.join(" | ") : "Role not found"} // Job title
           rating={labourrating} // Rating
@@ -196,7 +198,7 @@ const styles = StyleSheet.create({
   
   container: {
     flexGrow: 1, // Take up entire space
-    marginTop: 10, 
+    marginTop: 80, 
     paddingHorizontal: 20, 
     backgroundColor: "white",
   
