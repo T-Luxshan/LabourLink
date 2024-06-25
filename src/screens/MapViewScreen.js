@@ -7,6 +7,7 @@ import * as Location from "expo-location";
 import LabourProfileComponent from "../components/LabourProfileComponent";
 import { useNavigation } from '@react-navigation/native'; 
 import { getLabourByJobRole, getLocationsByJobRole } from "../services/LabourDetailsService";
+// import {ProfileImageByEmail} from "../services/LabourDetailsService"
 
 const MapViewScreen = () => {
   const initialRegion = {
@@ -22,10 +23,13 @@ const MapViewScreen = () => {
   const [LabourLocation, setLabourLocation] = useState([]);
   const navigation = useNavigation();
   const [labourcard, setLabourCard] = useState([]);
+  // const [ProfileImage, setProfileImage] =useState([]);
 
  
 
-  let jobRole = "ELECTRICIAN";
+  let jobRole = "PAINTER";
+  
+
 
   useEffect(() => {
     fetchLabour(jobRole);
@@ -34,7 +38,7 @@ const MapViewScreen = () => {
   const fetchLabour = (jobRole) => {
     getLabourByJobRole(jobRole)
       .then(response => {
-        console.log(response);
+        // console.log(response.data);
         setLabourCard(response.data);
        
   
@@ -51,7 +55,7 @@ const MapViewScreen = () => {
   const fetchLocation = (jobRole) => {
     getLocationsByJobRole(jobRole)
       .then(response => {
-        console.log(response.data);
+        // console.log(response.data);
         setLabourLocation(response.data);
       })
       .catch(error => {
@@ -77,10 +81,12 @@ const MapViewScreen = () => {
     })();
   }, []);
 
-  const handleProfileClick = (labourEmail) => {
+  const handleProfileClick = (labourEmail,profileUri) => {
     navigation.navigate('LabourInfo', {
       email: labourEmail,
       JobRole:jobRole ,
+      ProfileImage:profileUri,
+
     });
   };
   
@@ -123,7 +129,7 @@ const MapViewScreen = () => {
                     source={require('../assets/Labour.png')}
                     style={styles.markerImage}
                   />
-                    <Callout onPress={() => handleProfileClick(labourLocation.labourId)}>
+                    <Callout onPress={() => handleProfileClick(labourLocation.labourId,labourLocation.profileUri)}>
                     <View style={styles.calloutContainer}>
                      
                       <Text style={styles.labourName}>{labourLocation.labourName}</Text>
@@ -143,8 +149,11 @@ const MapViewScreen = () => {
           <ScrollView>
             {labourcard.length > 0 ? (
               labourcard.map((labour, index) => (
-                <TouchableOpacity key={index} onPress={() => handleProfileClick(labour.labourEmail)}>
-                  <LabourProfileComponent 
+                <TouchableOpacity key={index} onPress={() => handleProfileClick(labour.labourEmail,labour.profileUri)}>
+                  <LabourProfileComponent
+                    profileImage={{
+                      uri: labour.profileUri,
+                    }}
                     name={labour.labourName}
                     jobTitle={labour.jobRole.join(" | ")}
                     rating={labour.rating}
