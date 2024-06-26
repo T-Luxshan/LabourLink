@@ -299,7 +299,7 @@ const Labour_page = ({ navigation, route }) => {
               Gender
             </Text>
             <Text style={{ paddingTop: 5, marginLeft: 30, color: "#41434A" }}>
-              {labourProfile ? labourProfile.aboutMe : ""}
+              {labourProfile ? labourProfile.gender : ""}
             </Text>
 
             <Text
@@ -317,17 +317,20 @@ const Labour_page = ({ navigation, route }) => {
             <View
               style={{ flexDirection: "row", flexWrap: "wrap", marginLeft: 30 }}
             >
+              {labourProfile.languages &&
               <Text
-                style={{
-                  backgroundColor: "#EFEFEF",
-                  padding: 5,
-                  marginRight: 5,
-                  marginBottom: 5,
-                  borderRadius: 5,
-                }}
-              >
-                {labourProfile ? labourProfile.aboutMe : ""}
-              </Text>
+              style={{
+                backgroundColor: "#EFEFEF",
+                padding: 5,
+                marginRight: 5,
+                marginBottom: 5,
+                borderRadius: 5,
+              }}
+            >
+              {labourProfile ? labourProfile.languages.join(", ") : ""}
+            </Text>
+              }
+              
             </View>
           </Surface>
         </View>
