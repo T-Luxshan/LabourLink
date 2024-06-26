@@ -12,49 +12,33 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import { deleteCustomer } from "../services/CustomerService";
-
+import { getCustomerById, deleteCustomer } from "../services/CustomerService";
+import { useLogin } from "../context/LoginProvider";
 
 
 const Customer_profile_page = ({ navigation, route }) => {
   // Function to handle press event for the "Languages" section
   const [customer, setCustomer] = useState("");
+  const { setIsLoggedIn } = useLogin();
  
- const handleDeleteAccount = () => {
-   // Show confirmation alert
-   Alert.alert(
-     "Delete Account",
-     "Are you sure you want to delete your account?",
-     [
-       {
-         text: "No",
-         style: "cancel",
-       },
-       {
-         text: "Yes",
-         onPress: () => {
-           // Call deleteCustomer API
-           deleteCustomer("aruran@example.com")
-             .then((response) => {
-               console.log("Account deleted successfully:", response.data);
-               // Handle navigation or other actions after deletion
-               navigation.navigate("Login");
-             })
-             .catch((error) => {
-               console.error("Error deleting account:", error);
-               // Handle error gracefully
-               Alert.alert(
-                 "Error",
-                 "Failed to delete account. Please try again later."
-               );
-             });
-         },
-       },
-     ]
-   );
- };
 
-  
+  const email = "aruran@example.com";
+
+
+  useEffect(() => {
+    getCustomerById(email)
+      .then((response) => {
+        const data = response.data;
+        setCustomer(data);
+        // setJobRole(data.jobRole);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching customer profile data:", error);
+      });
+  }, []);
+
+
 
   const handleAboutUs = () => {
     navigation.navigate("About_Us");
@@ -79,6 +63,7 @@ const Customer_profile_page = ({ navigation, route }) => {
       // Log to confirm removal
       console.log("After logout - tokens removed");
 
+      setIsLoggedIn(false);
       // Navigate to Login screen
       navigation.navigate("Login");
     } catch (error) {
@@ -94,6 +79,56 @@ const Customer_profile_page = ({ navigation, route }) => {
   const handlePassword = () => {
     navigation.navigate("Change_Password");
   };
+
+   const deleteAccountConfirmed = async () => {
+     try {
+       // Delete account using service function
+       await deleteCustomer(email);
+
+       const tokenValue = await AsyncStorage.getItem("token");
+       const refreshTokenValue = await AsyncStorage.getItem("refreshToken");
+       console.log(
+         "Before logout - token:",
+         tokenValue,
+         "refreshToken:",
+         refreshTokenValue
+       );
+
+       // Clear tokens from AsyncStorage
+       await AsyncStorage.removeItem("token");
+       await AsyncStorage.removeItem("refreshToken");
+
+       // Log to confirm removal
+       console.log("After logout - tokens removed");
+
+       setIsLoggedIn(false);
+       // Navigate to Login screen
+       navigation.navigate("Login");
+     } catch (error) {
+       console.error("Error deleting account:", error);
+       // Handle error gracefully
+       // You can add specific error handling based on different error scenarios here
+       // For example, displaying an alert to the user or logging more details
+       Alert.alert("Error", "Failed to delete account. Please try again.");
+     }
+   };
+
+   const handleDeleteAccount = () => {
+     Alert.alert(
+       "Delete Account",
+       "Are you sure you want to delete your account?",
+       [
+         {
+           text: "No",
+           style: "cancel",
+         },
+         {
+           text: "Yes",
+           onPress: deleteAccountConfirmed,
+         },
+       ]
+     );
+   };
 
   return (
     <View>

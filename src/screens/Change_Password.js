@@ -1,5 +1,3 @@
-// ChangePassword.js
-
 import React, { useState } from "react";
 import {
   View,
@@ -9,7 +7,7 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
-import { updateCustomerPassword } from "../services/CustomerService";
+import { updateCustomerPassword, getCustomerById } from "../services/CustomerService";
 
 const Change_Password = ({ navigation }) => {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -36,6 +34,15 @@ const Change_Password = ({ navigation }) => {
           "Password Updated",
           "Your password has been updated successfully."
         );
+
+        // Fetch the updated user data to confirm password update
+        getCustomerById("aruran@example.com")
+          .then((response) => {
+            console.log("Updated user data:", response.data);
+          })
+          .catch((error) => {
+            console.error("Error fetching updated user data:", error);
+          });
         setCurrentPassword("");
         setNewPassword("");
         setConfirmPassword("");

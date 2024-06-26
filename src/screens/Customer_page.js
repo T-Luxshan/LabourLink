@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -13,7 +13,9 @@ import {getCustomerById} from "../services/CustomerService";
 import {getLabourById} from "../services/LabourService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getAllReviews } from "../services/LabourReviewService";
+import { getCompletedBookings } from "../services/CustomerBookingService";
 import { AntDesign } from "@expo/vector-icons";
+import { useFocusEffect } from "@react-navigation/native";
 
 // Functional component definition
 const Customer_page = ({ navigation }) => {
@@ -39,6 +41,11 @@ const Customer_page = ({ navigation }) => {
         const customerResponse = await getCustomerById(email);
         const customerData = customerResponse.data;
         setCustomerName(customerData.name);
+
+        // Fetch completed bookings
+        const completedBookingsResponse = await getCompletedBookings(email);
+        const completedBookingsData = completedBookingsResponse.data;
+        setCompletedBookings(completedBookingsData);
 
         // Fetch all reviews
         const reviewsResponse = await getAllReviews();
@@ -89,14 +96,12 @@ const Customer_page = ({ navigation }) => {
 
   const handleViewAllPress = () => {
     navigation.navigate("Work_History", {
-     
+      completedBookings: completedBookings,
     });
   };
 
   const handleViewPress = () => {
-    navigation.navigate("Upcoming_Services", {
-     
-    });
+    navigation.navigate("Upcoming_Services");
   };
 
   // Component rendering
@@ -119,9 +124,9 @@ const Customer_page = ({ navigation }) => {
             </Text>
           </View>
 
-          <View style={{ marginLeft: 150, marginTop: 28 }}>
+          {/* <View style={{ marginLeft: 150, marginTop: 28 }}>
             <Icon source="bell-badge-outline" size={25} />
-          </View>
+          </View> */}
         </View>
 
         {/* Employee of the month section */}
@@ -209,10 +214,9 @@ const Customer_page = ({ navigation }) => {
                     <Text> {topRatedEmployee.totalRating}</Text>
                   </View>
                 </View>
-                <View style={{ marginTop: 20, marginLeft: 15 }}>
-                  <View style={{ marginLeft: 10 }}>
-                    <Icon source="heart" size={20} color="#FF0000" />
-                  </View>
+
+                <View style={{ marginRight: 15, marginTop: 50 }}>
+                  <Icon source="heart" size={20} color="#FF0000" />
                 </View>
               </View>
             </Surface>
@@ -361,11 +365,7 @@ const Customer_page = ({ navigation }) => {
               </Text>
               {"\t"}
               <TouchableOpacity onPress={handleViewPress}>
-                <Text
-                  style={{ color: "blue" }}
-                >
-                  View All
-                </Text>
+                <Text style={{ color: "blue" }}>View All</Text>
               </TouchableOpacity>
             </Text>
 
@@ -425,11 +425,7 @@ const Customer_page = ({ navigation }) => {
               </Text>
               {"\t"}
               <TouchableOpacity onPress={handleViewAllPress}>
-                <Text
-                  style={{ color: "blue" }}
-                >
-                  View All
-                </Text>
+                <Text style={{ color: "blue" }}>View All</Text>
               </TouchableOpacity>
             </Text>
 
@@ -451,7 +447,8 @@ const Customer_page = ({ navigation }) => {
                 <Text
                   style={{ marginLeft: 30, fontSize: 13, color: "#2F3239" }}
                 >
-                  @{booking.date} | {booking.startTime}
+                  {booking.jobRole} | @{booking.appointmentDate} |
+                  {booking.appointmentTime}
                 </Text>
               </View>
             ))}

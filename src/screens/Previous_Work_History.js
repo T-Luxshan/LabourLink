@@ -13,16 +13,7 @@ const Previous_Work_History = ({route}) => {
      setBookings(completedBookings);
    }, [completedBookings]);
 
-  //  const renderBooking = ({ item }) => (
-  //    <View style={styles.bookingContainer}>
-  //      <Text style={styles.customerName}>
-  //        Customer Name: {item.customerName}
-  //      </Text>
-  //      <Text style={styles.bookingDetails}>
-  //        @{item.date} | {item.startTime}
-  //      </Text>
-  //    </View>
-  //  );
+
  
 
  const handleReportReview = (booking) => {
@@ -50,14 +41,7 @@ const Previous_Work_History = ({route}) => {
   
 
   return (
-    //  <View style={styles.container}>
-    //     {/* <Text style={styles.header}>Previous Work History</Text> */}
-    //     <FlatList
-    //       data={completedBookings}
-    //       renderItem={renderBooking}
-    //       keyExtractor={(item, index) => index.toString()}
-    //     />
-    //   </View>
+   
     <ScrollView>
       <View style={styles.container}>
         {bookings.map((booking) => renderBooking(booking))}
@@ -71,7 +55,7 @@ const Previous_Work_History = ({route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
+    backgroundColor: "#FFF",
     padding: 20,
   },
   // header: {

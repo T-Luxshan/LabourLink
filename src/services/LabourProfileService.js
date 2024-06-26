@@ -6,82 +6,10 @@ const BASE_URL = "http://172.20.10.3:8080/api/labour-profiles";
 
 
 
-// export const getLabourProfileById = async (labourEmail) => {
-//   try {
-//     const response = await axios.get(
-//       `${BASE_URL}/getLabourProfileById/${labourEmail}`
-//     );
-//     return response.data;
-//   } catch (error) {
-   
-//     throw error;
-//   }
-// };
-
-
-
-// // API for updating the profile of a specific labour
-// export const updateLabourProfile = async (
-//   aboutMe,
-//   gender,
-//   languages,
-//   labourEmail
-// ) => {
-//   try {
-//     const response = await axios.put(
-//       `${BASE_URL}/update/${labourEmail}`,
-//       {
-//         aboutMe,
-//         gender,
-//         languages,
-//       }
-//     );
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
-
-
-
-// export const getLabourProfileById = async (labourEmail) => {
-//   try {
-//     console.log(`Fetching Labour Profile for: ${labourEmail}`);
-//     const response = await axios.get(
-//       `${BASE_URL}/getLabourProfileById/${labourEmail}`
-//     );
-//     console.log("Labour Profile Response:", response.data);
-//     return response.data; // Ensure this is correctly returning the data
-//   } catch (error) {
-//     console.error("Error fetching Labour Profile:", error);
-//     throw error;
-//   }
-// };
 export const getLabourProfileById = (labourEmail) => {
   return axios.get(`${BASE_URL}/getLabourProfileById/${labourEmail}`);
   }
 
-// API for updating the profile of a specific labour
-// export const updateLabourProfile = async (
-//   aboutMe,
-//   gender,
-//   languages,
-//   labourEmail
-// ) => {
-//   try {
-//     console.log(`Updating Labour Profile for: ${labourEmail}`);
-//     const response = await axios.put(`${BASE_URL}/update/${labourEmail}`, {
-//       aboutMe,
-//       gender,
-//       languages,
-//     });
-//     console.log("Update Response:", response.data);
-//     return response.data;
-//   } catch (error) {
-//     console.error("Error updating Labour Profile:", error);
-//     throw error;
-//   }
-// };
 
 export const updateLabourProfile = (
   aboutMe,

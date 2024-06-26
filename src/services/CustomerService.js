@@ -20,7 +20,7 @@ export const updateCustomer = (
   return axios.put(`${BASE_URL}/${email}`, {
     name,
     address,
-    mobileNumber,
+    mobileNumber,   
   });
 };
 

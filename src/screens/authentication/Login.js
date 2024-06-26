@@ -50,7 +50,7 @@ const Login = () => {
 
     const handleLogin = () => {
       setIsLoggedIn(true);
-      setUserRole("LABOUR");
+      setUserRole("CUSTOMER");
       // try {
       //   await schema.validate({ email, password, role }, { abortEarly: false });
       //   const lowercasedEmail = email.toLowerCase();

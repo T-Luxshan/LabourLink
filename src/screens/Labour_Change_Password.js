@@ -1,5 +1,3 @@
-// ChangePassword.js
-
 import React, { useState } from "react";
 import {
   View,
@@ -16,40 +14,6 @@ const Labour_Change_Password = ({ navigation }) => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-
-  // const handleChangePassword = () => {
-  //   // Basic validation
-  //   if (!currentPassword || !newPassword || !confirmPassword) {
-  //     setErrorMessage("Please fill in all fields.");
-  //     return;
-  //   }
-
-  //   if (newPassword !== confirmPassword) {
-  //     setErrorMessage("New password and confirm password must match.");
-  //     return;
-  //   }
-
-  //   updateLabourPassword("lehaan@example.com", newPassword)
-  //     .then((response) => {
-  //       console.log("Password updated successfully:", response.data);
-  //       Alert.alert(
-  //         "Password Updated",
-  //         "Your password has been updated successfully."
-  //       );
-  //       setCurrentPassword("");
-  //       setNewPassword("");
-  //       setConfirmPassword("");
-  //       setErrorMessage("");
-  //       navigation.navigate("Labour_profile_page"); // Navigate to desired screen
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error updating password:", error);
-  //       Alert.alert(
-  //         "Error",
-  //         "Failed to update password. Please try again later."
-  //       );
-  //     });
-  // };
 
 
  const handleChangePassword = () => {
