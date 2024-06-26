@@ -232,6 +232,8 @@ const Edit = ({ navigation }) => {
   const [error, setError] = useState("");
   const labourEmail = "Vanaiyan@example.com";
 
+  const [existingProfile, setExistingProfile] = useState(null);
+
   useEffect(() => {
     fetchProfileData();
   }, []);
@@ -241,11 +243,12 @@ const Edit = ({ navigation }) => {
       setIsLoading(true);
       console.log(`Fetching profile for email: ${labourEmail}`);
       const response = await getLabourProfileById(labourEmail);
-      console.log("Response from getLabourProfileById:", response);
+      console.log("Profile:", response.data);
+      setExistingProfile(response.data);
 
-      if (response && response.data) {
+      if (response.data) {
         const profileData = response.data;
-        console.log("Fetched Profile Data:", profileData);
+        // console.log("Fetched Profile Data:", profileData);
 
         setAboutMe(profileData.aboutMe || "");
         setGender(profileData.gender || "");
@@ -284,23 +287,36 @@ const Edit = ({ navigation }) => {
       console.log("Profile Data to Save:", profileData);
 
       // Check if profile exists and has at least one non-null/undefined field
-      if (aboutMe || gender || selectedLanguages.length > 0) {
-        const response =
-          profileData.aboutMe ||
-          profileData.gender ||
-          profileData.languages.length > 0
-            ? await updateLabourProfile(profileData)
-            : await createLabourProfile(profileData);
+      // if (aboutMe || gender || selectedLanguages.length > 0) {
+      //   const response =
+      //     profileData.aboutMe ||
+      //     profileData.gender ||
+      //     profileData.languages.length > 0
+      //       ? await updateLabourProfile(profileData)
+      //       : await createLabourProfile(profileData);
 
-        console.log(
-          `Response from ${response ? "update" : "create"}LabourProfile:`,
-          response
-        );
-        setError("");
-      } else {
-        console.log("No data to update or create.");
-        setError("No data to save.");
+      //   console.log(
+      //     `Response from ${response ? "update" : "create"}LabourProfile:`,
+      //     response
+      //   );
+      //   setError("");
+      if (!existingProfile.aboutMe && !existingProfile.gender) {
+        try{
+          const response = await createLabourProfile(aboutMe, gender, selectedLanguages, labourEmail);
+        } catch(error){
+          console.log("Failed to create labour profile")
+        }
+        }
+        else{
+          try{
+            const response = await updateLabourProfile(aboutMe, gender, selectedLanguages, labourEmail);
+          } catch(error){
+            console.log("Failed to update labour profile")
+          }
       }
+  
+          
+       
 
       // Reset form and state
       setAboutMe("");
