@@ -39,7 +39,7 @@ const Customer_Personal_Details = ({ navigation }) => {
 
   const handleSave = async () => {
     try {
-      const response = await updateCustomer(email, address, mobileNumber, name);
+      const response = await updateCustomer(name, address, email, mobileNumber);
       console.log("Customer updated:", response.data);
       Alert.alert("Success", "Customer details updated successfully.");
       navigation.navigate("Customer_profile_page");
