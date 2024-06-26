@@ -177,10 +177,10 @@ const Labour_page = ({ navigation, route }) => {
                 fontWeight: 200,
                 marginLeft: 50,
                 justifyContent: "center",
+                textAlign: "center",
               }}
             >
               {labour && labour.jobRole ? `${labour.jobRole}\t` : " "}
-              
             </Text>
           </View>
         </View>
@@ -238,14 +238,13 @@ const Labour_page = ({ navigation, route }) => {
             }}
             elevation={1}
           >
-           
-              <IconButton
-                icon="pencil-outline"
-                size={20}
-                onPress={handleEdit}
-                style={{ position: "absolute", top: 10, right: 10 }}
-              />
-            
+            <IconButton
+              icon="pencil-outline"
+              size={20}
+              onPress={handleEdit}
+              style={{ position: "absolute", top: 10, right: 10 }}
+            />
+
             <Text
               style={{
                 color: "#FF7600",
@@ -265,10 +264,10 @@ const Labour_page = ({ navigation, route }) => {
                 lineHeight: 20,
                 marginLeft: 30,
                 color: "#2F3239",
-                minHeight: 60,
+                minHeight: 30,
               }}
             >
-              {labourProfile?.aboutMe}
+              {labourProfile ? labourProfile.aboutMe : ""}
             </Text>
 
             {/* Contact details */}
@@ -285,7 +284,7 @@ const Labour_page = ({ navigation, route }) => {
             </Text>
 
             <Text style={{ paddingTop: 5, marginLeft: 30, color: "#41434A" }}>
-              {labour?.mobileNumber}
+              {labour.mobileNumber}
             </Text>
 
             <Text
@@ -300,7 +299,7 @@ const Labour_page = ({ navigation, route }) => {
               Gender
             </Text>
             <Text style={{ paddingTop: 5, marginLeft: 30, color: "#41434A" }}>
-              {labourProfile?.gender}
+              {labourProfile ? labourProfile.aboutMe : ""}
             </Text>
 
             <Text
@@ -318,21 +317,17 @@ const Labour_page = ({ navigation, route }) => {
             <View
               style={{ flexDirection: "row", flexWrap: "wrap", marginLeft: 30 }}
             >
-              {labourProfile?.languages &&
-                labourProfile?.languages.map((language, index) => (
-                  <Text
-                    key={index}
-                    style={{
-                      backgroundColor: "#EFEFEF",
-                      padding: 5,
-                      marginRight: 5,
-                      marginBottom: 5,
-                      borderRadius: 5,
-                    }}
-                  >
-                    {language}
-                  </Text>
-                ))}
+              <Text
+                style={{
+                  backgroundColor: "#EFEFEF",
+                  padding: 5,
+                  marginRight: 5,
+                  marginBottom: 5,
+                  borderRadius: 5,
+                }}
+              >
+                {labourProfile ? labourProfile.aboutMe : ""}
+              </Text>
             </View>
           </Surface>
         </View>

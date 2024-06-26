@@ -43,7 +43,7 @@ const Languages = ({ navigation }) => {
       );
 
       // Replace with actual email or fetch dynamically
-      const labourEmail = "lehaan@example.com";
+      const labourEmail = "Vanaiyan@example.com";
 
       // Call updateLabourProfile function from LabourProfileService
       await LabourProfileService.updateLabourProfile(

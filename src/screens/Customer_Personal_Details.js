@@ -30,8 +30,8 @@ const Customer_Personal_Details = ({ navigation }) => {
       const { name, mobileNumber, address } = response.data;
       setName(name);
       setMobileNumber(mobileNumber);
-      setNic(nic);
-    } catch (address) {
+      setAddress(address);
+    } catch (error) {
       console.error("Error fetching Customer data:", error);
       Alert.alert("Error", "Failed to fetch Customer details.");
     }

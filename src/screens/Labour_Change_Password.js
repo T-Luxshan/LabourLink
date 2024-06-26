@@ -64,7 +64,7 @@ const Labour_Change_Password = ({ navigation }) => {
      return;
    }
 
-   updateLabourPassword("lehaan@example.com", newPassword)
+   updateLabourPassword("Vanaiyan@example.com", newPassword)
      .then((response) => {
        console.log("Password updated successfully:", response.data);
        Alert.alert(
@@ -73,7 +73,7 @@ const Labour_Change_Password = ({ navigation }) => {
        );
 
        // Fetch the updated user data to confirm password update
-       getLabourById("lehaan@example.com")
+       getLabourById("Vanaiyan@example.com")
          .then((response) => {
            console.log("Updated user data:", response.data);
          })

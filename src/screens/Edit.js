@@ -1,94 +1,96 @@
-// import React, { useState, useEffect } from "react";
+// import React, { useState } from "react";
 // import {
 //   View,
 //   Text,
 //   TextInput,
-//   Button,
 //   StyleSheet,
 //   TouchableOpacity,
 //   Alert,
 // } from "react-native";
-// import { getLabourById, updateLabour } from "../services/LabourService";
 // import {
 //   getLabourProfileById,
 //   updateLabourProfile,
+//   createLabourProfile,
 // } from "../services/LabourProfileService";
-// import { ScrollView } from "react-native-gesture-handler";
-// import { Checkbox } from "react-native-paper";
-
 
 // const Edit = ({ navigation }) => {
 //   const [aboutMe, setAboutMe] = useState("");
-//   const [mobileNumber, setMobileNumber] = useState("");
 //   const [gender, setGender] = useState("");
 //   const [languages, setLanguages] = useState({
 //     Tamil: false,
 //     English: false,
 //     Sinhala: false,
 //   });
+//   const [isLoading, setIsLoading] = useState(false);
+//   const [error, setError] = useState("");
+//   const labourEmail = "Vanaiyan@example.com";
 
-//   const email = "Vanaiyan@example.com";
-//    const labourEmail = "Vanaiyan@example.com";
 
-//   useEffect(() => {
-//     // Fetch existing Labour data when component mounts
-//     fetchLabourData();
-//   }, []);
+// const handleSave = async () => {
+//   setIsLoading(true);
 
-//   const fetchLabourData = async () => {
-//     try {
-//       // Fetch data from LabourProfileService for aboutMe, gender, and languages
-//       const profileResponse = await getLabourProfileById(labourEmail);
-//       if (profileResponse.data) {
-//       const { aboutMe, gender, languages } = profileResponse.data;
-//       setAboutMe(aboutMe);
-//       setGender(gender);
+//   try {
+//     // Fetch the existing profile data
+//     const response = await getLabourProfileById(labourEmail);
+//     const profileData = response.data;
 
-//       // Convert languages array to object for checkbox handling
-//       const languagesObject = {};
-//       languages.forEach((lang) => {
-//         if (lang === "Tamil" || lang === "English" || lang === "Sinhala") {
-//           languagesObject[lang] = true;
-//         }
+//     console.log("Fetched Profile Data:", profileData);
+//     console.log("Labour Email:", labourEmail);
+
+//     // Check if profile data exists and has at least one non-null/undefined field
+//     if (
+//       profileData &&
+//       (profileData.aboutMe !== null ||
+//         profileData.gender !== null ||
+//         (profileData.languages && profileData.languages.length > 0))
+//     ) {
+     
+//       // If profile exists and has at least one valid field, update the existing profile
+//       console.log("Updating profile with data:");
+//       console.log("aboutMe:", aboutMe);
+//       console.log("gender:", gender);
+//       console.log("languages:", getSelectedLanguages());
+
+//       await updateLabourProfile({
+//         aboutMe,
+//         gender,
+//         languages: getSelectedLanguages(),
+//         labourEmail,
 //       });
-//       setLanguages(languagesObject);
+//     } else {
+//       // If profile does not exist or all relevant fields are null/undefined, create a new profile
+//       console.log("Creating new profile with data:");
+//       console.log("aboutMe:", aboutMe);
+//       console.log("gender:", gender);
+//       console.log("languages:", getSelectedLanguages());
+
+//       await createLabourProfile({
+//         aboutMe,
+//         gender,
+//         languages: getSelectedLanguages(),
+//         labourEmail,
+//       });
 //     }
 
-//       // Fetch data from LabourService for mobileNumber
-//       const serviceResponse = await getLabourById(email);
-//        if (serviceResponse.data) {
-//       const { mobileNumber } = serviceResponse.data;
-//       setMobileNumber(mobileNumber);
-//        }
-//     } catch (error) {
-//       console.error("Error fetching Labour data:", error);
-//       Alert.alert("Error", "Failed to fetch Labour details.");
-//     }
+//     // Reset form and state
+   
+//     setIsLoading(false);
+//     setError("");
+//     navigation.navigate("Labour_page");
+//   } catch (error) {
+//     console.error(
+//       "Error updating labour data:",
+//       error.response ? error.response.data : error.message
+//     );
+//     setError("Failed to update labour details.");
+//     setIsLoading(false);
+//   }
+// };
+
+
+//   const getSelectedLanguages = () => {
+//     return Object.keys(languages).filter((lang) => languages[lang]);
 //   };
-
-//  const handleSave = async () => {
-//    try {
-//      // Prepare languages as an array of selected languages
-//      const selectedLanguages = Object.keys(languages).filter(
-//        (lang) => languages[lang]
-//      );
-
-//      // Update data in LabourProfileService for aboutMe, gender, and languages
-//      await updateLabourProfile(aboutMe, gender, selectedLanguages, labourEmail);
-
-//      console.log("Labour details updated successfully.");
-
-//      // Navigate to desired screen after successful update
-//      navigation.navigate("Labour_page");
-//    } catch (error) {
-//      console.error("Error updating labour data:", error);
-//      if (error.response) {
-//        console.error("Response data:", error.response.data);
-//      }
-//      Alert.alert("Error", "Failed to update labour details.");
-//    }
-//  };
-
 
 //   const handleCheckboxChange = (name) => {
 //     setLanguages((prevLanguages) => ({
@@ -98,75 +100,58 @@
 //   };
 
 //   return (
-//     <ScrollView>
-//       <View style={styles.container}>
-//         <View style={styles.card}>
-//           <Text style={styles.label}>About Me</Text>
-//           <TextInput
-//             style={[styles.input, styles.aboutMeInput]}
-//             value={aboutMe}
-//             onChangeText={setAboutMe}
-//             placeholder="Enter About Me"
-//             multiline={true}
-//             textAlignVertical="top"
-//             autoFocus={true} // Optional: Autofocus on this input
-//           />
-//           <Text style={styles.label}>Contact Details</Text>
-//           <TextInput
-//             style={styles.input}
-//             value={mobileNumber}
-//             onChangeText={setMobileNumber}
-//             placeholder="Enter Mobile Number"
-//             keyboardType="phone-pad"
-//           />
-//           <Text style={styles.label}>Gender</Text>
-//           <View style={styles.checkboxContainer}>
-//             <Checkbox.Item
-//               label="Male"
-//               status={gender === "male" ? "checked" : "unchecked"}
-//               onPress={() => setGender("male")}
-//               color="#007bff"
-//               style={styles.checkbox}
-//             />
-//             <Checkbox.Item
-//               label="Female"
-//               status={gender === "female" ? "checked" : "unchecked"}
-//               onPress={() => setGender("female")}
-//               color="#007bff"
-//               style={styles.checkbox}
-//             />
-//           </View>
+//     <View style={styles.container}>
+//       <Text style={styles.label}>About Me</Text>
+//       <TextInput
+//         style={styles.input}
+//         value={aboutMe}
+//         onChangeText={setAboutMe}
+//         placeholder="Enter About Me"
+//       />
 
-//           <Text style={styles.label}>Languages</Text>
-//           <View style={styles.checkboxContainer}>
-//             <Checkbox.Item
-//               label="Tamil"
-//               status={languages.Tamil ? "checked" : "unchecked"}
-//               onPress={() => handleCheckboxChange("Tamil")}
-//               color="#007bff"
-//               style={styles.checkbox}
-//             />
-//             <Checkbox.Item
-//               label="English"
-//               status={languages.English ? "checked" : "unchecked"}
-//               onPress={() => handleCheckboxChange("English")}
-//               color="#007bff"
-//               style={styles.checkbox}
-//             />
-//             <Checkbox.Item
-//               label="Sinhala"
-//               status={languages.Sinhala ? "checked" : "unchecked"}
-//               onPress={() => handleCheckboxChange("Sinhala")}
-//               color="#007bff"
-//               style={styles.checkbox}
-//             />
-//           </View>
-//           <TouchableOpacity style={styles.button} onPress={handleSave}>
-//             <Text style={styles.buttonText}>Save</Text>
-//           </TouchableOpacity>
-//         </View>
+//       <Text style={styles.label}>Gender</Text>
+//       <TextInput
+//         style={styles.input}
+//         value={gender}
+//         onChangeText={setGender}
+//         placeholder="Enter Gender"
+//       />
+
+//       <Text style={styles.label}>Languages</Text>
+//       <View style={styles.checkboxContainer}>
+//         <TouchableOpacity
+//           style={styles.checkbox}
+//           onPress={() => handleCheckboxChange("Tamil")}
+//         >
+//           <Text>Tamil</Text>
+//           {languages.Tamil && <Text> ✓</Text>}
+//         </TouchableOpacity>
+//         <TouchableOpacity
+//           style={styles.checkbox}
+//           onPress={() => handleCheckboxChange("English")}
+//         >
+//           <Text>English</Text>
+//           {languages.English && <Text> ✓</Text>}
+//         </TouchableOpacity>
+//         <TouchableOpacity
+//           style={styles.checkbox}
+//           onPress={() => handleCheckboxChange("Sinhala")}
+//         >
+//           <Text>Sinhala</Text>
+//           {languages.Sinhala && <Text> ✓</Text>}
+//         </TouchableOpacity>
 //       </View>
-//     </ScrollView>
+
+//       {error ? <Text style={styles.error}>{error}</Text> : null}
+
+//       <TouchableOpacity
+//         style={styles.button}
+//         onPress={handleSave}
+//         disabled={isLoading}
+//       >
+//         <Text style={styles.buttonText}>Save</Text>
+//       </TouchableOpacity>
+//     </View>
 //   );
 // };
 
@@ -175,21 +160,11 @@
 //     flex: 1,
 //     justifyContent: "center",
 //     alignItems: "center",
-//     backgroundColor: "#f5f5f5",
-//   },
-//   card: {
-//     width: "90%",
-//     padding: 20,
-//     borderRadius: 10,
 //     backgroundColor: "#fff",
-//     shadowColor: "#000",
-//     shadowOffset: { width: 0, height: 2 },
-//     shadowOpacity: 0.1,
-//     shadowRadius: 5,
-//     elevation: 5,
+//     padding: 20,
 //   },
 //   label: {
-//     fontSize: 16,
+//     fontSize: 18,
 //     fontWeight: "bold",
 //     marginBottom: 5,
 //   },
@@ -200,32 +175,32 @@
 //     borderWidth: 1,
 //     borderRadius: 5,
 //     paddingHorizontal: 10,
-//     marginBottom: 15,
-//   },
-//   aboutMeInput: {
-//     minHeight: 80, // Minimum height of the TextInput
-//     textAlignVertical: "top",
-//     paddingTop: 10, // Padding at the top for better spacing
+//     marginBottom: 10,
 //   },
 //   checkboxContainer: {
 //     flexDirection: "row",
-//     alignItems: "center",
-//     marginBottom: 10,
+//     justifyContent: "space-around",
+//     width: "100%",
+//     marginBottom: 20,
 //   },
 //   checkbox: {
-//     paddingHorizontal: 0, // Adjust padding for checkbox items if necessary
+//     flexDirection: "row",
+//     alignItems: "center",
 //   },
 //   button: {
 //     backgroundColor: "#007bff",
-//     borderRadius: 20,
-//     height: 40,
-//     alignItems: "center",
-//     justifyContent: "center",
+//     padding: 10,
+//     borderRadius: 5,
 //   },
 //   buttonText: {
 //     color: "#fff",
-//     fontSize: 16,
+//     fontSize: 18,
 //     fontWeight: "bold",
+//     textAlign: "center",
+//   },
+//   error: {
+//     color: "red",
+//     marginTop: 10,
 //   },
 // });
 
@@ -238,98 +213,118 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  Alert,
 } from "react-native";
-import { getLabourById, updateLabour } from "../services/LabourService";
 import {
   getLabourProfileById,
   updateLabourProfile,
+  createLabourProfile,
 } from "../services/LabourProfileService";
 
 const Edit = ({ navigation }) => {
   const [aboutMe, setAboutMe] = useState("");
-  const [mobileNumber, setMobileNumber] = useState("");
   const [gender, setGender] = useState("");
   const [languages, setLanguages] = useState({
     Tamil: false,
     English: false,
     Sinhala: false,
   });
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const labourEmail = "Vanaiyan@example.com";
 
   useEffect(() => {
-    fetchLabourData();
+    fetchProfileData();
   }, []);
 
-  const fetchLabourData = async () => {
-    setLoading(true);
+  const fetchProfileData = async () => {
     try {
-      // Fetch data from LabourProfileService for aboutMe, gender, and languages
-      const profileResponse = await getLabourProfileById(labourEmail);
-      if (profileResponse.data) {
-        const { aboutMe, gender, languages } = profileResponse.data;
+      setIsLoading(true);
+      console.log(`Fetching profile for email: ${labourEmail}`);
+      const response = await getLabourProfileById(labourEmail);
+      console.log("Response from getLabourProfileById:", response);
 
-        // Set existing values if not null
-        if (aboutMe) setAboutMe(aboutMe);
-        if (gender) setGender(gender);
+      if (response && response.data) {
+        const profileData = response.data;
+        console.log("Fetched Profile Data:", profileData);
 
-        // Convert languages array to object for checkbox handling
-        const languagesObject = {};
-        languages.forEach((lang) => {
-          if (lang === "Tamil" || lang === "English" || lang === "Sinhala") {
-            languagesObject[lang] = true;
-          }
-        });
-        setLanguages(languagesObject);
-      }
-
-      // Fetch data from LabourService for mobileNumber
-      const serviceResponse = await getLabourById(labourEmail);
-      if (serviceResponse.data) {
-        const { mobileNumber } = serviceResponse.data;
-        setMobileNumber(mobileNumber);
+        setAboutMe(profileData.aboutMe || "");
+        setGender(profileData.gender || "");
+        const selectedLanguages = { ...languages };
+        Object.keys(selectedLanguages).forEach(
+          (lang) =>
+            (selectedLanguages[lang] =
+              profileData.languages && profileData.languages.includes(lang))
+        );
+        setLanguages(selectedLanguages);
+      } else {
+        console.log("Profile data not found for:", labourEmail);
+        setError("Profile data not found.");
       }
     } catch (error) {
-      console.error("Error fetching Labour data:", error);
-      Alert.alert("Error", "Failed to fetch Labour details.");
+      console.error("Error fetching labour profile:", error);
+      setError("Failed to fetch labour profile.");
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
   const handleSave = async () => {
-    setLoading(true);
+    setIsLoading(true);
+
     try {
-      const selectedLanguages = Object.keys(languages).filter(
-        (lang) => languages[lang]
-      );
-
-      const labourEmail = "Vanaiyan@example.com"; 
-
-      // Update data in LabourProfileService for aboutMe, gender, and languages
-      await updateLabourProfile({
+      console.log("Saving profile data...");
+      const selectedLanguages = getSelectedLanguages();
+      const profileData = {
         aboutMe,
         gender,
         languages: selectedLanguages,
-        labourEmail, // Make sure labourEmail is included in the update payload
+        labourEmail, // Ensure labourEmail is passed here
+      };
+
+      console.log("Profile Data to Save:", profileData);
+
+      // Check if profile exists and has at least one non-null/undefined field
+      if (aboutMe || gender || selectedLanguages.length > 0) {
+        const response =
+          profileData.aboutMe ||
+          profileData.gender ||
+          profileData.languages.length > 0
+            ? await updateLabourProfile(profileData)
+            : await createLabourProfile(profileData);
+
+        console.log(
+          `Response from ${response ? "update" : "create"}LabourProfile:`,
+          response
+        );
+        setError("");
+      } else {
+        console.log("No data to update or create.");
+        setError("No data to save.");
+      }
+
+      // Reset form and state
+      setAboutMe("");
+      setGender("");
+      setLanguages({
+        Tamil: false,
+        English: false,
+        Sinhala: false,
       });
-
-      console.log("Labour details updated successfully.");
-
-      // Navigate to desired screen after successful update
       navigation.navigate("Labour_page");
     } catch (error) {
-      console.error("Error updating labour data:", error);
-      if (error.response) {
-        console.error("Response data:", error.response.data);
-      }
-      Alert.alert("Error", "Failed to update labour details.");
+      console.error(
+        "Error updating labour data:",
+        error.response ? error.response.data : error.message
+      );
+      setError("Failed to update labour details.");
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
+  const getSelectedLanguages = () => {
+    return Object.keys(languages).filter((lang) => languages[lang]);
+  };
 
   const handleCheckboxChange = (name) => {
     setLanguages((prevLanguages) => ({
@@ -347,14 +342,7 @@ const Edit = ({ navigation }) => {
         onChangeText={setAboutMe}
         placeholder="Enter About Me"
       />
-      <Text style={styles.label}>Contact Details</Text>
-      <TextInput
-        style={styles.input}
-        value={mobileNumber}
-        onChangeText={setMobileNumber}
-        placeholder="Enter Mobile Number"
-        keyboardType="phone-pad"
-      />
+
       <Text style={styles.label}>Gender</Text>
       <TextInput
         style={styles.input}
@@ -362,6 +350,7 @@ const Edit = ({ navigation }) => {
         onChangeText={setGender}
         placeholder="Enter Gender"
       />
+
       <Text style={styles.label}>Languages</Text>
       <View style={styles.checkboxContainer}>
         <TouchableOpacity
@@ -386,10 +375,13 @@ const Edit = ({ navigation }) => {
           {languages.Sinhala && <Text> ✓</Text>}
         </TouchableOpacity>
       </View>
+
+      {error ? <Text style={styles.error}>{error}</Text> : null}
+
       <TouchableOpacity
         style={styles.button}
         onPress={handleSave}
-        disabled={loading}
+        disabled={isLoading}
       >
         <Text style={styles.buttonText}>Save</Text>
       </TouchableOpacity>
@@ -439,6 +431,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     textAlign: "center",
+  },
+  error: {
+    color: "red",
+    marginTop: 10,
   },
 });
 
