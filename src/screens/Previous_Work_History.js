@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, FlatList } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import { Card } from "react-native-paper";
 
 
@@ -24,7 +24,11 @@ const Previous_Work_History = ({route}) => {
   //    </View>
   //  );
  
- 
+
+ const handleReportReview = (booking) => {
+   // Handle the report and review action here
+   console.log(`Report and Review for booking ID: ${booking.id}`);
+ };
 
     const renderBooking = (booking) => (
       <Card key={booking.id} style={styles.card}>
@@ -35,6 +39,11 @@ const Previous_Work_History = ({route}) => {
           <Text style={styles.bookingDetails}>
             @{booking.date} | {booking.startTime}
           </Text>
+          <View style={styles.reportReviewContainer}>
+            <TouchableOpacity onPress={() => handleReportReview(booking)}>
+              <Text style={styles.reportReviewText}>Report and Review</Text>
+            </TouchableOpacity>
+          </View>
         </Card.Content>
       </Card>
     ); 
@@ -62,9 +71,8 @@ const Previous_Work_History = ({route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-   
+
     padding: 20,
-    
   },
   // header: {
   //   fontSize: 24,
@@ -94,6 +102,16 @@ const styles = StyleSheet.create({
   bookingDetails: {
     fontSize: 16,
     color: "#2F3239",
+  },
+  reportReviewContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginTop: 10,
+  },
+  reportReviewText: {
+    fontSize: 14,
+    color: "blue",
+    textDecorationLine: "underline",
   },
 });
 

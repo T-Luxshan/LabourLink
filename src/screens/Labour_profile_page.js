@@ -200,22 +200,24 @@ const handlePassword = () => {
             style={{ marginLeft: 15 }}
           />
           {/* User details */}
-          <View style={{ marginLeft: 15 }}>
+          <View style={{ marginLeft: 15, flex: 1 }}>
             <Text style={{ fontSize: 18, fontWeight: "700", color: "#222222" }}>
               {labour.name}
             </Text>
-            <Text style={{ fontSize: 14, fontWeight: "400", color: "#888888" }}>
-              Joined since{" "}
-              <Text style={{ fontWeight: "600", color: "#232323" }}>
-                27 Dec 2020
-              </Text>{" "}
-            </Text>
           </View>
           {/* Button to edit profile */}
-          <TouchableOpacity onPress={handleEditProfile}>
+          <TouchableOpacity
+            onPress={handleEditProfile}
+            style={{ alignSelf: "flex-start" }}
+          >
             <Button
               mode="contained"
-              style={{ width: 90, marginLeft: 10, backgroundColor: "#00204A" }}
+              style={{
+                minWidth: 90,
+                marginLeft: 35,
+                backgroundColor: "#00204A",
+                marginTop: 10,
+              }}
             >
               Edit
             </Button>
@@ -254,54 +256,7 @@ const handlePassword = () => {
 
         {/* Surface for settings */}
         <Surface style={styles.surface} elevation={1}>
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: "600",
-              padding: 10,
-              color: "#222222",
-            }}
-          >
-            Settings
-          </Text>
-
-          {/* Languages option */}
-
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              paddingLeft: 10,
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                paddingLeft: 10,
-              }}
-            >
-              <Icon
-                name="globe"
-                size={20}
-                color="#505151"
-                style={{ marginRight: 10 }}
-              />
-              <Text style={{ fontSize: 16, padding: 10, color: "#888888" }}>
-                Languages
-              </Text>
-            </View>
-            <TouchableOpacity onPress={handleSelectLanguages}>
-              {/* Button to navigate to language settings */}
-              {/* <View style={{ flex: 1, alignItems: "flex-end" }}> */}
-              <FontAwesomeIcon
-                icon={faChevronRight}
-                size={18}
-                style={{ marginLeft: 143 }}
-              />
-            </TouchableOpacity>
-            {/* </View> */}
-          </View>
+          
           <View
             style={{
               flexDirection: "row",

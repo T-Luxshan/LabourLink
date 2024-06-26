@@ -39,7 +39,7 @@ const Labour_page = ({ navigation, route }) => {
          console.log("Labour Data:", labourResponse.data);
          setLabour(labourResponse.data);
        } catch (error) {
-         console.error("Error fetching labour data:", error);
+         console.log("Error fetching labour data:", error);
        }
 
        try {
@@ -47,7 +47,7 @@ const Labour_page = ({ navigation, route }) => {
          console.log("Labour Profile Data:", labourProfileResponse.data);
          setLabourProfile(labourProfileResponse.data);
        } catch (error) {
-         console.error("Error fetching labour profile data:", error);
+         console.log("Error fetching labour profile data:", error);
        }
 
        try {
@@ -55,7 +55,7 @@ const Labour_page = ({ navigation, route }) => {
          console.log("Rating Data:", ratingData);
          setRating(ratingData);
        } catch (error) {
-         console.error("Error fetching rating:", error);
+         console.log("Error fetching rating:", error);
        }
 
        try {
@@ -65,7 +65,7 @@ const Labour_page = ({ navigation, route }) => {
          console.log("Completed Appointments:", completedAppointments);
          setCompletedBookings(completedAppointments);
        } catch (error) {
-         console.error("Error fetching completed appointments:", error);
+         console.log("Error fetching completed appointments:", error);
        }
 
        try {
@@ -75,7 +75,7 @@ const Labour_page = ({ navigation, route }) => {
          console.log("Accepted Appointments:", acceptedAppointments);
          setAcceptedAppointments(acceptedAppointments);
        } catch (error) {
-         console.error("Error fetching accepted appointments:", error);
+         console.log("Error fetching accepted appointments:", error);
        }
      };
 
@@ -267,7 +267,9 @@ const Labour_page = ({ navigation, route }) => {
                 minHeight: 30,
               }}
             >
-              {labourProfile ? labourProfile.aboutMe : ""}
+              {labourProfile
+                ? labourProfile.aboutMe
+                : "No information available"}
             </Text>
 
             {/* Contact details */}
@@ -299,7 +301,7 @@ const Labour_page = ({ navigation, route }) => {
               Gender
             </Text>
             <Text style={{ paddingTop: 5, marginLeft: 30, color: "#41434A" }}>
-              {labourProfile ? labourProfile.gender : ""}
+              {labourProfile ? labourProfile.gender : "Not specified"}
             </Text>
 
             <Text
@@ -309,7 +311,7 @@ const Labour_page = ({ navigation, route }) => {
                 fontSize: 16,
                 marginTop: 10,
                 marginLeft: 20,
-                minHeight: 60,
+                minHeight: 30,
               }}
             >
               Languages
@@ -317,20 +319,21 @@ const Labour_page = ({ navigation, route }) => {
             <View
               style={{ flexDirection: "row", flexWrap: "wrap", marginLeft: 30 }}
             >
-              {labourProfile.languages &&
-              <Text
-              style={{
-                backgroundColor: "#EFEFEF",
-                padding: 5,
-                marginRight: 5,
-                marginBottom: 5,
-                borderRadius: 5,
-              }}
-            >
-              {labourProfile ? labourProfile.languages.join(", ") : ""}
-            </Text>
-              }
-              
+              {labourProfile.languages && (
+                <Text
+                  style={{
+                    backgroundColor: "#fff",
+                    padding: 0,
+                    marginRight: 5,
+                    marginBottom: 5,
+                    borderRadius: 5,
+                  }}
+                >
+                  {labourProfile
+                    ? labourProfile.languages.join(", ")
+                    : " No languages specified"}
+                </Text>
+              )}
             </View>
           </Surface>
         </View>
@@ -365,40 +368,54 @@ const Labour_page = ({ navigation, route }) => {
               Appointments
             </Text>
 
-            {/* Render accepted appointments */}
-            {acceptedAppointments.map((appointment, index) => (
-              <View key={index}>
-                <Text
-                  style={{
-                    paddingTop: 10,
-                    marginLeft: 30,
-                    fontSize: 15,
-                    fontWeight: 500,
-                    color: "#2F3239",
-                  }}
-                >
-                  Customer Name: {appointment.customerName}
-                </Text>
+            {acceptedAppointments.length === 0 ? (
+              <Text
+                style={{
+                  paddingTop: 10,
+                  marginLeft: 30,
+                  fontSize: 15,
+                  fontWeight: 500,
+                  color: "#2F3239",
+                  opacity: 0.5,
+                }}
+              >
+                No appointments found
+              </Text>
+            ) : (
+              acceptedAppointments.map((appointment, index) => (
+                <View key={index}>
+                  <Text
+                    style={{
+                      paddingTop: 10,
+                      marginLeft: 30,
+                      fontSize: 15,
+                      fontWeight: 500,
+                      color: "#2F3239",
+                    }}
+                  >
+                    Customer Name: {appointment.customerName}
+                  </Text>
 
-                <Text
-                  style={{ marginLeft: 30, fontSize: 13, color: "#2F3239" }}
-                >
-                  @{appointment.date} | {appointment.startTime}
-                </Text>
-                <Button
-                  mode="contained"
-                  onPress={() => handleMarkAsCompleted(appointment.id)}
-                  style={{
-                    marginLeft: 30,
-                    marginTop: 10,
-                    backgroundColor: "#FF7600",
-                    width: 200,
-                  }}
-                >
-                  Completed
-                </Button>
-              </View>
-            ))}
+                  <Text
+                    style={{ marginLeft: 30, fontSize: 13, color: "#2F3239" }}
+                  >
+                    @{appointment.date} | {appointment.startTime}
+                  </Text>
+                  <Button
+                    mode="contained"
+                    onPress={() => handleMarkAsCompleted(appointment.id)}
+                    style={{
+                      marginLeft: 30,
+                      marginTop: 10,
+                      backgroundColor: "#FF7600",
+                      width: 200,
+                    }}
+                  >
+                    Completed
+                  </Button>
+                </View>
+              ))
+            )}
           </Surface>
         </View>
 
@@ -420,7 +437,7 @@ const Labour_page = ({ navigation, route }) => {
             }}
             elevation={1}
           >
-            <Text style={{ marginLeft: 20, minHeight: 60 }}>
+            <Text style={{ marginLeft: 20, minHeight: 30 }}>
               <Text
                 style={{
                   color: "#FF7600",
@@ -439,28 +456,42 @@ const Labour_page = ({ navigation, route }) => {
               </TouchableOpacity>
             </Text>
 
-            {/* Previous work details */}
-            {completedBookings?.slice(0, 3).map((booking, index) => (
-              <View key={index}>
-                <Text
-                  style={{
-                    paddingTop: 10,
-                    marginLeft: 30,
-                    fontSize: 15,
-                    fontWeight: 500,
-                    color: "#2F3239",
-                  }}
-                >
-                  Customer Name: {booking?.customerName}
-                </Text>
+            {completedBookings.length === 0 ? (
+              <Text
+                style={{
+                  paddingTop: 10,
+                  marginLeft: 30,
+                  fontSize: 15,
+                  fontWeight: 500,
+                  color: "#2F3239",
+                  opacity: 0.5,
+                }}
+              >
+                No previous work history found
+              </Text>
+            ) : (
+              completedBookings.slice(0, 3).map((booking, index) => (
+                <View key={index}>
+                  <Text
+                    style={{
+                      paddingTop: 10,
+                      marginLeft: 30,
+                      fontSize: 15,
+                      fontWeight: 500,
+                      color: "#2F3239",
+                    }}
+                  >
+                    Customer Name: {booking.customerName}
+                  </Text>
 
-                <Text
-                  style={{ marginLeft: 30, fontSize: 13, color: "#2F3239" }}
-                >
-                  @{booking?.date} | {booking?.startTime}
-                </Text>
-              </View>
-            ))}
+                  <Text
+                    style={{ marginLeft: 30, fontSize: 13, color: "#2F3239" }}
+                  >
+                    @{booking.date} | {booking.startTime}
+                  </Text>
+                </View>
+              ))
+            )}
           </Surface>
         </View>
       </ScrollView>

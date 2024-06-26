@@ -349,6 +349,10 @@ const Edit = ({ navigation }) => {
     }));
   };
 
+   const handleGenderChange = (selectedGender) => {
+     setGender(selectedGender);
+   };
+
   return (
     <View style={styles.container}>
       <Text style={styles.label}>About Me</Text>
@@ -360,12 +364,22 @@ const Edit = ({ navigation }) => {
       />
 
       <Text style={styles.label}>Gender</Text>
-      <TextInput
-        style={styles.input}
-        value={gender}
-        onChangeText={setGender}
-        placeholder="Enter Gender"
-      />
+      <View style={styles.checkboxContainer}>
+        <TouchableOpacity
+          style={styles.checkbox}
+          onPress={() => handleGenderChange("Male")}
+        >
+          <Text>Male</Text>
+          {gender === "Male" && <Text> ✓</Text>}
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.checkbox}
+          onPress={() => handleGenderChange("Female")}
+        >
+          <Text>Female</Text>
+          {gender === "Female" && <Text> ✓</Text>}
+        </TouchableOpacity>
+      </View>
 
       <Text style={styles.label}>Languages</Text>
       <View style={styles.checkboxContainer}>
