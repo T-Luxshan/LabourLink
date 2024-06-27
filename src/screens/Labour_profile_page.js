@@ -17,6 +17,7 @@ import {
 import { getLabourProfileById } from "../services/LabourProfileService";
 import { getLabourById, deleteLabour } from "../services/LabourService";
 import { useLogin } from "../context/LoginProvider";
+import { getProfilePicture } from "../services/ProfilePhotoService";
 
 
 
@@ -26,48 +27,84 @@ const Labour_profile_page = ({ navigation, route }) => {
  const [labour, setLabour] = useState("");
  const [labourProfile, setLabourProfile] = useState("");
  const [image, setImage] = useState(null);
-const [name, setName] = useState("");
+ const [name, setName] = useState("");
  const { setIsLoggedIn } = useLogin();
+ const [userEmail, setUserEmail] = useState('');
+
+//  const email = AsyncStorage.getItem('userEmail');
+  // const email = "lehaan@example.com";
 
 
 
-const labourEmail = "aruran@example.com"; // Replace with dynamic value if needed
-const email2 = "Vanaiyan@example.com";
+// const labourEmail = "aruran@example.com"; // Replace with dynamic value if needed
 useEffect(() => {
-  getLabourProfileById(labourEmail)
-    .then((response) => {
-      const data = response.data;
-      setLabourProfile(data);
-      console.log(response.data);
-    })
-    .catch((error) => {
-      console.error("Error fetching labourProfile name data:", error);
-    });
+  
 
-  getLabourById(email2)
+  
+  // getLabourProfileById(email)
+  //   .then((response) => {
+  //     const data = response.data;
+  //     setLabourProfile(data);
+  //     console.log(response.data);
+  //   })
+  //   .catch((error) => {
+  //     console.error("Error fetching labourProfile name data:", error);
+  //   });
+
+  
+  getEmail();
+
+}, []);
+
+const getEmail = async () => {
+
+  try {
+    const email = await AsyncStorage.getItem('userEmail');
+    console.log("This is the email", email)
+    setUserEmail(email);
+    fetchLabourByEmail(email);
+    fetchProfilePhoto(email);
+
+    // alert(userEmail);
+
+
+    return email;
+  } catch (error) {
+    console.log('Error retrieving email from AsyncStorage:');
+  }
+};
+
+ const fetchLabourByEmail = (userEmail) => {
+  // alert(userEmail);
+   
+  getLabourById(userEmail)
     .then((response) => {
       const data = response.data;
       setLabour(data);
       // setJobRole(data.jobRole);
-      console.log(response.data);
+      // console.log(response.data);
     })
     .catch((error) => {
-      console.error("Error fetching labour profile data:", error);
+      // console.error("Error fetching labour by id data:");
     });
-}, []);
+ }
 
-
-useEffect(() => {
-  if (route.params?.name) {
-    setName(route.params.name);
-  }
-  if (route.params?.image) {
-    setImage(route.params.image);
-  }
-}, [route.params?.name, route.params?.image]);
+ const fetchProfilePhoto = (userEmail) => {
+   getProfilePicture()
+    .then(res=>setImage(res.data.profileUri))
+    .catch(err=>console.log("failed to fetch profile pic"));
+ }
+// useEffect(() => {
+//   if (route.params?.name) {
+//     setName(route.params.name);
+//   }
+//   if (route.params?.image) {
+//     setImage(route.params.image);
+//   }
+// }, [route.params?.name, route.params?.image]);
 
 const handleEditProfile = () => {
-  navigation.navigate("Edit_Profile", { name, image});
+  navigation.navigate("Edit_Profile", { userEmail: userEmail });
 };
 
 
@@ -103,7 +140,7 @@ const handleEditProfile = () => {
       // Navigate to Login screen
       // navigation.navigate("Login");
     } catch (error) {
-      console.error("Error logging out:", error);
+      // console.error("Error logging out:");
       // Handle error gracefully
     }
   };
@@ -119,7 +156,7 @@ const handlePassword = () => {
     const deleteAccountConfirmed = async () => {
       try {
         // Delete account using service function
-        await deleteLabour(email2);
+        await deleteLabour(email);
 
           const tokenValue = await AsyncStorage.getItem("token");
           const refreshTokenValue = await AsyncStorage.getItem("refreshToken");
@@ -139,7 +176,7 @@ const handlePassword = () => {
 
         setIsLoggedIn(false);
         // Navigate to Login screen
-        navigation.navigate("Login");
+        // navigation.navigate("Login");
       } catch (error) {
         console.error("Error deleting account:", error);
         // Handle error gracefully

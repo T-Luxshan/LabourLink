@@ -17,6 +17,7 @@ import {
 } from "../services/BookingService";
 import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getProfilePicture } from "../services/ProfilePhotoService";
 
 // Functional component definition
 const Labour_page = ({ navigation, route }) => {
@@ -27,10 +28,12 @@ const Labour_page = ({ navigation, route }) => {
   const [rating, setRating] = useState(0);
   const [completedBookings, setCompletedBookings] = useState([]);
   const [acceptedAppointments, setAcceptedAppointments] = useState([]);
+  const [image, setImage] = useState('');
 
-  const labourEmail = AsyncStorage.getItem('userEmail');
+  // const labourEmail = AsyncStorage.getItem('userEmail');
   const email = "Vanaiyan@example.com"; // Replace with dynamic value if needed
-  // const labourEmail = "lehaan@example.com";
+  const labourEmail = "lehaan@example.com";
+  // const labourEmail = AsyncStorage.getItem('userEmail');
 
 
   useFocusEffect(
@@ -79,6 +82,15 @@ const Labour_page = ({ navigation, route }) => {
        } catch (error) {
          console.log("Error fetching accepted appointments:");
        }
+
+       getProfilePicture()
+        .then(res=>{
+          setImage(res.data.profileUri);
+          console.log(res.data.profileUri)
+        })
+        .catch(error=> {
+         console.log("Failed to fetch profile photo");
+        })
      };
 
      fetchData();
@@ -156,7 +168,7 @@ const Labour_page = ({ navigation, route }) => {
           >
             <Avatar.Image
               size={150}
-              source={require("../assets/Images/boy.png")}
+              source={image ? { uri: image } : require("../assets/Images/boy.png")}
               style={{
                 marginTop: 35,
               }}
