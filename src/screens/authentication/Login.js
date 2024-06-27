@@ -48,63 +48,68 @@ const Login = () => {
 
 
 
-    const handleLogin = () => {
-      setIsLoggedIn(true);
-      setUserRole("CUSTOMER");
-      // try {
-      //   await schema.validate({ email, password, role }, { abortEarly: false });
-      //   const lowercasedEmail = email.toLowerCase();
-      //   setErrors({});
+    const handleLogin = async () => {
+      try {
+        await schema.validate({ email, password, role }, { abortEarly: false });
+        const lowercasedEmail = email.toLowerCase();
+        setErrors({});
        
 
-      //   try {
-      //     let response = null;
-      //     let userRoleResponse = await getUserRole(lowercasedEmail);
-      //     let userRole = userRoleResponse.data.role;
-      //     let userRoleStatus = userRoleResponse.data.verified;
-      //     console.log(userRoleResponse);
-      //     console.log(userRole);
-      //     console.log(userRoleStatus);
+        try {
+          let response = null;
+          let userRoleResponse = await getUserRole(lowercasedEmail);
+          let userRole = userRoleResponse.data.role;
+          let userRoleStatus = userRoleResponse.data.verified;
+          // console.log(userRoleResponse);
+          // console.log(userRole);
+          // console.log(userRoleStatus);
 
       
-      //     if(role != userRole )
-      //       throw new Error('Invalid email or password.');
+          if(role != userRole )
+            throw new Error('Invalid email or password.');
 
-      //     if(role == "CUSTOMER" ){
-      //        response = await loginCustomer(role, lowercasedEmail, password); 
-      //        AsyncStorage.setItem("token", response.data.accessToken);
-      //        AsyncStorage.setItem("refreshToken", response.data.refreshToken);
-      //        AsyncStorage.setItem("userEmail", email);
-      //        navigation.navigate('GettingStarted');
-      //     }
-      //     else{
-      //       response = await loginLabour(role, lowercasedEmail, password);   
-      //       AsyncStorage.setItem("token", response.data.accessToken);
-      //       AsyncStorage.setItem("refreshToken", response.data.refreshToken);
-      //       AsyncStorage.setItem("userEmail", email);
-      //       if(userRoleStatus)
-      //         navigation.navigate('GettingStarted');
-      //       else
-      //         navigation.navigate('WaitingPage')
-      //     }
+          if(role == "CUSTOMER" ){
+             response = await loginCustomer(role, lowercasedEmail, password); 
+             AsyncStorage.setItem("token", response.data.accessToken);
+             AsyncStorage.setItem("refreshToken", response.data.refreshToken);
+             AsyncStorage.setItem("userEmail", email);
+            //  navigation.navigate('GettingStarted');
+            setIsLoggedIn(true);
+            setUserRole("CUSTOMER");
+          }
+          else{
+            response = await loginLabour(role, lowercasedEmail, password);   
+            AsyncStorage.setItem("token", response.data.accessToken);
+            AsyncStorage.setItem("refreshToken", response.data.refreshToken);
+            AsyncStorage.setItem("userEmail", email);
+            if(userRoleStatus){
+              // navigation.navigate('GettingStarted');
+              setIsLoggedIn(true);
+              setUserRole("LABOUR");
+            }
+              
+            else
+              navigation.navigate('WaitingPage')
+          }
           
-      //     setLogError("");
-      //     console.log(response);
-      //     console.log(response.data.accessToken);
+          setLogError("");
+          console.log(response);
+          console.log(response.data.accessToken);
           
-      //   } catch (e) {
-      //     setLogError("Invalid email or password.");
-      //   }
+        } catch (e) {
+          console.log(e);
+          setLogError("Invalid email or password.");
+        }
 
        
-      // } catch (error) {
-      //   // Validation failed, set errors state
-      //   const validationErrors = {};
-      //   error.inner.forEach(err => {
-      //     validationErrors[err.path] = err.message;
-      //   });
-      //   setErrors(validationErrors);
-      // }
+      } catch (error) {
+        // Validation failed, set errors state
+        const validationErrors = {};
+        error.inner.forEach(err => {
+          validationErrors[err.path] = err.message;
+        });
+        setErrors(validationErrors);
+      }
     };
 
     
