@@ -11,6 +11,7 @@ import Upcoming_Services from "../screens/Upcoming_Services";
 import Customer_profile_page from "../screens/Customer_profile_page";
 import Customer_Personal_Details from "../screens/Customer_Personal_Details";
 import Change_Password from "../screens/Change_Password";
+import ReviewModel from "../components/ReviewModel";
 
 
 
@@ -29,6 +30,11 @@ function CustomerStack() {
       <Stack.Screen
         name="Work_History"
         component={Work_History}
+        options={{ headerBackTitle: "Back" }}
+      />
+      <Stack.Screen
+        name="add_review"
+        component={ReviewModel}
         options={{ headerBackTitle: "Back" }}
       />
       <Stack.Screen
