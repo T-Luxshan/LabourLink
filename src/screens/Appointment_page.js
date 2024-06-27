@@ -5,13 +5,38 @@ import {
   getBookingDetailsByLabourEmail,
   updateBookingStage,
 } from "../services/BookingService";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const Appointment_page = ({ route, navigation }) => {
   const { appointmentId, removeAppointment } = route.params;
   const [bookingDetails, setBookingDetails] = useState(null);
   const [error, setError] = useState(null);
-  const labourEmail = "lehaan@example.com"; // Replace with dynamic value if needed
+  // const labourEmail = "lehaan@example.com"; // Replace with dynamic value if needed
+
+
+   const [labourEmail, setLabourEmail] = useState("");
+
+
+
+   useEffect(() => {
+     const fetchLabourEmail = async () => {
+       try {
+         const email = await AsyncStorage.getItem("userEmail");
+         if (email) {
+           setLabourEmail(email);
+         } else {
+           console.log("No email found in AsyncStorage");
+         }
+       } catch (error) {
+         console.log("Error fetching email from AsyncStorage:", error);
+       }
+     };
+
+     fetchLabourEmail();
+   }, []);
+
+
 
   useEffect(() => {
     const fetchBookingDetails = async () => {
@@ -259,12 +284,12 @@ const handleIgnore = async () => {
           </View>
         </View>
 
-        {/* Error handling */}
+        {/* Error handling
         {error && (
           <View style={styles.errorContainer}>
             <Text style={styles.errorText}>{error}</Text>
           </View>
-        )}
+        )} */}
       </ScrollView>
     </View>
   );

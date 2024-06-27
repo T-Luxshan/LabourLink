@@ -8,7 +8,7 @@ import Labour_profile_page from "../screens/Labour_profile_page";
 import Previous_Work_History from "../screens/Previous_Work_History";
 import Appointment from "../screens/Appointment";
 import Appointment_page from "../screens/Appointment_page";
-import Languages from "../screens/Languages";
+// import Languages from "../screens/Languages";
 import About_Us from "../screens/About_Us";
 import Edit_Profile from "../screens/Edit_Profile"; 
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -67,11 +67,7 @@ function LabourStack() {
         component={Labour_profile_page}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name="Languages"
-        component={Languages}
-        options={{ title: "Languages", headerBackTitle: "Back" }}
-      />
+    
       <Stack.Screen
         name="Edit_Profile"
         component={Edit_Profile}

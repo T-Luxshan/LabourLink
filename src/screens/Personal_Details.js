@@ -9,15 +9,35 @@ import {
 } from "react-native";
 import { getLabourById, updateLabour } from "../services/LabourService";
 import { ScrollView } from "react-native-gesture-handler";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Personal_Details = ({ navigation }) => {
   const [nic, setNic] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
   const [name, setName] = useState("");
   
-  const email = "Vanaiyan@example.com";
+  const [labourEmail, setLabourEmail] = useState("");
+  // const email = "Vanaiyan@example.com";
 
  
+
+   useEffect(() => {
+     const fetchLabourEmail = async () => {
+       try {
+         const email = await AsyncStorage.getItem("userEmail");
+         if (email) {
+           setLabourEmail(email);
+         } else {
+           console.log("No email found in AsyncStorage");
+         }
+       } catch (error) {
+         console.log("Error fetching email from AsyncStorage:", error);
+       }
+     };
+
+     fetchLabourEmail();
+   }, []);
+
 
   useEffect(() => {
     // Fetch existing Labour data when component mounts
@@ -26,7 +46,7 @@ const Personal_Details = ({ navigation }) => {
 
   const fetchLabourData = async () => {
     try {
-      const response = await getLabourById("Vanaiyan@example.com"); // Replace with actual email or dynamic value
+      const response = await getLabourById(labourEmail); // Replace with actual email or dynamic value
       const { name, mobileNumber, nic} = response.data;
       setName(name);
      setMobileNumber(mobileNumber);

@@ -59,7 +59,7 @@ const Edit_Profile = ({ navigation, route }) => {
       quality: 1,
     });
 
-    if (!result.canceled) {
+    if (!result.cancelled) {
       const uploadURL = await handleSave(result.assets[0].uri);
       if (uploadURL) {
         setImage(uploadURL);
@@ -115,7 +115,7 @@ const Edit_Profile = ({ navigation, route }) => {
   const deleteFromDB = (uri) => {
     deleteProfilePicture(uri)
     .then(res=>console.log("Profile deleted from DB"))
-    .catch(err=>console.log("Faild to delete from db"))
+    .catch(err=>console.log("Failed to delete from db"))
   }
 
   return (

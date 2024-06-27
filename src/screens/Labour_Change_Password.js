@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   Alert,
 } from "react-native";
 import { updateLabourPassword, getLabourById } from "../services/LabourService";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Labour_Change_Password = ({ navigation }) => {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -15,6 +16,26 @@ const Labour_Change_Password = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  const [labourEmail, setLabourEmail] = useState("");
+
+
+
+  useEffect(() => {
+    const fetchLabourEmail = async () => {
+      try {
+        const email = await AsyncStorage.getItem("userEmail");
+        if (email) {
+          setLabourEmail(email);
+        } else {
+          console.log("No email found in AsyncStorage");
+        }
+      } catch (error) {
+        console.log("Error fetching email from AsyncStorage:", error);
+      }
+    };
+
+    fetchLabourEmail();
+  }, []);
 
  const handleChangePassword = () => {
    // Basic validation
@@ -28,7 +49,7 @@ const Labour_Change_Password = ({ navigation }) => {
      return;
    }
 
-   updateLabourPassword("Vanaiyan@example.com", newPassword)
+   updateLabourPassword(labourEmail, newPassword)
      .then((response) => {
        console.log("Password updated successfully:", response.data);
        Alert.alert(
@@ -37,7 +58,7 @@ const Labour_Change_Password = ({ navigation }) => {
        );
 
        // Fetch the updated user data to confirm password update
-       getLabourById("Vanaiyan@example.com")
+       getLabourById(labourEmail)
          .then((response) => {
            console.log("Updated user data:", response.data);
          })
