@@ -20,7 +20,7 @@ const Appointment = ({ navigation }) => {
         setPendingBookings(response); // Assuming response is an array of pending bookings
         console.log("Pending Appointments:", response); // Log fetched data
       } catch (error) {
-        console.error("Error fetching pending appointments:", error);
+        console.log("1- Error fetching pending appointments:");
         setPendingBookings([]); // Ensure state is updated even on error
       }
     };

@@ -30,7 +30,7 @@ const Appointment_page = ({ route, navigation }) => {
           setError("Empty response or missing data fields.");
         }
       } catch (error) {
-        console.error("Error fetching booking data:", error);
+        console.log("Error fetching booking data:", error);
         setError("Error fetching booking data. Please try again.");
       }
     };
@@ -48,7 +48,7 @@ const Appointment_page = ({ route, navigation }) => {
       removeAppointment(appointmentId);
       navigation.navigate("Appointment"); // Navigate back to Appointment screen
     } catch (error) {
-      console.error("Error accepting appointment:", error);
+      console.log("Error accepting appointment:", error);
       // Handle error state or notify user accordingly
     }
   };
@@ -60,7 +60,7 @@ const handleIgnore = async () => {
     removeAppointment(appointmentId);
     navigation.navigate("Appointment"); // Navigate back to Appointment screen
   } catch (error) {
-    console.error("Error accepting appointment:", error);
+    console.log("Error accepting appointment:", error);
     // Handle error state or notify user accordingly
   }
 };
