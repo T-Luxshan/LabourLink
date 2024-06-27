@@ -6,6 +6,7 @@ import {
   updateBookingStage,
 } from "../services/BookingService";
 
+
 const Appointment_page = ({ route, navigation }) => {
   const { appointmentId, removeAppointment } = route.params;
   const [bookingDetails, setBookingDetails] = useState(null);

@@ -1,13 +1,14 @@
-import axios from "axios";
+// import axios from "axios";
+import axiosAuthInstance from "./AuthService";
 
 // Base URL for your API
-// const BASE_URL = "http://172.20.10.3:8080/api/labour-profiles";
-const BASE_URL = "http://192.168.1.56:8080/api/labour-profiles";
+const BASE_URL = "http://172.20.10.3:8080/api/labour-profiles";
+// const BASE_URL = "http://192.168.1.56:8080/api/labour-profiles";
 
 
 
 export const getLabourProfileById = (labourEmail) => {
-  return axios.get(`${BASE_URL}/getLabourProfileById/${labourEmail}`);
+  return axiosAuthInstance.get(`${BASE_URL}/getLabourProfileById/${labourEmail}`);
   }
 
 
@@ -19,7 +20,7 @@ export const updateLabourProfile = (
 ) => {
  
     // console.log(`Updating Labour Profile for: ${labourEmail}`);
-  return axios.put(`${BASE_URL}/update/${labourEmail}`, {
+  return axiosAuthInstance.put(`${BASE_URL}/update/${labourEmail}`, {
       aboutMe,
       gender,
       languages,
@@ -38,7 +39,7 @@ export const createLabourProfile = async (
 ) => {
   try {
     console.log("Creating Labour Profile...");
-    const response = await axios.post(`${BASE_URL}/create`, {
+    const response = await axiosAuthInstance.post(`${BASE_URL}/create`, {
       aboutMe,
       gender,
       languages,
@@ -53,7 +54,7 @@ export const createLabourProfile = async (
 };
 
 export const deleteLabourProfile = (labourEmail) => {
-  return axios.delete(`${BASE_URL}/delete/${labourEmail}`);
+  return axiosAuthInstance.delete(`${BASE_URL}/delete/${labourEmail}`);
 };
 
 

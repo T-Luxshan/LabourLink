@@ -217,7 +217,7 @@ const Customer_page = ({ navigation }) => {
                           topRatedEmployee.totalRating /
                             topRatedEmployee.reviewCount
                             ? "star"
-                            : "staro"
+                            : "star"
                         }
                         size={24}
                         color="#FF7600"
@@ -354,7 +354,8 @@ const Customer_page = ({ navigation }) => {
               marginLeft: 15,
               marginTop: 25,
               padding: 10,
-              height: 250,
+              minHeight: 50,
+              height: "auto",
               width: 345,
               alignItems: "flex-start",
               justifyContent: "flex-start",
@@ -429,7 +430,8 @@ const Customer_page = ({ navigation }) => {
               marginLeft: 15,
               marginTop: 25,
               padding: 10,
-              height: 250,
+              height: "auto",
+              minHeight: 50,
               width: 345,
               alignItems: "flex-start",
               justifyContent: "flex-start",

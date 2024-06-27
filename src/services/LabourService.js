@@ -1,8 +1,9 @@
-import axios from "axios";
+// import axios from "axios";
+import axiosAuthInstance from "./AuthService";
 
 // Base URL for your API
-// const BASE_URL = "http://172.20.10.3:8080/api/labour";
-const BASE_URL = "http://192.168.1.56:8080/api/labour";
+const BASE_URL = "http://172.20.10.3:8080/api/labour";
+// const BASE_URL = "http://192.168.1.56:8080/api/labour";
 
 
 
@@ -10,7 +11,7 @@ const BASE_URL = "http://192.168.1.56:8080/api/labour";
 
 // API for fetching a specific labour by ID
 export const getLabourById = (email) => {
-  return axios.get(`${BASE_URL}/getLabourById/${email}`);
+  return axiosAuthInstance.get(`${BASE_URL}/getLabourById/${email}`);
 };
 
 
@@ -34,7 +35,7 @@ export const updateLabour = (
   documentUri,
   jobRole
 ) => {
-  return axios.put(`${BASE_URL}/${email}`, {
+  return axiosAuthInstance.put(`${BASE_URL}/${email}`, {
     name,
     nic,
     documentUri,
@@ -44,11 +45,11 @@ export const updateLabour = (
 };
 // API for deleting a labour
 export const deleteLabour = (email) => {
-  return axios.delete(`${BASE_URL}/${email}`);
+  return axiosAuthInstance.delete(`${BASE_URL}/${email}`);
 };
 
 export const updateLabourPassword = (email, newPassword) => {
-  return axios.put(`${BASE_URL}/changePassword/${email}`, {newPassword});
+  return axiosAuthInstance.put(`${BASE_URL}/changePassword/${email}`, {newPassword});
 };
 
 

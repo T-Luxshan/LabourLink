@@ -1,20 +1,21 @@
 // services/CustomerBookingService.js
 
-import axios from "axios";
+// import axios from "axios";
+import axiosAuthInstance from "./AuthService";
 
-// const BASE_URL = "http://172.20.10.3:8080/api/bookings";
-const BASE_URL = "http://192.168.1.56:8080/api/bookings";
+const BASE_URL = "http://172.20.10.3:8080/api/bookings";
+// const BASE_URL = "http://192.168.1.56:8080/api/bookings";
 
 
 
 
 
 export const getCompletedBookings = (email) => {
-  return axios.get(`${BASE_URL}/completed-bookings/${email}`);
+  return axiosAuthInstance.get(`${BASE_URL}/completed-bookings/${email}`);
 };
 
 export const getAcceptedBookings = (email) => {
-  return axios
+  return axiosAuthInstance
     .get(`${BASE_URL}/customer/${email}`)
     .then((response) => {
       // Filter bookings where bookingStage is ACCEPTED
@@ -30,5 +31,5 @@ export const getAcceptedBookings = (email) => {
 };
 
 export const getBooingDetailsById = (id) => {
-  return axios.get(`${BASE_URL}/${id}`)
+  return axiosAuthInstance.get(`${BASE_URL}/${id}`)
 }

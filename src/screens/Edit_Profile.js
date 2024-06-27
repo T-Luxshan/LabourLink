@@ -132,12 +132,12 @@ const Edit_Profile = ({ navigation, route }) => {
         <Text style={styles.changeText}>Change Profile Picture</Text>
       </TouchableOpacity>
 
-      <TextInput
+      {/* <TextInput
         style={styles.input}
         value={name}
         onChangeText={setName}
         placeholder="Enter your name"
-      />
+      /> */}
 
       {/* <Button title="Save" onPress={saveProfile} /> */}
     </View>

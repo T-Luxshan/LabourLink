@@ -37,7 +37,7 @@ const Labour_profile_page = ({ navigation, route }) => {
 
 
 // const labourEmail = "aruran@example.com"; // Replace with dynamic value if needed
-useEffect(() => {
+
   
 
   
@@ -51,10 +51,9 @@ useEffect(() => {
   //     console.error("Error fetching labourProfile name data:", error);
   //   });
 
-  
-  getEmail();
-
-}, []);
+  useEffect(() => {
+    getEmail();
+  }, []);
 
 const getEmail = async () => {
 
