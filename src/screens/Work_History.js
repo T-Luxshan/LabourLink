@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import { Card } from "react-native-paper";
+import ReviewModel from "../components/ReviewModel";
 
 
-const Work_History = ({ route }) => {
+const Work_History = ({ route, navigation }) => {
   const { completedBookings } = route.params;
   const email = "aruran@example.com";
 
@@ -16,9 +17,13 @@ const Work_History = ({ route }) => {
 
 
 
-  const handleReportReview = (booking) => {
+  const handleReview = (booking) => {
     // Handle the report and review action here
     console.log(`Report and Review for booking ID: ${booking.id}`);
+    navigation.navigate("add_review", {
+      completedBookings: completedBookings,
+      bookingId: booking.id
+    });
   };
 
   const renderBooking = (booking) => (
@@ -30,9 +35,12 @@ const Work_History = ({ route }) => {
           {booking.appointmentTime}
         </Text>
         <View style={styles.reportReviewContainer}>
-          <TouchableOpacity onPress={() => handleReportReview(booking)}>
-            <Text style={styles.reportReviewText}>Report and Review</Text>
+          <TouchableOpacity onPress={() => handleReview(booking)}>
+            <Text style={styles.reportReviewText}>Add Review</Text>
           </TouchableOpacity>
+
+          
+          {/* <ReviewModel /> */}
         </View>
       </Card.Content>
     </Card>
