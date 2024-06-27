@@ -13,7 +13,10 @@ import {getCustomerById} from "../services/CustomerService";
 import {getLabourById} from "../services/LabourService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getAllReviews } from "../services/LabourReviewService";
-import { getCompletedBookings } from "../services/CustomerBookingService";
+import {
+  getCompletedBookings,
+  getAcceptedBookings,
+} from "../services/CustomerBookingService";
 import { AntDesign } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 
@@ -46,6 +49,12 @@ const Customer_page = ({ navigation }) => {
         const completedBookingsResponse = await getCompletedBookings(email);
         const completedBookingsData = completedBookingsResponse.data;
         setCompletedBookings(completedBookingsData);
+
+
+
+         const acceptedBookingsResponse = await getAcceptedBookings(email);
+         setUpcomingServices(acceptedBookingsResponse);
+
 
         // Fetch all reviews
         const reviewsResponse = await getAllReviews();
@@ -101,7 +110,10 @@ const Customer_page = ({ navigation }) => {
   };
 
   const handleViewPress = () => {
-    navigation.navigate("Upcoming_Services");
+    navigation.navigate("Upcoming_Services", {
+      upcomingServices: upcomingServices,
+    });
+   
   };
 
   // Component rendering
@@ -369,8 +381,23 @@ const Customer_page = ({ navigation }) => {
               </TouchableOpacity>
             </Text>
 
-            {/* Previous work details */}
-            {upcomingServices.slice(0, 3).map((booking, index) => (
+
+            {upcomingServices.length === 0 ? (
+              <Text
+                style={{
+                  paddingTop: 10,
+                  marginLeft: 30,
+                  fontSize: 15,
+                  fontWeight: 500,
+                  color: "#2F3239",
+                  opacity: 0.5,
+                }}
+              >
+                No appointments found
+              </Text>
+            ) : (
+            
+            upcomingServices.slice(0, 3).map((booking, index) => (
               <View key={index}>
                 <Text
                   style={{
@@ -387,10 +414,10 @@ const Customer_page = ({ navigation }) => {
                 <Text
                   style={{ marginLeft: 30, fontSize: 13, color: "#2F3239" }}
                 >
-                  @{booking.date} | {booking.startTime}
+                  {booking.jobRole} | @{booking.date} | {booking.startTime}
                 </Text>
               </View>
-            ))}
+            )))}
           </Surface>
         </View>
 
@@ -429,8 +456,23 @@ const Customer_page = ({ navigation }) => {
               </TouchableOpacity>
             </Text>
 
-            {/* Previous work details */}
-            {completedBookings.slice(0, 3).map((booking, index) => (
+            {completedBookings.length === 0 ? (
+              <Text
+                style={{
+                  paddingTop: 10,
+                  marginLeft: 30,
+                  fontSize: 15,
+                  fontWeight: 500,
+                  color: "#2F3239",
+                  opacity: 0.5,
+                }}
+              >
+                No previous work history found
+              </Text>
+            ) : (
+
+           
+            completedBookings.slice(0, 3).map((booking, index) => (
               <View key={index}>
                 <Text
                   style={{
@@ -451,7 +493,7 @@ const Customer_page = ({ navigation }) => {
                   {booking.appointmentTime}
                 </Text>
               </View>
-            ))}
+            )))}
           </Surface>
         </View>
       </View>

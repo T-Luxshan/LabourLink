@@ -45,7 +45,10 @@ const Appointment = ({ navigation }) => {
   return (
     <ScrollView>
       <View style={{ marginTop: 10 }}>
-        {pendingBookings.map((appointment, index) => (
+      {pendingBookings.length === 0 ? (
+          <Text style={styles.noPendingText}>No Pending Appointments Found</Text>
+        ) : (
+        pendingBookings.map((appointment, index) => (
           <Card key={index} style={styles.card}>
             <Card.Content>
               <Text style={styles.appointmentDetail}>
@@ -62,7 +65,7 @@ const Appointment = ({ navigation }) => {
               </TouchableOpacity>
             </Card.Content>
           </Card>
-        ))}
+        )))}
       </View>
     </ScrollView>
   );
@@ -95,6 +98,14 @@ const styles = StyleSheet.create({
   viewText: {
     color: "blue",
     fontSize: 14,
+  },
+  noPendingText: {
+    fontSize: 18,
+    fontWeight: "500",
+    textAlign: "center",
+    marginTop: 20,
+    color: "#2F3239",
+    opacity: 0.5,
   },
 });
 

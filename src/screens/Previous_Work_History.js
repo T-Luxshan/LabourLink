@@ -44,7 +44,10 @@ const Previous_Work_History = ({route}) => {
    
     <ScrollView>
       <View style={styles.container}>
-        {bookings.map((booking) => renderBooking(booking))}
+      {bookings.length === 0 ? (
+          <Text style={styles.noBookingsText}>No Previous Work History Found</Text>
+        ) : (
+        bookings.map((booking) => renderBooking(booking)))}
       </View>
     </ScrollView>
   );
@@ -96,6 +99,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "blue",
     textDecorationLine: "underline",
+  },
+  noBookingsText: {
+    fontSize: 18,
+    fontWeight: "500",
+    textAlign: "center",
+    marginTop: 20,
+    color: "#2F3239",
+    opacity: 0.5,
   },
 });
 

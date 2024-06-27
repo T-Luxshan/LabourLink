@@ -41,7 +41,11 @@ const Work_History = ({ route }) => {
   return (
     <ScrollView>
       <View style={styles.container}>
-        {bookings.map((booking) => renderBooking(booking))}
+      {bookings.length === 0 ? (
+          <Text style={styles.noBookingsText}>No Completed Bookings Found</Text>
+        ) : (
+        bookings.map((booking) => renderBooking(booking))
+        )}
       </View>
     </ScrollView>
   );
@@ -50,7 +54,7 @@ const Work_History = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFF",
+    // backgroundColor: "#FFF",
     padding: 20,
   },
   // header: {
@@ -91,6 +95,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "blue",
     textDecorationLine: "underline",
+  },
+  noBookingsText: {
+    fontSize: 18,
+    fontWeight: "500",
+    textAlign: "center",
+    marginTop: 20,
+    color: "#2F3239",
+    opacity: 0.5,
   },
 });
 
