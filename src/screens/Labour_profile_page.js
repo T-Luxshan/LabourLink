@@ -101,7 +101,7 @@ const handleEditProfile = () => {
 
       setIsLoggedIn(false);
       // Navigate to Login screen
-      navigation.navigate("Login");
+      // navigation.navigate("Login");
     } catch (error) {
       console.error("Error logging out:", error);
       // Handle error gracefully
