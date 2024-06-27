@@ -1,11 +1,13 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import { Card } from "react-native-paper";
+import { getBooingDetailsById } from "../services/CustomerBookingService";
 
 
-const Previous_Work_History = ({route}) => {
+const Previous_Work_History = ({ route, navigation }) => {
    const { completedBookings } = route.params;
-   const labourEmail = "lehaan@example.com"; // Replace with dynamic value if needed
+   const labourEmail = AsyncStorage.getItem('userEmail');
 
    const [bookings, setBookings] = useState([]);
 
@@ -19,6 +21,14 @@ const Previous_Work_History = ({route}) => {
  const handleReportReview = (booking) => {
    // Handle the report and review action here
    console.log(`Report and Review for booking ID: ${booking.id}`);
+   getBooingDetailsById(booking.id)
+    .then(res=> {
+      navigation.navigate("report-user", {
+        completedBookings: completedBookings,
+        reportTo: res.data.customerId
+      });
+    })
+    .catch(err=>console.log("Failed to fetch booing details."));
  };
 
     const renderBooking = (booking) => (
@@ -32,7 +42,7 @@ const Previous_Work_History = ({route}) => {
           </Text>
           <View style={styles.reportReviewContainer}>
             <TouchableOpacity onPress={() => handleReportReview(booking)}>
-              <Text style={styles.reportReviewText}>Report and Review</Text>
+              <Text style={styles.reportReviewText}>Report user</Text>
             </TouchableOpacity>
           </View>
         </Card.Content>
@@ -97,8 +107,8 @@ const styles = StyleSheet.create({
   },
   reportReviewText: {
     fontSize: 14,
-    color: "blue",
-    textDecorationLine: "underline",
+    color: "#FB9741",
+    textDecorationLine: "none",
   },
   noBookingsText: {
     fontSize: 18,
