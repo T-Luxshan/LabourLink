@@ -2,7 +2,9 @@
 
 import axios from "axios";
 
-const BASE_URL = "http://172.20.10.3:8080/api/bookings";
+// const BASE_URL = "http://172.20.10.3:8080/api/bookings";
+const BASE_URL = "http://192.168.1.56:8080/api/bookings";
+
 
 
 
@@ -26,3 +28,7 @@ export const getAcceptedBookings = (email) => {
       throw error; // Rethrow the error to handle it in the component
     });
 };
+
+export const getBooingDetailsById = (id) => {
+  return axios.get(`${BASE_URL}/${id}`)
+}
