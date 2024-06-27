@@ -16,6 +16,7 @@ import {
   updateBookingStage,
 } from "../services/BookingService";
 import { useFocusEffect } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Functional component definition
 const Labour_page = ({ navigation, route }) => {
@@ -27,8 +28,9 @@ const Labour_page = ({ navigation, route }) => {
   const [completedBookings, setCompletedBookings] = useState([]);
   const [acceptedAppointments, setAcceptedAppointments] = useState([]);
 
+  const labourEmail = AsyncStorage.getItem('userEmail');
   const email = "Vanaiyan@example.com"; // Replace with dynamic value if needed
-  const labourEmail = "Vanaiyan@example.com";
+  // const labourEmail = "lehaan@example.com";
 
 
   useFocusEffect(
@@ -39,7 +41,7 @@ const Labour_page = ({ navigation, route }) => {
          console.log("Labour Data:", labourResponse.data);
          setLabour(labourResponse.data);
        } catch (error) {
-         console.log("Error fetching labour data:", error);
+         console.log("Error fetching labour data:");
        }
 
        try {
@@ -47,7 +49,7 @@ const Labour_page = ({ navigation, route }) => {
          console.log("Labour Profile Data:", labourProfileResponse.data);
          setLabourProfile(labourProfileResponse.data);
        } catch (error) {
-         console.log("Error fetching labour profile data:", error);
+         console.log("Error fetching labour profile data:");
        }
 
        try {
@@ -55,7 +57,7 @@ const Labour_page = ({ navigation, route }) => {
          console.log("Rating Data:", ratingData);
          setRating(ratingData);
        } catch (error) {
-         console.log("Error fetching rating:", error);
+         console.log("Error fetching rating:");
        }
 
        try {
@@ -65,7 +67,7 @@ const Labour_page = ({ navigation, route }) => {
          console.log("Completed Appointments:", completedAppointments);
          setCompletedBookings(completedAppointments);
        } catch (error) {
-         console.log("Error fetching completed appointments:", error);
+         console.log("Error fetching completed appointments:");
        }
 
        try {
@@ -75,7 +77,7 @@ const Labour_page = ({ navigation, route }) => {
          console.log("Accepted Appointments:", acceptedAppointments);
          setAcceptedAppointments(acceptedAppointments);
        } catch (error) {
-         console.log("Error fetching accepted appointments:", error);
+         console.log("Error fetching accepted appointments:");
        }
      };
 
@@ -101,7 +103,7 @@ const Labour_page = ({ navigation, route }) => {
       );
       setCompletedBookings(updatedCompletedAppointments); // Ensure it defaults to [] if undefined
     } catch (error) {
-      console.error("Error marking appointment as completed:", error);
+      console.log("Error marking appointment as completed:");
     }
   };
 

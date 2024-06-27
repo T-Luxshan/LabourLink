@@ -30,10 +30,10 @@ const Customer_page = ({ navigation }) => {
    const [completedBookings, setCompletedBookings] = useState([]);
    const [upcomingServices, setUpcomingServices] = useState([]);
 
-  // const email = AsyncStorage.getItem('userEmail')
+  const email = AsyncStorage.getItem('userEmail')
 
-  const email = "aruran@example.com"; // Replace with dynamic value if needed
-  const email2 = "lehaan@example.com";
+  // const email = "aruran@example.com"; // Replace with dynamic value if needed
+  // const email2 = "lehaan@example.com";
   
 
   // Updated useEffect with error handling
@@ -86,7 +86,7 @@ const Customer_page = ({ navigation }) => {
 
         setTopRatedEmployee(topRatedLabour);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.log("Error fetching data:");
         // Handle specific error scenarios, e.g., display error message to user
       }
     };
@@ -353,11 +353,11 @@ const Customer_page = ({ navigation }) => {
               borderRadius: 20,
               marginLeft: 15,
               marginTop: 25,
-              padding: 5,
+              padding: 10,
               height: 250,
               width: 345,
-              alignItems: "flexStart",
-              justifyContent: "flexStart",
+              alignItems: "flex-start",
+              justifyContent: "flex-start",
               marginBottom: 30,
             }}
             elevation={1}
@@ -428,11 +428,11 @@ const Customer_page = ({ navigation }) => {
               borderRadius: 20,
               marginLeft: 15,
               marginTop: 25,
-              padding: 5,
+              padding: 10,
               height: 250,
               width: 345,
-              alignItems: "flexStart",
-              justifyContent: "flexStart",
+              alignItems: "flex-start",
+              justifyContent: "flex-start",
               marginBottom: 30,
             }}
             elevation={1}
