@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { TextInput, Button, Title, ToggleButton, Checkbox, Image } from 'react-native-paper';
 import { TouchableRipple, IconButton } from 'react-native-paper';
@@ -9,11 +9,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import * as yup from 'yup';
 import { getUserRole, loginCustomer, loginLabour } from '../../services/AuthService';
+import { useLogin } from '../../context/LoginProvider';
 
 
 const Login = () => {
 
     const navigation = useNavigation();
+    const { setIsLoggedIn } = useLogin();
+    const { setUserRole } = useLogin();
 
     const [email, setEmail] = useState(''); // Need to change the state named for email.
     const [password, setPassword] = useState(''); // state for password field.
@@ -57,9 +60,9 @@ const Login = () => {
           let userRoleResponse = await getUserRole(lowercasedEmail);
           let userRole = userRoleResponse.data.role;
           let userRoleStatus = userRoleResponse.data.verified;
-          console.log(userRoleResponse);
-          console.log(userRole);
-          console.log(userRoleStatus);
+          // console.log(userRoleResponse);
+          // console.log(userRole);
+          // console.log(userRoleStatus);
 
       
           if(role != userRole )
@@ -69,15 +72,22 @@ const Login = () => {
              response = await loginCustomer(role, lowercasedEmail, password); 
              AsyncStorage.setItem("token", response.data.accessToken);
              AsyncStorage.setItem("refreshToken", response.data.refreshToken);
-             navigation.navigate('AuthTestSignup');
-             console.log("cus")
+             AsyncStorage.setItem("userEmail", email);
+            //  navigation.navigate('GettingStarted');
+            setIsLoggedIn(true);
+            setUserRole("CUSTOMER");
           }
           else{
             response = await loginLabour(role, lowercasedEmail, password);   
             AsyncStorage.setItem("token", response.data.accessToken);
             AsyncStorage.setItem("refreshToken", response.data.refreshToken);
-            if(userRoleStatus)
-              navigation.navigate('AuthTestSignup');
+            AsyncStorage.setItem("userEmail", email);
+            if(userRoleStatus){
+              // navigation.navigate('GettingStarted');
+              setIsLoggedIn(true);
+              setUserRole("LABOUR");
+            }
+              
             else
               navigation.navigate('WaitingPage')
           }
@@ -87,6 +97,7 @@ const Login = () => {
           console.log(response.data.accessToken);
           
         } catch (e) {
+          console.log(e);
           setLogError("Invalid email or password.");
         }
 
