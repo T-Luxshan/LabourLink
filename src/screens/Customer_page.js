@@ -122,6 +122,9 @@ const Customer_page = ({ navigation }) => {
 
   const handleJobPress = (jobCategory) => {
     console.log(`Job category pressed: ${jobCategory}`);
+    navigation.navigate("MapViewScreen" ,{
+        jobRole : jobCategory,
+    });
   };
 
   const handleViewAllPress = () => {
@@ -313,22 +316,22 @@ const Customer_page = ({ navigation }) => {
                 {renderImage(
                   "Driver",
                   require("../assets/Images/driver.png"),
-                  () => handleJobPress()
+                  () => handleJobPress("DRIVER")
                 )}
                 {renderImage(
                   "Electrician",
                   require("../assets/Images/electrician.png"),
-                  () => handleJobPress()
+                  () => handleJobPress("ELECTRICIAN")
                 )}
                 {renderImage(
                   "Carpenter",
                   require("../assets/Images/carpenter.png"),
-                  () => handleJobPress()
+                  () => handleJobPress("CARPENTER")
                 )}
                 {renderImage(
                   "Painter",
                   require("../assets/Images/painter.png"),
-                  () => handleJobPress()
+                  () => handleJobPress("PAINTER")
                 )}
               </View>
 
@@ -345,22 +348,22 @@ const Customer_page = ({ navigation }) => {
                 {renderImage(
                   "Mason",
                   require("../assets/Images/mason.png"),
-                  () => handleJobPress()
+                  () => handleJobPress("MASON")
                 )}
                 {renderImage(
                   "Plumber",
                   require("../assets/Images/plumber.png"),
-                  () => handleJobPress()
+                  () => handleJobPress("PLUMBER")
                 )}
                 {renderImage(
                   "Mechanic",
                   require("../assets/Images/mechanic.png"),
-                  () => handleJobPress()
+                  () => handleJobPress("MECHANIC")
                 )}
                 {renderImage(
                   "Welder",
                   require("../assets/Images/welder.png"),
-                  () => handleJobPress()
+                  () => handleJobPress("WELDER")
                 )}
               </View>
             </Surface>
