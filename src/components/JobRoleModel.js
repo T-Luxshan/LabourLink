@@ -16,15 +16,20 @@ const JobRoleModel = ({onMStateChange, onJobRolesChange, mState}) => {
     onMStateChange(false);
     onJobRolesChange(selectedJobs);
   };
+  let availableJobRoles = ["CARPENTER", "ELECTRICIAN", "PLUMBER", "PAINTER", "MASON", "WELDER", "DRIVER"];
+
   useEffect(() => {
-    getLabourJobRoles()
-      .then(response => {
-        setJoblist(response.data);
-      })
-      .catch(error => {
-        console.log('Error fetching job roles:');
-      });
-  }, []); 
+    setJoblist(availableJobRoles);
+  }, []);
+  // useEffect(() => {
+  //   getLabourJobRoles()
+  //     .then(response => {
+  //       setJoblist(response.data);
+  //     })
+  //     .catch(error => {
+  //       console.error('Error fetching job roles:', error);
+  //     });
+  // }, []); 
 
   const toggleChipSelection = (job) => {
     setSelectedJobs((prevSelectedJobs) =>
@@ -84,7 +89,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 10,
     height: 300,
-    width: '120%',
+    width: '110%',
     marginBottom: 250,
     borderRadius: 10,
     alignSelf: 'center',
@@ -118,12 +123,12 @@ const styles = StyleSheet.create({
     shadowRadius: 0,
   },
   chipMargin: {
-    margin: 3,
+    margin: 2,
   },
   chipContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 3,
+    gap: 2,
   },
   selectedChip: {
     backgroundColor: '#01214A',    

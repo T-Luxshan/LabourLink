@@ -22,7 +22,7 @@ const UploadDocument = ({ nic, onFileUpload, mState }) => {
         console.log(nicExist);
       })
       .catch(error => {
-        console.log('NIC fetching failed:', error);
+        console.error('Error fetching job roles:', error);
       });
   }, [nic]);
 
