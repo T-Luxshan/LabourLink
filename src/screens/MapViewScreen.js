@@ -5,7 +5,7 @@ import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Image } from "rea
 import MapView, { Marker, Callout } from "react-native-maps";
 import * as Location from "expo-location";
 import LabourProfileComponent from "../components/LabourProfileComponent";
-import { useNavigation } from '@react-navigation/native'; 
+import { useNavigation , useRoute} from '@react-navigation/native'; 
 import { getLabourByJobRole, getLocationsByJobRole } from "../services/LabourDetailsService";
 // import {ProfileImageByEmail} from "../services/LabourDetailsService"
 
@@ -28,10 +28,12 @@ const MapViewScreen = () => {
   const [labourcard, setLabourCard] = useState([]);
   const tempProfile = "https://firebasestorage.googleapis.com/v0/b/labourlink-e7ecf.appspot.com/o/ProfilePhoto%2Fboy.png?alt=media&token=b9013246-c51f-4bb8-b68b-1465e24e8583"
   // const [ProfileImage, setProfileImage] =useState([]);
+  const route = useRoute();
+  const { jobRole } = route.params;
 
  
 
-  let jobRole = "PAINTER";
+  // let jobRole = "PAINTER";
   
 
 
@@ -95,6 +97,10 @@ const MapViewScreen = () => {
 
     });
   };
+
+  // const navigation = useNavigation(); // Get navigation object using useNavigation hook
+
+  
   
   
 
