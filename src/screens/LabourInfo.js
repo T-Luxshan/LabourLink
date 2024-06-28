@@ -1,7 +1,7 @@
 // Importing necessary modules from React and React Native
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet,ScrollView } from "react-native";
-import { useNavigation, useRoute } from '@react-navigation/native'; // Import useNavigation hook
+import { View, Text, StyleSheet,ScrollView, TouchableOpacity } from "react-native";
+import { useNavigation, useRoute } from '@react-navigation/native'; 
 import AppBar from "../components/AppBar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import LabourProfileComponent from "../components/LabourProfileComponent";
@@ -13,6 +13,7 @@ import {getLabourByAbout} from "../services/LabourDetailsService";
 import {getLabourByRating} from "../services/LabourDetailsService";
 import { getLabourByTotalservice } from "../services/LabourDetailsService";
 import { Button } from 'react-native-paper';
+import LabourPerformanceModel from "../components/LabourPerfomanceModel";
 
 
 
@@ -109,12 +110,16 @@ const LabourInfo = () => {
         });
     };
   
-  
+  const handleLabourPerfomance = () => {
+    navigation.navigate('labour-perfomance', {
+      email: email
+    });
+  }
   
 
   const handlePress = () => {
     // Navigate to 'BookAppointment' screen
-    navigation.navigate("BookAppointment",{
+    navigation.navigate("BookAppointment", {
       labourId: email,
       jobRole: jobRole,
       labourCard: {},
@@ -175,6 +180,10 @@ const LabourInfo = () => {
             </Text>
           </View>
         </View>
+
+        <TouchableOpacity onPress={() => handleLabourPerfomance()}>
+            <Text style={ {color: "#FB9741", margin:5}}>View labour perfomance</Text>
+          </TouchableOpacity>
 
         {/* Container for displaying scroll reviewer and page button */}
         <View>

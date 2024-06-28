@@ -43,7 +43,7 @@ const Customer_page = ({ navigation }) => {
        try {
          const email = await AsyncStorage.getItem("userEmail");
          if (email) {
-           setEmail(email);
+           setEmail(email.toLowerCase());
          } else {
            console.log("No email found in AsyncStorage");
          }

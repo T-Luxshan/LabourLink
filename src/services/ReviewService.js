@@ -1,9 +1,11 @@
 import axiosAuthInstance from "./AuthService";
 import axios from "axios";
+import { IP } from "./BASE_IP";
 
 // const REST_API_BASE_URL_REVIEW = "http://localhost:8080/api/v1/labourReview";
 // const REST_API_BASE_URL_REVIEW = "http://192.168.1.56:8080/api/v1/labourReview";
-const REST_API_BASE_URL_REVIEW = "http://172.20.10.3:8080/api/labour";
+// const REST_API_BASE_URL_REVIEW = "http://172.20.10.3:8080/api/labour";
+const REST_API_BASE_URL_REVIEW = `http://${IP}:8080/api/v1/labourReview`;
 
 // API for add review
 export const addReview = (jobRole, description, rating, labourEmail) => {
@@ -22,3 +24,7 @@ export const editReview = (id, jobRole, description, rating, labourEmail) => {
 export const getReviewById = (email) => {
     return axiosAuthInstance.get(`${REST_API_BASE_URL_REVIEW}/getReviewById/${email}`)
 } 
+
+export const getLabourReviews = (email) => {
+    return axiosAuthInstance.get(`${REST_API_BASE_URL_REVIEW}/getLabourReviews/${email}`)
+}
