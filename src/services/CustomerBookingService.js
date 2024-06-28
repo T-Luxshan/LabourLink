@@ -25,7 +25,7 @@ export const getAcceptedBookings = (email) => {
       return acceptedBookings;
     })
     .catch((error) => {
-      console.error("Error fetching accepted bookings:", error);
+      // console.error("Error fetching accepted bookings:", error);
       throw error; // Rethrow the error to handle it in the component
     });
 };

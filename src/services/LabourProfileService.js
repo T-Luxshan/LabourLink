@@ -48,7 +48,7 @@ export const createLabourProfile = async (
     console.log("Create Labour Profile Response:", response.data);
     return response.data; // Assuming backend returns the created labour profile data
   } catch (error) {
-    console.error("Error creating Labour Profile:", error);
+    // console.error("Error creating Labour Profile:", error);
     throw error;
   }
 };

@@ -21,11 +21,29 @@ const Customer_profile_page = ({ navigation, route }) => {
   const [customer, setCustomer] = useState("");
   const { setIsLoggedIn } = useLogin();
  
-
-  const email = "aruran@example.com";
+const [email, setEmail] = useState("");
+  // const email = "aruran@example.com";
 
 
   useEffect(() => {
+    const fetchEmail = async () => {
+      try {
+        const email = await AsyncStorage.getItem("userEmail");
+        if (email) {
+          setEmail(email);
+        } else {
+          console.log("No email found in AsyncStorage");
+        }
+      } catch (error) {
+        console.log("Error fetching email from AsyncStorage:", error);
+      }
+    };
+
+    fetchEmail();
+  }, []);
+
+  useEffect(() => {
+    if (email) {
     getCustomerById(email)
       .then((response) => {
         const data = response.data;
@@ -34,9 +52,9 @@ const Customer_profile_page = ({ navigation, route }) => {
         console.log(response.data);
       })
       .catch((error) => {
-        console.error("Error fetching customer profile data:", error);
+        // console.error("Error fetching customer profile data:", error);
       });
-  }, []);
+}}, []);
 
 
 

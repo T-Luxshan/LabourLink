@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -8,12 +8,34 @@ import {
   Alert,
 } from "react-native";
 import { updateCustomerPassword, getCustomerById } from "../services/CustomerService";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Change_Password = ({ navigation }) => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
+  const [labourEmail, setLabourEmail] = useState("");
+
+
+   useEffect(() => {
+     const fetchLabourEmail = async () => {
+       try {
+         const email = await AsyncStorage.getItem("userEmail");
+         if (email) {
+           setLabourEmail(email);
+         } else {
+           console.log("No email found in AsyncStorage");
+         }
+       } catch (error) {
+        //  console.log("Error fetching email from AsyncStorage:", error);
+       }
+     };
+
+     fetchLabourEmail();
+   }, []);
+
 
   const handleChangePassword = () => {
     // Basic validation
@@ -27,7 +49,7 @@ const Change_Password = ({ navigation }) => {
       return;
     }
 
-    updateCustomerPassword("aruran@example.com", newPassword)
+    updateCustomerPassword(labourEmail, newPassword)
       .then((response) => {
         console.log("Password updated successfully:", response.data);
         Alert.alert(
@@ -36,7 +58,7 @@ const Change_Password = ({ navigation }) => {
         );
 
         // Fetch the updated user data to confirm password update
-        getCustomerById("aruran@example.com")
+        getCustomerById(labourEmail)
           .then((response) => {
             console.log("Updated user data:", response.data);
           })

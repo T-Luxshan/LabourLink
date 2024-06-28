@@ -3,14 +3,31 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-nati
 import { Card } from "react-native-paper";
 import ReviewModel from "../components/ReviewModel";
 import { getBooingDetailsById } from "../services/CustomerBookingService";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const Work_History = ({ route, navigation }) => {
   const { completedBookings } = route.params;
-  const email = "aruran@example.com";
-
+  // const email = "aruran@example.com";
+const [email, setEmail] = useState("");
   const [bookings, setBookings] = useState([]);
 
+ useEffect(() => {
+   const fetchEmail = async () => {
+     try {
+       const email = await AsyncStorage.getItem("userEmail");
+       if (email) {
+         setEmail(email);
+       } else {
+         console.log("No email found in AsyncStorage");
+       }
+     } catch (error) {
+       console.log("Error fetching email from AsyncStorage:", error);
+     }
+   };
+
+   fetchEmail();
+ }, []);
  
   useEffect(() => {
     setBookings(completedBookings);

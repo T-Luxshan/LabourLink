@@ -68,7 +68,7 @@ const Previous_Work_History = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFF",
+    // backgroundColor: "#FFF",
     padding: 20,
   },
   // header: {

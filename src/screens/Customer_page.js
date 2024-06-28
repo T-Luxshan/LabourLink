@@ -30,14 +30,35 @@ const Customer_page = ({ navigation }) => {
    const [completedBookings, setCompletedBookings] = useState([]);
    const [upcomingServices, setUpcomingServices] = useState([]);
 
-  const email = AsyncStorage.getItem('userEmail')
+   const[email, setEmail] = useState(""); 
+
+  // const email = AsyncStorage.getItem('userEmail')
 
   // const email = "aruran@example.com"; // Replace with dynamic value if needed
   // const email2 = "lehaan@example.com";
   
 
+   useEffect(() => {
+     const fetchEmail = async () => {
+       try {
+         const email = await AsyncStorage.getItem("userEmail");
+         if (email) {
+           setEmail(email);
+         } else {
+           console.log("No email found in AsyncStorage");
+         }
+       } catch (error) {
+         console.log("Error fetching email from AsyncStorage:", error);
+       }
+     };
+
+     fetchEmail();
+   }, []);
+
+
   // Updated useEffect with error handling
   useEffect(() => {
+    if (email) {
     const fetchCustomerAndLabourData = async () => {
       try {
         // Fetch customer data by email
@@ -86,13 +107,13 @@ const Customer_page = ({ navigation }) => {
 
         setTopRatedEmployee(topRatedLabour);
       } catch (error) {
-        console.log("Error fetching data:");
+        // console.log("Error fetching data:");
         // Handle specific error scenarios, e.g., display error message to user
       }
     };
 
     fetchCustomerAndLabourData();
-  }, []);
+}}, [email]);
 
   // Function to handle languages press
   const handleLanguagesPress = () => {
@@ -360,6 +381,7 @@ const Customer_page = ({ navigation }) => {
               alignItems: "flex-start",
               justifyContent: "flex-start",
               marginBottom: 30,
+              backgroundColor: "#fff",
             }}
             elevation={1}
           >
@@ -382,7 +404,6 @@ const Customer_page = ({ navigation }) => {
               </TouchableOpacity>
             </Text>
 
-
             {upcomingServices.length === 0 ? (
               <Text
                 style={{
@@ -397,28 +418,28 @@ const Customer_page = ({ navigation }) => {
                 No appointments found
               </Text>
             ) : (
-            
-            upcomingServices.slice(0, 3).map((booking, index) => (
-              <View key={index}>
-                <Text
-                  style={{
-                    paddingTop: 10,
-                    marginLeft: 30,
-                    fontSize: 15,
-                    fontWeight: 500,
-                    color: "#2F3239",
-                  }}
-                >
-                  Labour Name: {booking.labourName}
-                </Text>
+              upcomingServices.slice(0, 3).map((booking, index) => (
+                <View key={index}>
+                  <Text
+                    style={{
+                      paddingTop: 10,
+                      marginLeft: 30,
+                      fontSize: 15,
+                      fontWeight: 500,
+                      color: "#2F3239",
+                    }}
+                  >
+                    Labour Name: {booking.labourName}
+                  </Text>
 
-                <Text
-                  style={{ marginLeft: 30, fontSize: 13, color: "#2F3239" }}
-                >
-                  {booking.jobRole} | @{booking.date} | {booking.startTime}
-                </Text>
-              </View>
-            )))}
+                  <Text
+                    style={{ marginLeft: 30, fontSize: 13, color: "#2F3239" }}
+                  >
+                    {booking.jobRole} | @{booking.date} | {booking.startTime}
+                  </Text>
+                </View>
+              ))
+            )}
           </Surface>
         </View>
 
@@ -436,6 +457,7 @@ const Customer_page = ({ navigation }) => {
               alignItems: "flex-start",
               justifyContent: "flex-start",
               marginBottom: 30,
+              backgroundColor: "#fff",
             }}
             elevation={1}
           >
@@ -472,30 +494,29 @@ const Customer_page = ({ navigation }) => {
                 No previous work history found
               </Text>
             ) : (
+              completedBookings.slice(0, 3).map((booking, index) => (
+                <View key={index}>
+                  <Text
+                    style={{
+                      paddingTop: 10,
+                      marginLeft: 30,
+                      fontSize: 15,
+                      fontWeight: 500,
+                      color: "#2F3239",
+                    }}
+                  >
+                    Labour Name: {booking.labourName}
+                  </Text>
 
-           
-            completedBookings.slice(0, 3).map((booking, index) => (
-              <View key={index}>
-                <Text
-                  style={{
-                    paddingTop: 10,
-                    marginLeft: 30,
-                    fontSize: 15,
-                    fontWeight: 500,
-                    color: "#2F3239",
-                  }}
-                >
-                  Labour Name: {booking.labourName}
-                </Text>
-
-                <Text
-                  style={{ marginLeft: 30, fontSize: 13, color: "#2F3239" }}
-                >
-                  {booking.jobRole} | @{booking.appointmentDate} |
-                  {booking.appointmentTime}
-                </Text>
-              </View>
-            )))}
+                  <Text
+                    style={{ marginLeft: 30, fontSize: 13, color: "#2F3239" }}
+                  >
+                    {booking.jobRole} | @{booking.appointmentDate} |
+                    {booking.appointmentTime}
+                  </Text>
+                </View>
+              ))
+            )}
           </Surface>
         </View>
       </View>

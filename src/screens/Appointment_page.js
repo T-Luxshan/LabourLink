@@ -39,30 +39,31 @@ const Appointment_page = ({ route, navigation }) => {
 
 
   useEffect(() => {
-    const fetchBookingDetails = async () => {
-      try {
-        const response = await getBookingDetailsByLabourEmail(labourEmail);
-        console.log("API Response:", response);
-        if (response) {
-          const relevantAppointment = response.find(
-            (appointment) => appointment.id === appointmentId
-          );
-          if (relevantAppointment) {
-            setBookingDetails(relevantAppointment);
+    if(labourEmail){
+      const fetchBookingDetails = async () => {
+        try {
+          const response = await getBookingDetailsByLabourEmail(labourEmail);
+          console.log("API Response:", response);
+          if (response) {
+            const relevantAppointment = response.find(
+              (appointment) => appointment.id === appointmentId
+            );
+            if (relevantAppointment) {
+              setBookingDetails(relevantAppointment);
+            } else {
+              setError("No relevant appointment found.");
+            }
           } else {
-            setError("No relevant appointment found.");
+            setError("Empty response or missing data fields.");
           }
-        } else {
-          setError("Empty response or missing data fields.");
+        } catch (error) {
+          // console.log("Error fetching booking data:", error);
+          setError("Error fetching booking data. Please try again.");
         }
-      } catch (error) {
-        console.log("Error fetching booking data:", error);
-        setError("Error fetching booking data. Please try again.");
-      }
-    };
+      };
 
-    fetchBookingDetails();
-  }, [labourEmail, appointmentId]); // Dependency array ensures useEffect runs when labourEmail or appointmentId changes
+      fetchBookingDetails();
+    }}, [labourEmail, appointmentId]); // Dependency array ensures useEffect runs when labourEmail or appointmentId changes
 
   
 
@@ -74,7 +75,7 @@ const Appointment_page = ({ route, navigation }) => {
       removeAppointment(appointmentId);
       navigation.navigate("Appointment"); // Navigate back to Appointment screen
     } catch (error) {
-      console.log("Error accepting appointment:", error);
+      // console.log("Error accepting appointment:", error);
       // Handle error state or notify user accordingly
     }
   };
@@ -86,7 +87,7 @@ const handleIgnore = async () => {
     removeAppointment(appointmentId);
     navigation.navigate("Appointment"); // Navigate back to Appointment screen
   } catch (error) {
-    console.log("Error accepting appointment:", error);
+    // console.log("Error accepting appointment:", error);
     // Handle error state or notify user accordingly
   }
 };

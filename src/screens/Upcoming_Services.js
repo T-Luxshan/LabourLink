@@ -7,14 +7,33 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Card } from "react-native-paper";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 
 const Upcoming_Services = ({ route }) => {
   const { upcomingServices } = route.params;
-  const email = "aruran@example.com";
-
+  // const email = "aruran@example.com";
+const [email, setEmail] = useState("");
   const [bookings, setBookings] = useState([]);
+
+   useEffect(() => {
+     const fetchEmail = async () => {
+       try {
+         const email = await AsyncStorage.getItem("userEmail");
+         if (email) {
+           setEmail(email);
+         } else {
+           console.log("No email found in AsyncStorage");
+         }
+       } catch (error) {
+         console.log("Error fetching email from AsyncStorage:", error);
+       }
+     };
+
+     fetchEmail();
+   }, []);
+
 
 useEffect(() => {
   setBookings(upcomingServices);

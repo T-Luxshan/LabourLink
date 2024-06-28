@@ -35,19 +35,20 @@ const Appointment = ({ navigation }) => {
 
   
   useEffect(() => {
+    if(labourEmail){
     const fetchPendingAppointments = async () => {
       try {
         const response = await getPendingAppointments(labourEmail);
         setPendingBookings(response); // Assuming response is an array of pending bookings
         console.log("Pending Appointments:", response); // Log fetched data
       } catch (error) {
-        console.log("1- Error fetching pending appointments:");
+        // console.log("1- Error fetching pending appointments:");
         setPendingBookings([]); // Ensure state is updated even on error
       }
     };
 
     fetchPendingAppointments();
-  }, [labourEmail]); // Dependency array ensures useEffect runs when labourEmail changes
+   }   }, [labourEmail]); // Dependency array ensures useEffect runs when labourEmail changes
 
   const handleViewAppointment = (appointment) => {
     navigation.navigate("Appointment_page", {

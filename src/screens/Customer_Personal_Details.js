@@ -10,29 +10,50 @@ import {
   Alert,
 } from "react-native";
 import { getCustomerById, updateCustomer } from "../services/CustomerService";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Customer_Personal_Details = ({ navigation }) => {
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
+  const [email, setEmail] = useState("");
 
-  const email =  "aruran@example.com";
+  // const email =  "aruran@example.com";
+
+   useEffect(() => {
+     const fetchEmail = async () => {
+       try {
+         const email = await AsyncStorage.getItem("userEmail");
+         if (email) {
+           setEmail(email);
+         } else {
+           console.log("No email found in AsyncStorage");
+         }
+       } catch (error) {
+         console.log("Error fetching email from AsyncStorage:", error);
+       }
+     };
+
+     fetchEmail();
+   }, []);
 
 
   useEffect(() => {
+    if (email) {
     // Fetch existing Labour data when component mounts
     fetchCustomerData();
-  }, []);
+    }
+  }, [email]);
 
   const fetchCustomerData = async () => {
     try {
-      const response = await getCustomerById("aruran@example.com"); // Replace with actual email or dynamic value
+      const response = await getCustomerById(email); // Replace with actual email or dynamic value
       const { name, mobileNumber, address } = response.data;
       setName(name);
       setMobileNumber(mobileNumber);
       setAddress(address);
     } catch (error) {
-      console.error("Error fetching Customer data:", error);
+      // console.error("Error fetching Customer data:", error);
       Alert.alert("Error", "Failed to fetch Customer details.");
     }
   };
@@ -44,7 +65,7 @@ const Customer_Personal_Details = ({ navigation }) => {
       Alert.alert("Success", "Customer details updated successfully.");
       navigation.navigate("Customer_profile_page");
     } catch (error) {
-      console.error("Error updating customer data:", error);
+      // console.error("Error updating customer data:", error);
       Alert.alert("Error", "Failed to update customer details.");
     }
   };

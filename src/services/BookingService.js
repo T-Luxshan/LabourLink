@@ -15,7 +15,7 @@ export const updateBookingStage = async (id, bookingStage) => {
     });
     return response.data;
   } catch (error) {
-    console.error("Error updating booking stage:", error);
+    // console.error("Error updating booking stage:", error);
     throw error; // Ensure the error is re-thrown for the caller to handle
   }
 };
@@ -29,7 +29,7 @@ export const getPendingAppointments = async (labourEmail) => {
     );
     return response.data;
   } catch (error) {
-    console.error("Error fetching pending appointments:", error);
+    // console.error("Error fetching pending appointments:", error);
     throw error; // Ensure the error is re-thrown for the caller to handle
   }
 };
@@ -41,7 +41,7 @@ export const getAcceptedAppointments = async (labourEmail) => {
     );
     return response.data;
   } catch (error) {
-    console.log("Error fetching accepted appointments:", error);
+    // console.log("Error fetching accepted appointments:", error);
     throw error; // Ensure the error is re-thrown for the caller to handle
   }
 };
@@ -53,7 +53,7 @@ export const getDeclinedAppointments = async (labourEmail) => {
     );
     return response.data;
   } catch (error) {
-    console.log("Error fetching declined appointments:", error);
+    // console.log("Error fetching declined appointments:", error);
     throw error; // Ensure the error is re-thrown for the caller to handle
   }
 };
@@ -70,7 +70,7 @@ export const getCompletedAppointments = async (labourEmail) => {
     );
     return response.data;
   } catch (error) {
-    console.log("Error fetching completed appointments:", error);
+    // console.log("Error fetching completed appointments:", error);
     throw error; // Ensure the error is re-thrown for the caller to handle
   }
 }; 
@@ -80,7 +80,7 @@ export const getBookingDetailsByLabourEmail = async (labourEmail) => {
     const response = await axiosAuthInstance.get(`${BASE_URL}/labour/${labourEmail}`);
     return response.data;
   } catch (error) {
-    console.log("Error fetching booking details:", error);
+    // console.log("Error fetching booking details:", error);
     throw error; // Ensure the error is re-thrown for the caller to handle
   }
 };

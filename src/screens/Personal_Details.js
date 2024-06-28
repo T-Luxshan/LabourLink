@@ -41,8 +41,10 @@ const Personal_Details = ({ navigation }) => {
 
   useEffect(() => {
     // Fetch existing Labour data when component mounts
-    fetchLabourData();
-  }, []);
+    if(labourEmail){
+      fetchLabourData();
+    }
+  }, [labourEmail]);
 
   const fetchLabourData = async () => {
     try {
@@ -54,7 +56,7 @@ const Personal_Details = ({ navigation }) => {
      
      
     } catch (error) {
-      console.error("Error fetching Labour data:", error);
+      // console.error("Error fetching Labour data:", error);
       Alert.alert("Error", "Failed to fetch Labour details.");
     }
   };
