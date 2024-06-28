@@ -26,11 +26,11 @@ const ScrollReviewer = ({email,jobRole}) => {
   const fetchLabourReview = (email,jobRole) =>{
     getLabourByReview(email, jobRole)
       .then(respose=>{
-        // console.log(respose);
+         console.log(respose.data);
         setReviews(respose.data);
       })
       .catch(error=>{
-        console.log("Error in fetching About", error);
+        console.log("Error in fetching Review", error);
       })
   }
   
@@ -44,15 +44,21 @@ const ScrollReviewer = ({email,jobRole}) => {
         </TouchableOpacity>
       </View>
       <ScrollView style={styles.reviewsContainer}>
-        {reviews.map((review, index) => ( // Show only first 2 reviews
+      {reviews.length > 0 ? (
+        reviews.map((review, index) => ( // Show only first 2 reviews
           <View key={index} style={styles.reviewItemContainer}>
             <View style={styles.reviewDetailsContainer}>
-              <Text style={styles.reviewerName}>Name{review ? review.customerName: "Name not found"}</Text>
-              <Text style={styles.reviewText}>{review ? review.description:"description not found"}</Text>
-              <Text style={styles.reviewRating}>Rating: {review ? review.rating:"rating not found"}</Text>
+              <Text style={styles.reviewerName}>Name{review.customerName ? review.customerName : "Name not found"}</Text>
+              <Text style={styles.reviewText}>{review.description ? review.description : "description not found"}</Text>
+              <Text style={styles.reviewRating}>Rating: {review.rating ? review.rating : "rating not found"}</Text>
             </View>
           </View>
-        ))}
+        ))
+      ) : (
+        <Text>No reviews found.</Text>
+      )}
+
+        
       </ScrollView>
 
       {/* Modal for displaying all reviews */}
@@ -66,15 +72,19 @@ const ScrollReviewer = ({email,jobRole}) => {
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>All Reviews</Text>
             <ScrollView style={styles.modalReviewsContainer}>
-              {reviews.map((review, index) => (
+            {reviews.length > 0 ? (
+              reviews.map((review, index) => (
                 <View key={index} style={styles.modalReviewItemContainer}>
                   <View style={styles.modalReviewDetailsContainer}>
-                    <Text style={styles.modalReviewerName}>{review.customerName}</Text>
-                    <Text style={styles.modalReviewText}>{review.description}</Text>
-                    <Text style={styles.modalReviewRating}>Rating: {review.rating}</Text>
+                    <Text style={styles.modalReviewerName}>{review.customerName ? review.customerName :"Reviews not found" }</Text>
+                    <Text style={styles.modalReviewText}>{review.description ? review.description : "Decription not found"}</Text>
+                    <Text style={styles.modalReviewRating}>Rating: {review.rating ?  review.rating  : "Rating not found"}</Text>
                   </View>
                 </View>
-              ))}
+              ))
+            ) : (
+                <Text>No reviews found.</Text>
+              )}
             </ScrollView>
             <Button title="Close" onPress={toggleModal} />
           </View>

@@ -42,7 +42,7 @@ const BookAppointment = () => {
   const tempProfile = "https://firebasestorage.googleapis.com/v0/b/labourlink-e7ecf.appspot.com/o/ProfilePhoto%2Fboy.png?alt=media&token=b9013246-c51f-4bb8-b68b-1465e24e8583"
    
   // const labourId = "thana@example.com";
-  const customerId = "thanakaran@gmail.com";
+  const customerId = "aruran@example.com";
   const bookingStage = "PENDING";
   // const jobRole = "ELECTRICIAN";
 
