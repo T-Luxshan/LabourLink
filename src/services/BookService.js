@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { IP } from './BASE_IP';
 
-const REST_API_BASE_URL_BOOK = "http://172.20.10.4:8080/api/bookings";
+const REST_API_BASE_URL_BOOK = `http://${IP}:8080/api/bookings`;
 
 
 

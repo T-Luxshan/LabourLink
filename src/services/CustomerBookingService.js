@@ -2,9 +2,10 @@
 
 // import axios from "axios";
 import axiosAuthInstance from "./AuthService";
+import { IP } from "./BASE_IP";
 
-const BASE_URL = "http://172.20.10.3:8080/api/bookings";
-// const BASE_URL = "http://192.168.1.56:8080/api/bookings";
+// const BASE_URL = "http://172.20.10.3:8080/api/bookings";
+const BASE_URL = `http://${IP}:8080/api/bookings`;
 
 
 
