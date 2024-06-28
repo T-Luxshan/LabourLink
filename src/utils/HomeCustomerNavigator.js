@@ -13,6 +13,9 @@ import Customer_Personal_Details from "../screens/Customer_Personal_Details";
 import Change_Password from "../screens/Change_Password";
 import ReviewModel from "../components/ReviewModel";
 import ReportModel from "../components/ReportModel";
+import MapViewScreen from "../screens/MapViewScreen";
+import LabourInfo from "../screens/LabourInfo";
+import BookAppointment from "../screens/BookAppointment";
 
 
 const Stack = createStackNavigator();
@@ -47,6 +50,23 @@ function CustomerStack() {
         component={Upcoming_Services}
         options={{ headerBackTitle: "Back" }}
       />
+      
+      <Stack.Screen
+        name="MapViewScreen"
+        component={MapViewScreen}
+        options={{ headerBackTitle: "Back" }}
+      />
+      <Stack.Screen
+        name="LabourInfo"
+        component={LabourInfo}
+        options={{ headerBackTitle: "Back" }}
+      />
+      <Stack.Screen
+        name="BookAppointment"
+        component={BookAppointment}
+        options={{ headerBackTitle: "Back" }}
+      /> 
+
       
     </Stack.Navigator>
   );
