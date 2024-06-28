@@ -46,7 +46,7 @@ const LabourInfo = () => {
          },[email])
 
   const [labour, setLabour] = useState('');
-  const [Labourfrofile, setAbout] = useState('');
+  const [LabourProfile, setAbout] = useState('');
   const [labourrating, setrating] = useState('');
   const [labourTotalservice, setTotalServices] = useState('');
   const [labourcard, setLabourCard] = useState([]);
@@ -84,7 +84,7 @@ const LabourInfo = () => {
           setrating(respose.data);
         })
         .catch(error=>{
-          console.log("Error in fetching About", error);
+          console.log("Error in fetching rating", error);
         })
     }
 
@@ -96,11 +96,16 @@ const LabourInfo = () => {
     const fetchTotalServices = (email, stage) => {
       getLabourByTotalservice(email, stage)
         .then(response => {
-          console.log(response.data);
+          // console.log(response.data);
           setTotalServices(response.data.length);  // Assuming response.data is an array of services
         })
         .catch(error => {
-          console.log("Error in fetching total services", error);
+          if (error.response && error.response.status === 404) {
+            console.log("Total services not found for the given email and stage");
+            setTotalServices("Not found");  // Set a default value if no services are found
+          } else {
+            console.log("Error in fetching total services", error);
+          }
         });
     };
   
@@ -141,8 +146,8 @@ const LabourInfo = () => {
         {/* Container for displaying service information */}
         
         <View style={styles.infoContainer}>
-          <ServiceBoxBar Cardtext="Total Services" Cardno={labourTotalservice} />  
-          <ServiceBoxBar  Cardtext="Rating" Cardno ={labourrating} /> 
+          <ServiceBoxBar Cardtext="Total Services" Cardno={labourTotalservice ? labourTotalservice :"Not found" } />  
+          <ServiceBoxBar  Cardtext="Rating" Cardno ={labourrating ? labourrating : "Not found"} /> 
         </View>  
 
         {/* Container for labour information */}
@@ -152,12 +157,12 @@ const LabourInfo = () => {
           {/* Displaying various information about the labour */}
               <Text style={styles.info}>Name: {labour ? labour.name : "Name not found"}</Text> 
 
-          <Text style={styles.info}>Gender: {Labourfrofile ? Labourfrofile.gender : "Name not found"}</Text> 
-          {Labourfrofile.languages ?
-            <Text style={styles.info}>language: {Labourfrofile ? Labourfrofile.languages.join(", ") : "languages not found"}</Text> 
-          :
-          <Text style={styles.info}>language: languages not found</Text> 
-          }
+          <Text style={styles.info}>Gender: {LabourProfile.gender ? LabourProfile.gender : "Gender not found"}</Text> 
+          
+            <Text style={styles.info}>language: {LabourProfile.languages ? LabourProfile.languages.join(", ") : "languages not found"}</Text> 
+          
+          {/* // <Text style={styles.info}>language: languages not found</Text>  */}
+          
           {/* Container for displaying about information */}
           <View style={styles.about}>
             {/* Title for about section */}
@@ -165,7 +170,7 @@ const LabourInfo = () => {
             {/* Description about the labour */}
             <Text style={styles.indentedText}>
               
-                {Labourfrofile ? Labourfrofile.aboutMe : "text not found"}
+                {LabourProfile.aboutMe ? LabourProfile.aboutMe : "About Me not found"}
 
             </Text>
           </View>
