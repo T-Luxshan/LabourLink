@@ -11,13 +11,16 @@ import { getLabourByJobRole, getLocationsByJobRole } from "../services/LabourDet
 
 const MapViewScreen = () => {
   const initialRegion = {
-    latitude: 6.79503,
-    longitude: 79.90168,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
+    // latitude: 6.79503,
+    // longitude: 79.90168,
+    // latitudeDelta: 0.0922,
+    // longitudeDelta: 0.0421,
+    
+ 
+  
   };
 
-  const [region, setRegion] = useState(initialRegion);
+  const [region, setRegion] = useState();
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [LabourLocation, setLabourLocation] = useState([]);
@@ -78,6 +81,8 @@ const MapViewScreen = () => {
         ...region,
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
       });
     })();
   }, []);
@@ -155,8 +160,8 @@ const MapViewScreen = () => {
                     profileImage={{
                       uri: labour.profileUri ? labour.profileUri : tempProfile
                     }}
-                    name={labour.labourName}
-                    jobTitle={labour.jobRole.join(" | ")}
+                    name={labour.labourName ? labour.labourName : "Name not found"}
+                    jobTitle={labour.jobRole.join(" | ") ? labour.jobRole.join(" | ") : "job Role not found "}
                     rating={labour.rating}
                   />
                 </TouchableOpacity>
