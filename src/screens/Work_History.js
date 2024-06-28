@@ -5,7 +5,6 @@ import ReviewModel from "../components/ReviewModel";
 import { getBooingDetailsById } from "../services/CustomerBookingService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
 const Work_History = ({ route, navigation }) => {
   const { completedBookings } = route.params;
   // const email = "aruran@example.com";
