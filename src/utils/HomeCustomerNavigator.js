@@ -16,6 +16,7 @@ import ReportModel from "../components/ReportModel";
 import MapViewScreen from "../screens/MapViewScreen";
 import LabourInfo from "../screens/LabourInfo";
 import BookAppointment from "../screens/BookAppointment";
+import LabourPerformanceModel from "../components/LabourPerfomanceModel";
 
 
 const Stack = createStackNavigator();
@@ -64,6 +65,11 @@ function CustomerStack() {
       <Stack.Screen
         name="BookAppointment"
         component={BookAppointment}
+        options={{ headerBackTitle: "Back" }}
+      /> 
+      <Stack.Screen
+        name="labour-perfomance"
+        component={LabourPerformanceModel}
         options={{ headerBackTitle: "Back" }}
       /> 
 
