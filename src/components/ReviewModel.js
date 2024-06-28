@@ -5,9 +5,10 @@ import { Rating, AirbnbRating } from 'react-native-ratings';
 import DropDown from 'react-native-paper-dropdown';
 import { addReview, editReview } from '../services/ReviewService';
 import { getLabourJobRoles } from '../services/AuthService';
+import { getBooingDetailsById } from '../services/CustomerBookingService';
 
-const ReviewModel = () => {
-  const [visible, setVisible] = useState(true);
+const ReviewModel = ({ navigation, route }) => {
+  const { completedBookings, bookingId } = route.params;
   const [showDropDown, setShowDropDown] = useState(true);
   const [jobRole, setJobRole] = useState('');
   const [jobList, setJobList] = useState([]);
@@ -16,17 +17,14 @@ const ReviewModel = () => {
   const [error, setError] = useState('');
   const [reviewId, setReviewId] = useState(null);
   const [saveError, setSaveError] = useState('');
+  const [labour, setLabour] = useState("");
 
-  const labour = {
-    "name":"Luxshan",
-    "email": "lucky@gmail.com"
-  }
   useEffect(() => {
     fetchAvailableJobs();
+    bookingDetails(bookingId)
   }, []);
 
   const fetchAvailableJobs = () => {
-    
     getLabourJobRoles()
       .then(response => {
         setJobList(response.data.map(job => ({ label: job, value: job })));
@@ -34,61 +32,62 @@ const ReviewModel = () => {
       .catch(error => {
         console.log('Error fetching job roles:');
       });
-    // const availableJobs = ['Electrician', 'Plumber', 'Carpenter', 'Painter']; // Temporary data
-    
-    // const formattedJobList = availableJobs.map(job => ({ label: job, value: job }));
-    // setJobList(formattedJobList);
   };
 
-  const showModal = () => {
-    setVisible(true);
-  };
+  const bookingDetails = (id) => {
+    getBooingDetailsById(id)
+      .then(res => setLabour(res.data))
+      .catch(err => console.log("Failed to fetch labour"));
+  }
 
-  const hideModal = () => {
-    setVisible(false);
+
+
+  const handleCancel = () => {
+    navigation.navigate("Work_History", {
+      completedBookings: completedBookings,
+    });
   };
-  
 
   const ratingCompleted = (rating) => {
-    setRating(rating)
-    console.log('Rating is: ' + rating);
+    setRating(rating);
+    // console.log('Rating is: ' + rating);
   };
 
-  const handleSave =()=>{   
-    if(jobRole){
-      setError('');  
-      console.log(jobRole, description, rating );
-      if(reviewId){
-        editReview(reviewId, jobRole, description, rating, labour.email)
-          .then(res=>{
+  const handleSave = () => {
+    if (jobRole) {
+      setError('');
+      // console.log(jobRole, description, rating, labour.labourId);
+      // if (reviewId) {
+      //   editReview(reviewId, jobRole, description, rating, labour.labourId)
+      //     .then(res => {
+      //       // console.log(res);
+      //       setReviewId(res.data.id);
+      //       navigation.navigate("Work_History", {
+      //         completedBookings: completedBookings,
+      //       });
+      //     })
+      //     .catch(err => {
+      //       setSaveError("Something went wrong, try again later.");
+      //     })
+      // } else {
+        addReview(jobRole, description, rating, labour.labourId)
+          .then(res => {
             console.log(res);
             setReviewId(res.data.id);
-            setVisible(false);
+            navigation.navigate("Work_History", {
+              completedBookings: completedBookings,
+            });
           })
-        .catch(err=>{
-          console.log(err)
-          setSaveError("Something went wrong, try again later.");
-        })
-      
-      }else{
-      addReview(jobRole, description, rating, labour.email)
-        .then(res=>{
-          console.log(res);
-          setReviewId(res.data.id);
-          setVisible(false);
-        })
-        .catch(err=>{
-          console.log(err)
-          setSaveError("Something went wrong, try again later.");
-        })
-    }
-    }else{
+          .catch(err => {
+            setSaveError("Something went wrong, try again later.");
+          })
+      // }
+    } else {
       setError("Please select the job role.")
     }
   }
 
   const theme = {
-    // ...MD3LightTheme, // or MD3DarkTheme
     roundness: 2,
     colors: {
       ...MD3LightTheme.colors,
@@ -102,75 +101,62 @@ const ReviewModel = () => {
     <PaperProvider theme={theme}>
       <Portal>
         <Modal
-          visible={visible}
-          onDismiss={hideModal}
+          visible={true}
           overlayOpacity={0}
           contentContainerStyle={[styles.modelContainer, { marginBottom: 80 }]}
         >
           <KeyboardAvoidingView
-        style={styles.container}
-        behavior={Platform.OS === "ios" ? "padding" : null} // Adjust behavior for iOS and Android
-        keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0} // Adjust vertical offset for iOS
-      >
-      <ScrollView>
-          <Headline style={styles.headline}>Rate his performance</Headline>
-          <AirbnbRating 
-            onChangeRating={ratingCompleted}
-            size={24}
-          />
-          <Text style={{ marginTop: 10 }}>Please select the job role you hired for..</Text>
-          <DropDown
-            label="Job Role"
-            mode="outlined"
-            value={jobRole}
-            setValue={setJobRole}
-            list={jobList}
-            visible={showDropDown}
-            showDropDown={() => setShowDropDown(true)}
-            onDismiss={() => setShowDropDown(false)}
-            // inputProps={{
-            //   right: <TextInput.Icon name="menu-down" />,
-            // }}
-            activeColor="#FB9741"
-            theme={theme}
-          />
-          {error && <Text style={{color:'red'}} > {error} </Text>}
-          <TextInput
-            label="Description"
-            value={description}
-            onChangeText={text => setDescription(text)}
-            mode="outlined"
-            outlineColor="grey"
-            // multiline
-            // numberOfLines={3}
-            theme={{
-              colors: {
-                primary: 'black',
-              },
-            }}
-            style={styles.textInput}
-          />
-          {saveError && <Text style={{color:'red'}} > {saveError} </Text>}
-          <View style={styles.btnContainer}>
-            <Button mode="text" textColor="#F97300" onPress={hideModal} style={{ borderColor: '#F97300' }}>
-              Cancel
-            </Button>
-            <Button mode="text" textColor="#F97300" onPress={handleSave} style={{ borderColor: '#F97300' }}>
-              Save
-            </Button>
-          </View>
-          
-          </ScrollView>
+            style={styles.container}
+            behavior={Platform.OS === "ios" ? "padding" : null}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
+          >
+            <ScrollView>
+              <Headline style={styles.headline}>Rate his performance</Headline>
+              <AirbnbRating 
+                onFinishRating={ratingCompleted}
+                size={24}
+              />
+              <Text style={{ marginTop: 10 }}>Please select the job role you hired for..</Text>
+              <DropDown
+                label="Job Role"
+                mode="outlined"
+                value={jobRole}
+                setValue={setJobRole}
+                list={jobList}
+                visible={showDropDown}
+                showDropDown={() => setShowDropDown(true)}
+                onDismiss={() => setShowDropDown(false)}
+                activeColor="#FB9741"
+                theme={theme}
+              />
+              {error && <Text style={{ color: 'red' }}> {error} </Text>}
+              <TextInput
+                label="Description"
+                value={description}
+                onChangeText={text => setDescription(text)}
+                mode="outlined"
+                outlineColor="grey"
+                theme={{
+                  colors: {
+                    primary: 'black',
+                  },
+                }}
+                style={styles.textInput}
+              />
+              {saveError && <Text style={{ color: 'red' }}> {saveError} </Text>}
+              <View style={styles.btnContainer}>
+                <Button mode="text" textColor="#F97300" onPress={handleCancel} style={{ borderColor: '#F97300' }}>
+                  Cancel
+                </Button>
+                <Button mode="text" textColor="#F97300" onPress={handleSave} style={{ borderColor: '#F97300' }}>
+                  Save
+                </Button>
+              </View>
+            </ScrollView>
           </KeyboardAvoidingView>
         </Modal>
       </Portal>
       <View style={styles.uploadContainer}>
-        <View style={styles.infoContainer}>
-            <Button mode="text" textColor="#F97300" onPress={showModal} style={styles.infoIcon}>
-              Add review 
-            </Button>
-          
-        </View>
       </View>
     </PaperProvider>
   );
@@ -181,10 +167,10 @@ export default ReviewModel;
 const styles = StyleSheet.create({
   modelContainer: {
     backgroundColor: 'white',
-    padding: 20,
+    padding: 10,
     height: 450,
-    width: '100%',
     marginTop: 10,
+    margin: 20,
     borderRadius: 10,
     zIndex: 9999,
   },
@@ -200,10 +186,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   infoIcon: {
-    marginTop:300
-    // margin: 150,
-    // elevation: 0, // for Android
-    // shadowOpacity: 0, // for iOS
+    marginTop: 300,
   },
   promptText: {
     color: 'black',
@@ -218,8 +201,8 @@ const styles = StyleSheet.create({
   textInput: {
     backgroundColor: 'white',
     marginVertical: 10,
-    minHeight: 100, // Adjust the height for the multiline TextInput
-    textAlignVertical:'top'
+    minHeight: 100,
+    textAlignVertical: 'top',
   },
   btnContainer: {
     flexDirection: 'row',

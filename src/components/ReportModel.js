@@ -4,59 +4,69 @@ import { Button, Modal, Portal, Provider as PaperProvider, Headline, IconButton,
 import { Rating, AirbnbRating } from 'react-native-ratings';
 import DropDown from 'react-native-paper-dropdown';
 import { reportUser, editUserReport } from '../services/ReportService';
+import { useLogin } from '../context/LoginProvider';
 
 
-const ReportModel = () => {
-  const [visible, setVisible] = useState(true);
+const ReportModel = ({ navigation, route }) => {
+  const { completedBookings, reportTo } = route.params;
   const [issue, setIssue] = useState('');
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
-  const [reportId, setReviewId] = useState(null);
   const [saveError, setSaveError] = useState('');
+  const { userRole } = useLogin();
 
-  const labour = {
-    "name":"Luxshan",
-    "email": "lucky@gmail.com"
-  }
   
-
-  const showModal = () => {
-    setVisible(true);
+  
+  const handleCancel = () => {
+    if(userRole == "CUSTOMER"){
+      navigation.navigate("Work_History", {
+        completedBookings: completedBookings,
+      });
+    }
+    else{
+      navigation.navigate("Previous_Work_History", {
+        completedBookings: completedBookings,
+      });
+    }
   };
 
-  const hideModal = () => {
-    setVisible(false);
-  };
-  
 
   const handleSave =()=>{   
     if(issue){
       setError('');  
-      console.log( issue, description, labour.email );
-      if(reportId){
-        editUserReport(reportId, issue, description, labour.email)
-          .then(res=>{
-            console.log(res);
-            setReviewId(res.data.id);
-            setVisible(false);
-          })
-        .catch(err=>{
-          console.log(err)
-          setSaveError("Something went wrong, try again later.");
-        })
+      console.log( issue, description, reportTo );
+      // if(reportId){
+      //   editUserReport(reportId, issue, description, labour.email)
+      //     .then(res=>{
+      //       console.log(res);
+            
+      //     })
+      //   .catch(err=>{
+      //     console.log(err)
+      //     setSaveError("Something went wrong, try again later.");
+      //   })
       
-      }else{
-        reportUser(issue, description, labour.email)
+      // }else{
+        reportUser(issue, description, reportTo)
         .then(res=>{
           console.log(res);
-          setReviewId(res.data.id);
-          setVisible(false);
+          if(userRole == "CUSTOMER"){
+            navigation.navigate("Work_History", {
+              completedBookings: completedBookings,
+            });
+          }
+          else{
+            navigation.navigate("Previous_Work_History", {
+              completedBookings: completedBookings,
+            });
+          }
+          
         })
         .catch(err=>{
           console.log(err)
           setSaveError("Something went wrong, try again later.");
         })
-    }
+    // }
     }else{
       setError("Please mention the the issue.")
     }
@@ -77,8 +87,8 @@ const ReportModel = () => {
     <PaperProvider theme={theme}>
       <Portal>
         <Modal
-          visible={visible}
-          onDismiss={hideModal}
+          visible={true}
+          // onDismiss={hideModal}
           overlayOpacity={0}
           contentContainerStyle={[styles.modelContainer, { marginBottom: 80 }]}
         >
@@ -88,7 +98,7 @@ const ReportModel = () => {
         keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0} // Adjust vertical offset for iOS
       >
       <ScrollView>
-          <Headline style={styles.headline}>Please mention the the issue and and describe the issue, 
+          <Headline style={styles.headline}>Please mention and describe the issue, 
           so we can take action against that person.</Headline>
           <TextInput
             label="Issue"
@@ -125,7 +135,7 @@ const ReportModel = () => {
           />
           {saveError && <Text style={{color:'red'}} > {saveError} </Text>}
           <View style={styles.btnContainer}>
-            <Button mode="text" textColor="#F97300" onPress={hideModal} style={{ borderColor: '#F97300' }}>
+            <Button mode="text" textColor="#F97300" onPress={handleCancel} style={{ borderColor: '#F97300' }}>
               Cancel
             </Button>
             <Button mode="text" textColor="#F97300" onPress={handleSave} style={{ borderColor: '#F97300' }}>
@@ -139,9 +149,6 @@ const ReportModel = () => {
       </Portal>
       <View style={styles.uploadContainer}>
         <View style={styles.infoContainer}>
-            <Button mode="text" textColor="#F97300" onPress={showModal} style={styles.infoIcon}>
-              Add report 
-            </Button>
           
         </View>
       </View>
@@ -155,8 +162,9 @@ const styles = StyleSheet.create({
   modelContainer: {
     backgroundColor: 'white',
     padding: 20,
+    margin:10,
     height: 450,
-    width: '100%',
+    // width: '100%',
     marginTop: 10,
     borderRadius: 10,
     zIndex: 9999,
@@ -164,6 +172,7 @@ const styles = StyleSheet.create({
   headline: {
     color: 'black',
     marginBottom: 10,
+
   },
   modelText: {
     color: 'black',

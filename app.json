@@ -12,7 +12,7 @@
       "backgroundColor": "#ffffff"
     },
     "assetBundlePatterns": [
-      "**/*"
+      "/*"
     ],
     "ios": {
       "supportsTablet": true
@@ -43,3 +43,4 @@
     "owner": "kirushanth"
   }
 }
+
