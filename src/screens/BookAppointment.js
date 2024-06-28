@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; 
+import React, { useState , useEffect} from 'react'; 
 import { View, Text, StyleSheet, TouchableOpacity, Platform, TextInput, KeyboardAvoidingView, Alert } from 'react-native'; 
 import { Calendar } from 'react-native-calendars'; 
 import LabourProfileComponent from '../components/LabourProfileComponent'; 
@@ -9,6 +9,8 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';  
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { BookingLabour } from '../services/LabourDetailsService';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 // Define Yup validation schema
 const bookingSchema = Yup.object().shape({
@@ -40,11 +42,30 @@ const BookAppointment = () => {
   const [showTimePicker, setShowTimePicker] = useState(false);
   const [timePicked, setTimePicked] = useState(false);
   const tempProfile = "https://firebasestorage.googleapis.com/v0/b/labourlink-e7ecf.appspot.com/o/ProfilePhoto%2Fboy.png?alt=media&token=b9013246-c51f-4bb8-b68b-1465e24e8583"
-   
+  const[customerId, setCustomerId] = useState(""); 
+  
   // const labourId = "thana@example.com";
-  const customerId = "aruran@example.com";
+  // const customerId = "aruran@example.com";
   const bookingStage = "PENDING";
   // const jobRole = "ELECTRICIAN";
+
+
+  useEffect(() => {
+    const fetchEmail = async () => {
+      try {
+        const customerId = await AsyncStorage.getItem("userEmail");
+        if (customerId) {
+          setCustomerId(customerId.toLowerCase());
+        } else {
+          console.log("No email found in AsyncStorage");
+        }
+      } catch (error) {
+        console.log("Error fetching email from AsyncStorage:");
+      }
+    };
+
+    fetchEmail();
+  }, []);
 
   const handleDateSelect = (day) => {
     if (day.dateString) {
@@ -76,6 +97,7 @@ const BookAppointment = () => {
 
     console.log("Submitting booking data: ",  values); // Log the booking data
     console.log(jobRole.toUpperCase(), labourId)
+    console.log(customerId)
 
     try {
       const response = await BookingLabour( labourId,customerId,values.date, values.startTime, "PENDING", values.jobDescription,jobRole.toUpperCase());
