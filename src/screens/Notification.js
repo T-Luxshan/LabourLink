@@ -116,13 +116,29 @@ const Notification = ({ navigation }) => {
 
   const handleNotification = async () => {
     const notification = {
-      title: 'First Notification',
+      title: 'First Personal Notification',
       message: 'This is the first notification testing',
       recipient: email,
       createdAt: new Date().toISOString(),
     };
 
-    await fetch('https://app.nativenotify.com/api/notification', {
+    // await fetch('https://app.nativenotify.com/api/notification', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     Authorization: `Bearer dwb6dAoCmrQD8faaLyciTU`,
+    //   },
+    //   body: JSON.stringify({
+    //     appId: 21639,
+    //     appToken: 'dwb6dAoCmrQD8faaLyciTU',
+    //     title: notification.title,
+    //     message: notification.message,
+    //     userId: notification.recipient,
+    //     date: notification.createdAt,
+    //   }),
+    // });
+
+    await fetch('https://app.nativenotify.com/api/indie/notification', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -133,7 +149,8 @@ const Notification = ({ navigation }) => {
         appToken: 'dwb6dAoCmrQD8faaLyciTU',
         title: notification.title,
         message: notification.message,
-        userId: notification.recipient,
+        // userId: notification.recipient,
+        subID:email,
         date: notification.createdAt,
       }),
     });

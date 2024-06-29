@@ -13,6 +13,7 @@ import SignInWithGoogle from "../../components/SignInWithGoogle";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { registerIndieID, unregisterIndieDevice } from 'native-notify';
 
 import * as yup from "yup";
 import {
@@ -94,6 +95,9 @@ const Login = () => {
         console.log(response.data.accessToken);
         await AsyncStorage.setItem("userEmail", email);
         await AsyncStorage.setItem("userRole", userRole);
+
+        registerIndieID(email, 21639, 'dwb6dAoCmrQD8faaLyciTU');
+
       } catch (e) {
         console.log(e);
         setLogError("Invalid email or password.");
