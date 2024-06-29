@@ -6,7 +6,7 @@ import {
   updateBookingStage,
 } from "../services/BookingService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { saveNotifications } from '../services/NoificationSevice';
 
 const Appointment_page = ({ route, navigation }) => {
   const { appointmentId, removeAppointment } = route.params;
@@ -70,8 +70,7 @@ const Appointment_page = ({ route, navigation }) => {
   const handleAccept = async () => {
     try {
       await updateBookingStage(appointmentId, "ACCEPTED");
-
-      
+      handleAcceptNotification();      
       removeAppointment(appointmentId);
       navigation.navigate("Appointment"); // Navigate back to Appointment screen
     } catch (error) {
@@ -105,6 +104,39 @@ const handleIgnore = async () => {
       options
     );
     return formattedDate;
+  };
+
+  const handleAcceptNotification = async () => {
+    const notification = {
+      title: `Request accepted from `,
+      message: `You have successfully hired`,
+      recipient: labourEmail,
+      createdAt: new Date().toISOString(),
+    };
+
+    await fetch('https://app.nativenotify.com/api/indie/notification', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer dwb6dAoCmrQD8faaLyciTU`,
+      },
+      body: JSON.stringify({
+        appId: 21639,
+        appToken: 'dwb6dAoCmrQD8faaLyciTU',
+        title: notification.title,
+        message: notification.message,
+        // userId: notification.recipient,
+        subID:labourEmail,
+        date: notification.createdAt,
+      }),
+    });
+
+    try {
+      await saveNotifications(notification);
+      setNotifications((prevNotifications) => [notification, ...prevNotifications]);
+    } catch (error) {
+      console.error('Error saving notification', error);
+    }
   };
 
   return (

@@ -118,6 +118,7 @@ const handleEditProfile = () => {
 
   const handleLogout = async () => {
     try {
+      unregisterIndieDevice(userEmail, 21639, 'dwb6dAoCmrQD8faaLyciTU');
       // Log current AsyncStorage values
       const tokenValue = await AsyncStorage.getItem("token");
       const refreshTokenValue = await AsyncStorage.getItem("refreshToken");
@@ -131,6 +132,7 @@ const handleEditProfile = () => {
       // Clear tokens from AsyncStorage
       await AsyncStorage.removeItem("token");
       await AsyncStorage.removeItem("refreshToken");
+      
 
       // Log to confirm removal
       console.log("After logout - tokens removed");
