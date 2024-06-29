@@ -16,6 +16,10 @@ import Personal_Details from "../screens/Personal_Details";
 import Labour_Change_Password from "../screens/Labour_Change_Password";
 import Edit from "../screens/Edit";
 import ReportModel from "../components/ReportModel";
+import ChatAreaScreen from "../screens/ChatAreaScreen";
+import OnlineUsersScreen from "../screens/OnlineUsersScreen";
+import Notification from "../screens/Notification";
+import NotificationDetail from "../screens/NotificationDetail";
 
 
 const Stack = createStackNavigator();
@@ -91,6 +95,38 @@ function LabourStack() {
     </Stack.Navigator>
   );
 }
+
+function NotificationStack() {
+  return (
+    <Stack.Navigator initialRouteName="Notification">
+      <Stack.Screen
+        name="Notification"
+        component={Notification}
+      />
+      <Stack.Screen
+        name="NotificationDetail"
+        component={NotificationDetail}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function ChatStack() {
+  return (
+    <Stack.Navigator initialRouteName="OnlineUsersScreen">
+      <Stack.Screen
+        name="OnlineUsersScreen"
+        component={OnlineUsersScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ChatAreaScreen"
+        component={ChatAreaScreen}
+        options={{ title: "back" }}
+      />
+    </Stack.Navigator>
+  );
+}
   
   
   function CustomBottomNavigationBar() {
@@ -130,12 +166,12 @@ function LabourStack() {
         />
         <Tab.Screen
           name="Notification"
-          component={Notification_customer_page}
+          component={NotificationStack}
           options={{ headerShown: false }}
         />
         <Tab.Screen
           name="Chat"
-          component={Customer_page}
+          component={ChatStack}
           options={{ headerShown: false }}
         />
         <Tab.Screen
