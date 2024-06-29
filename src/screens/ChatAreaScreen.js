@@ -3,6 +3,7 @@ import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import { findChatMessages, saveChatMessage } from "../services/userService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { IP } from '../services/BASE_IP';
 
 const ChatAreaScreen = ({ route }) => {
   const { SelectedUserName, SelectedUserEmail } = route.params;
@@ -32,7 +33,7 @@ const ChatAreaScreen = ({ route }) => {
 
   const connect = () => {
     console.log("connect function called");
-    const ws = new WebSocket("ws://localhost:8080/ws");
+    const ws = new WebSocket(`ws://${IP}:8080/ws`);
 
     ws.onopen = () => {
       console.log("WebSocket connection opened.");

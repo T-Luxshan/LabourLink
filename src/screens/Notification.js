@@ -52,7 +52,7 @@ const Notification = ({ navigation }) => {
       // WebSocket connection
       const socket = new SockJS(`http://${IP}:8080/ws`);
       stompClient = new Client({
-        brokerURL: 'ws://localhost:8080/ws',
+        brokerURL: `http://${IP}:8080/ws`,
         connectHeaders: {
           login: 'guest',
           passcode: 'guest',
