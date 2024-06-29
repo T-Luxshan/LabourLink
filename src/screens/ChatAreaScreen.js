@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { TextInput, Button } from "react-native-paper";
-import { findChatMessages, saveChatMessage } from "../service/userService"; // Ensure saveChatMessage is defined in your userService
+import { findChatMessages, saveChatMessage } from "../services/userService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ChatAreaScreen = ({ route }) => {

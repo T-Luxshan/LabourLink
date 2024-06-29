@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { List, Avatar } from "react-native-paper";
-import { findConnectedLabours,findConnectedCustomers } from "../service/userService";
+import { findConnectedLabours,findConnectedCustomers } from "../services/userService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const OnlineUsersScreen = ({ navigation }) => {
