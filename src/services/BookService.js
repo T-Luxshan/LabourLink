@@ -3,8 +3,6 @@ import { IP } from './BASE_IP';
 
 const REST_API_BASE_URL_BOOK = `http://${IP}:8080/api/bookings`;
 
-
-
  // API for get customer
  export const customer = (customerEmail) => {
     return axios.get(`${REST_API_BASE_URL_BOOK}/getUserRole/${customerEmail}`)
@@ -19,4 +17,3 @@ const REST_API_BASE_URL_BOOK = `http://${IP}:8080/api/bookings`;
   export const updateStage = (id) =>{
     return axios.post(`${FORGOTPASSWORD_BASE_BOOK}/updateStage/${id}`)
     };
-    

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Notification_customer_page from "../screens/Notification_customer_page";
@@ -6,6 +6,7 @@ import Customer_page from "../screens/Customer_page";
 import About_Us from "../screens/About_Us";
 import Edit_Profile from "../screens/Edit_Profile";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { Badge, withBadge } from "react-native-elements";
 import Work_History from "../screens/Work_History";
 import Upcoming_Services from "../screens/Upcoming_Services";
 import Customer_profile_page from "../screens/Customer_profile_page";
@@ -21,11 +22,11 @@ import ChatAreaScreen from "../screens/ChatAreaScreen";
 import OnlineUsersScreen from "../screens/OnlineUsersScreen";
 import Notification from "../screens/Notification";
 import NotificationDetail from "../screens/NotificationDetail";
-
+import { findNotifications } from "../services/NoificationSevice";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-
 
 function CustomerStack() {
   return (
@@ -55,7 +56,6 @@ function CustomerStack() {
         component={Upcoming_Services}
         options={{ headerBackTitle: "Back" }}
       />
-      
       <Stack.Screen
         name="MapViewScreen"
         component={MapViewScreen}
@@ -70,18 +70,16 @@ function CustomerStack() {
         name="BookAppointment"
         component={BookAppointment}
         options={{ headerBackTitle: "Back" }}
-      /> 
+      />
       <Stack.Screen
         name="labour-perfomance"
         component={LabourPerformanceModel}
         options={{ headerBackTitle: "Back" }}
-      /> 
-
-      
+      />
     </Stack.Navigator>
   );
 }
-  
+
 function CustomerProfileStack() {
   return (
     <Stack.Navigator initialRouteName="Customer_profile_page">
@@ -117,14 +115,8 @@ function CustomerProfileStack() {
 function NotificationStack() {
   return (
     <Stack.Navigator initialRouteName="Notification">
-      <Stack.Screen
-        name="Notification"
-        component={Notification}
-      />
-      <Stack.Screen
-        name="NotificationDetail"
-        component={NotificationDetail}
-      />
+      <Stack.Screen name="Notification" component={Notification} />
+      <Stack.Screen name="NotificationDetail" component={NotificationDetail} />
     </Stack.Navigator>
   );
 }
@@ -146,68 +138,126 @@ function ChatStack() {
   );
 }
 
-  
-  
-  
-  function CustomBottomNavigationBar() {
-    return (
-      <Tab.Navigator
-        initialRouteName="Customer_page"
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ color, size }) => {
-            let iconName;
-  
-            switch (route.name) {
-              case "Home":
-                iconName = "home";
-                break;
-              case "Notification":
-                iconName = "bell";
-                break;
-              case "Chat":
-                iconName = "comment";
-                break;
-              case "Profile":
-                iconName = "user";
-                break;
-              default:
-                iconName = "question";
-                break;
-            }
-  
-            return <Icon name={iconName} size={size} color={color} />;
-          },
-        })}
-      >
-        <Tab.Screen
-          name="Home"
-          component={CustomerStack}
-          options={{ headerShown: false }}
-        />
-        <Tab.Screen
-          name="Notification"
-          component={NotificationStack}
-          options={{ headerShown: false }}
-        />
-        <Tab.Screen
-          name="Chat"
-          component={ChatStack}
-          options={{ headerShown: false }}
-        />
-        <Tab.Screen
-          name="Profile"
-          component={CustomerProfileStack}
-          options={{ headerShown: false }}
-        />
-      </Tab.Navigator>
-    );
-  }
+function CustomBottomNavigationBar() {
+  const [notifications, setNotifications] = useState([]);
+  const [email, setEmail] = useState("");
+  const [refreshing, setRefreshing] = useState(false);
 
-  const HomeCustomerNavigator = () => {
-      return <CustomBottomNavigationBar />
-  }
+  useEffect(() => {
+    const fetchEmail = async () => {
+      try {
+        const storedEmail = await AsyncStorage.getItem("userEmail");
+        if (storedEmail) {
+          setEmail(storedEmail);
+        }
+      } catch (error) {
+        console.error("Failed to fetch email from storage", error);
+      }
+    };
 
-  export default HomeCustomerNavigator;
-  
-  
-  
+    fetchEmail();
+  }, []);
+
+  // useEffect(() => {
+  //   const fetchNotifications = async () => {
+  //     if (email) {
+  //       try {
+  //         const response = await findNotifications(email);
+  //         const sortedNotifications = response.data.sort(
+  //           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  //         );
+  //         setNotifications(sortedNotifications);
+  //       } catch (error) {
+  //         console.log("Error fetching notifications ", error);
+  //       }
+  //     }
+  //   };
+
+  //   fetchNotifications();
+  // }, [email]);
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      if (email) {
+        setRefreshing(true);
+        try {
+          const response = await findNotifications(email);
+          const sortedNotifications = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+          setNotifications(sortedNotifications);
+        } catch (error) {
+          console.error('Error refreshing notifications', error);
+        } finally {
+          setRefreshing(false);
+        }
+      }
+    }, 1000); // Refresh every 1 second
+
+    return () => clearInterval(interval);
+  }, [email]);
+
+  const unreadNotificationCount = notifications.filter(
+    (notification) => !notification.read
+  ).length;
+
+  return (
+    <Tab.Navigator
+      initialRouteName="Customer_page"
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color, size }) => {
+          let iconName;
+          let badgeCount = 0;
+
+          switch (route.name) {
+            case "Home":
+              iconName = "home";
+              break;
+            case "Notification":
+              iconName = "bell";
+              badgeCount = unreadNotificationCount;
+              break;
+            case "Chat":
+              iconName = "comment";
+              break;
+            case "Profile":
+              iconName = "user";
+              break;
+            default:
+              iconName = "question";
+              break;
+          }
+
+          const IconWithBadge =
+            badgeCount > 0 ? withBadge(badgeCount)(Icon) : Icon;
+
+          return <IconWithBadge name={iconName} size={size} color={color} />;
+        },
+      })}
+    >
+      <Tab.Screen
+        name="Home"
+        component={CustomerStack}
+        options={{ headerShown: false }}
+      />
+      <Tab.Screen
+        name="Notification"
+        component={NotificationStack}
+        options={{ headerShown: false }}
+      />
+      <Tab.Screen
+        name="Chat"
+        component={ChatStack}
+        options={{ headerShown: false }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={CustomerProfileStack}
+        options={{ headerShown: false }}
+      />
+    </Tab.Navigator>
+  );
+}
+
+const HomeCustomerNavigator = () => {
+  return <CustomBottomNavigationBar />;
+};
+
+export default HomeCustomerNavigator;

@@ -114,6 +114,15 @@ const Notification = ({ navigation }) => {
     return () => clearInterval(interval);
   }, [email]);
 
+  // const count = notifications.length;
+  // const readCount = notifications.filter(
+  //   (notification) => notification.read
+  // ).length;
+  // const unreadNotificationCount = count - readCount;
+  // AsyncStorage.setItem("unreadNotifications",unreadNotificationCount);
+  // console.log("No of Unread Notifications",unreadNotificationCount);
+
+
   const handleNotification = async () => {
     const notification = {
       title: 'First Personal Notification',
