@@ -1,3 +1,4 @@
+
 // import { StatusBar } from "expo-status-bar";
 // import React, { useState, useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
@@ -24,6 +25,3 @@ export default function App() {
   
   );
 }
-
-
-

@@ -13,6 +13,7 @@ const FORGOTPASSWORD_BASE_URL = `http://${IP}:8080/forgotPassword`;
 const REST_API_BASE_URL_AUTH = `http://${IP}:8080/api/v1/auth`;
 const  baseURL = `http://${IP}:8080/api`;
 
+
 // const REST_API_BASE_URL_AUTH = "http://localhost:8080/api/v1/auth";
 // const  baseURL = 'http://localhost:8080/api';
 // const FORGOTPASSWORD_BASE_URL = "http://localhost:8080/forgotPassword";
