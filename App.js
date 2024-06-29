@@ -1,3 +1,4 @@
+
 // import { StatusBar } from "expo-status-bar";
 // import React, { useState, useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
@@ -6,7 +7,7 @@ import { NavigationContainer } from "@react-navigation/native";
 // import Icon from "react-native-vector-icons/FontAwesome";
 // import { SafeAreaProvider } from "react-native-safe-area-context";
 // import "react-native-gesture-handler";
-
+import registerNNPushToken from 'native-notify';
 
 
 import MainNavigator from "./src/utils/MainNavigator";
@@ -14,16 +15,12 @@ import LoginProvider from "./src/context/LoginProvider";
 
 
 export default function App() {
+  registerNNPushToken(21639, 'dwb6dAoCmrQD8faaLyciTU');
   return (
     <LoginProvider>
       <NavigationContainer>
       <MainNavigator />
       </NavigationContainer>
-    </LoginProvider>
-      
-  
+    </LoginProvider> 
   );
 }
-
-
-

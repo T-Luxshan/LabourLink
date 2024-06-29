@@ -10,7 +10,7 @@ import * as Yup from 'yup';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { BookingLabour } from '../services/LabourDetailsService';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { saveNotifications } from '../services/NoificationSevice';
 
 // Define Yup validation schema
 const bookingSchema = Yup.object().shape({
@@ -43,6 +43,7 @@ const BookAppointment = () => {
   const [timePicked, setTimePicked] = useState(false);
   const tempProfile = "https://firebasestorage.googleapis.com/v0/b/labourlink-e7ecf.appspot.com/o/ProfilePhoto%2Fboy.png?alt=media&token=b9013246-c51f-4bb8-b68b-1465e24e8583"
   const[customerId, setCustomerId] = useState(""); 
+  const [notifications, setNotifications] = useState([]);
   
   // const labourId = "thana@example.com";
   // const customerId = "aruran@example.com";
@@ -103,10 +104,44 @@ const BookAppointment = () => {
       const response = await BookingLabour( labourId,customerId,values.date, values.startTime, "PENDING", values.jobDescription,jobRole.toUpperCase());
       Alert.alert('Success', 'Booking has been made successfully.');
       console.log("Booking response: ", response.data);
+      handleNotification();
       resetForm();  // Reset the form after successful submission
     } catch (error) {
       Alert.alert('Error', 'Failed to make the booking. Please try again.');
       console.error("Booking error: ", error);
+    }
+  };
+
+  const handleNotification = async () => {
+    const notification = {
+      title: `Hiring Request sent to ${labourName}`,
+      message: `You have successfully hired ${labourName} for ${jobRole}`,
+      recipient: customerId,
+      createdAt: new Date().toISOString(),
+    };
+
+    await fetch('https://app.nativenotify.com/api/indie/notification', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer dwb6dAoCmrQD8faaLyciTU`,
+      },
+      body: JSON.stringify({
+        appId: 21639,
+        appToken: 'dwb6dAoCmrQD8faaLyciTU',
+        title: notification.title,
+        message: notification.message,
+        // userId: notification.recipient,
+        subID:customerId,
+        date: notification.createdAt,
+      }),
+    });
+
+    try {
+      await saveNotifications(notification);
+      setNotifications((prevNotifications) => [notification, ...prevNotifications]);
+    } catch (error) {
+      console.error('Error saving notification', error);
     }
   };
 

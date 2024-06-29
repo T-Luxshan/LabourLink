@@ -17,6 +17,10 @@ import MapViewScreen from "../screens/MapViewScreen";
 import LabourInfo from "../screens/LabourInfo";
 import BookAppointment from "../screens/BookAppointment";
 import LabourPerformanceModel from "../components/LabourPerfomanceModel";
+import ChatAreaScreen from "../screens/ChatAreaScreen";
+import OnlineUsersScreen from "../screens/OnlineUsersScreen";
+import Notification from "../screens/Notification";
+import NotificationDetail from "../screens/NotificationDetail";
 
 
 const Stack = createStackNavigator();
@@ -110,6 +114,38 @@ function CustomerProfileStack() {
   );
 }
 
+function NotificationStack() {
+  return (
+    <Stack.Navigator initialRouteName="Notification">
+      <Stack.Screen
+        name="Notification"
+        component={Notification}
+      />
+      <Stack.Screen
+        name="NotificationDetail"
+        component={NotificationDetail}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function ChatStack() {
+  return (
+    <Stack.Navigator initialRouteName="OnlineUsersScreen">
+      <Stack.Screen
+        name="OnlineUsersScreen"
+        component={OnlineUsersScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ChatAreaScreen"
+        component={ChatAreaScreen}
+        options={{ title: "back" }}
+      />
+    </Stack.Navigator>
+  );
+}
+
   
   
   
@@ -150,12 +186,12 @@ function CustomerProfileStack() {
         />
         <Tab.Screen
           name="Notification"
-          component={Notification_customer_page}
+          component={NotificationStack}
           options={{ headerShown: false }}
         />
         <Tab.Screen
           name="Chat"
-          component={Customer_page}
+          component={ChatStack}
           options={{ headerShown: false }}
         />
         <Tab.Screen
