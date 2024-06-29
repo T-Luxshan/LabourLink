@@ -38,7 +38,7 @@ const Labour_page = ({ navigation, route }) => {
       try {
         const email = await AsyncStorage.getItem("userEmail");
         if (email) {
-          setLabourEmail(email);
+          setLabourEmail(email.toLowerCase());
         } else {
           console.log("No email found in AsyncStorage");
         }
@@ -50,8 +50,9 @@ const Labour_page = ({ navigation, route }) => {
     fetchLabourEmail();
   }, []);
 
-  useFocusEffect(
-    useCallback(() => {
+
+  useEffect(() => {
+    if (labourEmail) {
       const fetchData = async () => {
         try {
           const labourResponse = await getLabourById(labourEmail);
@@ -87,15 +88,15 @@ const Labour_page = ({ navigation, route }) => {
           console.log("Error fetching completed appointments:", error);
         }
 
-        try {
-          const acceptedAppointments = await getAcceptedAppointments(
-            labourEmail
-          );
-          console.log("Accepted Appointments:", acceptedAppointments);
-          setAcceptedAppointments(acceptedAppointments);
-        } catch (error) {
-          console.log("Error fetching accepted appointments:", error);
-        }
+        // try {
+        //   const acceptedAppointments = await getAcceptedAppointments(
+        //     labourEmail
+        //   );
+        //   console.log("Accepted Appointments:", acceptedAppointments);
+        //   setAcceptedAppointments(acceptedAppointments);
+        // } catch (error) {
+        //   console.log("Error fetching accepted appointments:", error);
+        // }
 
         getProfilePicture()
           .then((res) => {
@@ -108,8 +109,28 @@ const Labour_page = ({ navigation, route }) => {
       };
 
       fetchData();
-    }, [labourEmail])
-  );
+}}, [labourEmail]);
+
+ useFocusEffect(
+   useCallback(() => {
+     if (labourEmail) {
+       const fetchAcceptedAppointments = async () => {
+         try {
+           const acceptedAppointments = await getAcceptedAppointments(
+             labourEmail
+           );
+           console.log("Accepted Appointments:", acceptedAppointments);
+           setAcceptedAppointments(acceptedAppointments);
+         } catch (error) {
+           console.log("Error fetching accepted appointments:", error);
+         }
+       };
+
+       fetchAcceptedAppointments();
+     }
+   }, [labourEmail])
+ );
+  
 
   const totalServices = completedBookings.length;
 

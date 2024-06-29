@@ -24,7 +24,7 @@ const Appointment_page = ({ route, navigation }) => {
        try {
          const email = await AsyncStorage.getItem("userEmail");
          if (email) {
-           setLabourEmail(email);
+           setLabourEmail(email.toLowerCase());
          } else {
            console.log("No email found in AsyncStorage");
          }

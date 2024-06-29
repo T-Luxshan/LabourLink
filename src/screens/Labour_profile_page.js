@@ -60,7 +60,7 @@ const getEmail = async () => {
   try {
     const email = await AsyncStorage.getItem('userEmail');
     console.log("This is the email", email)
-    setUserEmail(email);
+    setUserEmail(email.toLowerCase());
     fetchLabourByEmail(email);
     fetchProfilePhoto(email);
 
