@@ -23,15 +23,15 @@ import { saveNotifications } from "../services/NoificationSevice";
 
 // Define Yup validation schema
 const bookingSchema = Yup.object().shape({
-  date: Yup.string()
-    .required("Date is required")
-    .matches(/^\d{4}-\d{2}-\d{2}$/, "Date must be in the format YYYY-MM-DD"),
-  startTime: Yup.string()
-    .required("Start time is required")
-    .matches(
-      /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
-      "Start time must be in the format HH:MM"
-    ),
+  // date: Yup.string()
+  //   .required("Date is required")
+  //   .matches(/^\d{4}-\d{2}-\d{2}$/, "Date must be in the format YYYY-MM-DD"),
+  // startTime: Yup.string()
+  //   .required("Start time is required")
+  //   .matches(
+  //     /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
+  //     "Start time must be in the format HH:MM"
+  //   ),
   jobDescription: Yup.string().required("Job description is required"),
   // .min(10, 'Job description must be at least 10 characters long')
 });
@@ -131,7 +131,7 @@ const BookAppointment = () => {
       resetForm(); // Reset the form after successful submission
     } catch (error) {
       Alert.alert("Error", "Failed to make the booking. Please try again.");
-      console.error("Booking error: ", error);
+      console.log("Booking error: ", error);
     }
   };
 
@@ -256,7 +256,7 @@ const BookAppointment = () => {
                   style={styles.Timepicker}
                   value={selectedTime}
                   mode="time"
-                  is24Hour={false}
+                  is24Hour={true}
                   // display="default"
                   onChange={(event, date) => {
                     handleTimeChange(event, date);
@@ -265,6 +265,7 @@ const BookAppointment = () => {
                       date.toLocaleTimeString([], {
                         hour: "2-digit",
                         minute: "2-digit",
+                        hour12: false
                       })
                     ); // Set Formik field value
                   }}
