@@ -96,7 +96,7 @@ const Login = () => {
         await AsyncStorage.setItem("userEmail", email);
         await AsyncStorage.setItem("userRole", userRole);
 
-        registerIndieID(email, 21639, 'dwb6dAoCmrQD8faaLyciTU');
+        registerIndieID(email, 22199, 'emBddOfJLNr511DDJxUMcI');
 
       } catch (e) {
         console.log(e);
