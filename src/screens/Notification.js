@@ -213,11 +213,13 @@ const Notification = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   heading: {
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 10,
-    color: '#00204A',
+    color: '#1679AB',
+    marginBottom:2,
+    marginTop:50
   },
   buttonContainer: {
     marginVertical: 20,
@@ -240,7 +242,7 @@ const styles = StyleSheet.create({
   scrollContainer: {
     width: '100%',
     // Added height and flexGrow to enable scrolling
-    maxHeight: '80%',
+    maxHeight: '90%',
     flexGrow: 1,
   },
   scrollContent: {
@@ -275,7 +277,7 @@ const styles = StyleSheet.create({
   },
   date: {
     fontSize: 14,
-    color: '#888',
+    color: 'green',
   },
   accent: {
     color: '#F97300',

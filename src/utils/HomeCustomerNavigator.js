@@ -120,7 +120,7 @@ function CustomerProfileStack() {
 function NotificationStack() {
   return (
     <Stack.Navigator initialRouteName="Notification">
-      <Stack.Screen name="Notification" component={Notification} />
+      <Stack.Screen name="Notification" component={Notification}  options={{ headerShown: false }}/>
       <Stack.Screen name="NotificationDetail" component={NotificationDetail} />
     </Stack.Navigator>
   );
