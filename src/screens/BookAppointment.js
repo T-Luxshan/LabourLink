@@ -43,7 +43,7 @@ const BookAppointment = () => {
   const [timePicked, setTimePicked] = useState(false);
   const tempProfile = "https://firebasestorage.googleapis.com/v0/b/labourlink-e7ecf.appspot.com/o/ProfilePhoto%2Fboy.png?alt=media&token=b9013246-c51f-4bb8-b68b-1465e24e8583"
   const[customerId, setCustomerId] = useState(""); 
-  const [notifications, setNotifications] = useState([]);
+  const[customerName, setCustomerName] = useState(""); 
   
   // const labourId = "thana@example.com";
   // const customerId = "aruran@example.com";
@@ -55,13 +55,15 @@ const BookAppointment = () => {
     const fetchEmail = async () => {
       try {
         const customerId = await AsyncStorage.getItem("userEmail");
+        const customerName = await AsyncStorage.getItem("customerName");
         if (customerId) {
           setCustomerId(customerId.toLowerCase());
+          setCustomerName(customerName);
         } else {
-          console.log("No email found in AsyncStorage");
+          console.log("No email,setCustomerName found in AsyncStorage");
         }
       } catch (error) {
-        console.log("Error fetching email from AsyncStorage:");
+        console.log("Error fetching email,setCustomerName from AsyncStorage:");
       }
     };
 
@@ -104,7 +106,8 @@ const BookAppointment = () => {
       const response = await BookingLabour( labourId,customerId,values.date, values.startTime, "PENDING", values.jobDescription,jobRole.toUpperCase());
       Alert.alert('Success', 'Booking has been made successfully.');
       console.log("Booking response: ", response.data);
-      handleNotification();
+      HiredNotificationToCustomer();
+      HiredNotificationToLabour();
       resetForm();  // Reset the form after successful submission
     } catch (error) {
       Alert.alert('Error', 'Failed to make the booking. Please try again.');
@@ -112,7 +115,7 @@ const BookAppointment = () => {
     }
   };
 
-  const handleNotification = async () => {
+  const HiredNotificationToCustomer = async () => {
     const notification = {
       title: `Hiring Request sent to ${labourName}`,
       message: `You have successfully hired ${labourName} for ${jobRole}`,
@@ -139,7 +142,38 @@ const BookAppointment = () => {
 
     try {
       await saveNotifications(notification);
-      setNotifications((prevNotifications) => [notification, ...prevNotifications]);
+    } catch (error) {
+      console.error('Error saving notification', error);
+    }
+  };
+
+  const HiredNotificationToLabour = async () => {
+    const notification = {
+      title: `New Job from ${customerName}`,
+      message: `You have received hiring request from ${customerName} for ${jobRole}`,
+      recipient: labourId,
+      createdAt: new Date().toISOString(),
+    };
+
+    await fetch('https://app.nativenotify.com/api/indie/notification', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer dwb6dAoCmrQD8faaLyciTU`,
+      },
+      body: JSON.stringify({
+        appId: 21639,
+        appToken: 'dwb6dAoCmrQD8faaLyciTU',
+        title: notification.title,
+        message: notification.message,
+        // userId: notification.recipient,
+        subID:labourId,
+        date: notification.createdAt,
+      }),
+    });
+
+    try {
+      await saveNotifications(notification);
     } catch (error) {
       console.error('Error saving notification', error);
     }
