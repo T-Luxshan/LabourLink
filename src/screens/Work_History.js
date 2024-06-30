@@ -66,18 +66,17 @@ const [email, setEmail] = useState("");
           {booking.appointmentTime}
         </Text>
         <View style={styles.reportReviewContainer}>
-
-        <TouchableOpacity onPress={() => handleReport(booking)}>
-            <Text style={[styles.reportReviewText,  {color: "#FB9741"}]}>Report Labour</Text>
+          <TouchableOpacity onPress={() => handleReport(booking)}>
+            <Text style={[styles.reportReviewText, { color: "#FF7600" }]}>
+              Report Labour
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => handleReview(booking)}>
-            <Text style={[styles.reportReviewText, { color: "#0D04AF"}]}>Add Review</Text>
+            <Text style={[styles.reportReviewText, { color: "#0066CC" }]}>
+              Add Review
+            </Text>
           </TouchableOpacity>
-
-          
-
-          
         </View>
       </Card.Content>
     </Card>
@@ -122,7 +121,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     elevation: 2,
   },
-  customerName: {
+  labourName: {
     fontSize: 15,
     fontWeight: "500",
     color: "#2F3239",

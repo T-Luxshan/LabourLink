@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
   },
   reportReviewText: {
     fontSize: 14,
-    color: "#FB9741",
+    color: "#FF7600",
     textDecorationLine: "none",
   },
   noBookingsText: {

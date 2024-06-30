@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     right: 10,
   },
   viewText: {
-    color: "blue",
+    color: "#0066CC",
     fontSize: 14,
   },
   noPendingText: {

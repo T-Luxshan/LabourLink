@@ -24,7 +24,7 @@ import { getProfilePicture } from "../services/ProfilePhotoService";
 const Labour_profile_page = ({ navigation, route }) => {
     
   // Function to handle press event for the "Languages" section
- const [labour, setLabour] = useState("");
+ const [labour, setLabour] = useState({ name: "" });
  const [labourProfile, setLabourProfile] = useState("");
  const [image, setImage] = useState(null);
  const [name, setName] = useState("");
@@ -202,6 +202,19 @@ const handlePassword = () => {
       );
     };
    
+     const renderName = () => {
+       if (labour.name.length > 15) {
+         const splitName = labour.name.split(" ");
+         return (
+           <View>
+             <Text style={styles.longNameText}>{splitName[0]}</Text>
+             <Text style={styles.longNameText}>{splitName[1]}</Text>
+           </View>
+         );
+       }
+       return <Text style={styles.nameText}>{labour.name}</Text>;
+     };
+
   return (
     <View>
       <ScrollView>
@@ -223,9 +236,13 @@ const handlePassword = () => {
           </Text>
         </View>
 
-        {/* User information section */}
         <View
-          style={{ flexDirection: "row", alignItems: "center", marginTop: 15 }}
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            marginTop: 15,
+            paddingHorizontal: 15,
+          }}
         >
           {/* User avatar */}
           <Avatar.Image
@@ -233,26 +250,21 @@ const handlePassword = () => {
             source={
               image ? { uri: image } : require("../assets/Images/boy.png")
             }
-            style={{ marginLeft: 15 }}
+            style={{ marginRight: 15 }}
           />
           {/* User details */}
-          <View style={{ marginLeft: 15, flex: 1 }}>
-            <Text style={{ fontSize: 18, fontWeight: "700", color: "#222222" }}>
-              {labour.name}
-            </Text>
+          <View style={{ flex: 1, justifyContent: "center" }}>
+            {renderName()}
           </View>
           {/* Button to edit profile */}
           <TouchableOpacity
             onPress={handleEditProfile}
-            style={{ alignSelf: "flex-start" }}
+            style={{ alignSelf: "center" }}
           >
             <Button
               mode="contained"
               style={{
-                minWidth: 90,
-                marginLeft: 35,
-                backgroundColor: "#00204A",
-                marginTop: 10,
+                backgroundColor: "#0066CC",
               }}
             >
               Edit
@@ -265,13 +277,19 @@ const handlePassword = () => {
             style={{
               flexDirection: "row",
               alignItems: "center",
-              paddingLeft: 0,
+              paddingLeft: 10,
             }}
           >
+            <Icon
+              name="user"
+              size={20}
+              color="#505151"
+              style={{ marginRight: 10 }}
+            />
             <Text
               style={{
                 fontSize: 18,
-                fontWeight: "600",
+                fontWeight: "400",
                 padding: 10,
                 color: "#222222",
               }}
@@ -284,7 +302,7 @@ const handlePassword = () => {
               <FontAwesomeIcon
                 icon={faChevronRight}
                 size={18}
-                style={{ marginLeft: 135 }}
+                style={{ marginLeft: 102 }}
               />
             </TouchableOpacity>
           </View>
@@ -292,7 +310,6 @@ const handlePassword = () => {
 
         {/* Surface for settings */}
         <Surface style={styles.surface} elevation={1}>
-          
           <View
             style={{
               flexDirection: "row",
@@ -300,30 +317,37 @@ const handlePassword = () => {
               paddingLeft: 10,
             }}
           >
-            <View
+            {/* <View
               style={{
                 flexDirection: "row",
                 alignItems: "center",
                 paddingLeft: 10,
               }}
+            > */}
+            <Icon
+              name="lock"
+              size={20}
+              color="#505151"
+              style={{ marginRight: 10 }}
+            />
+            <Text
+              style={{
+                fontSize: 18,
+                padding: 10,
+                color: "#222222",
+                fontWeight: "400",
+              }}
             >
-              <Icon
-                name="lock"
-                size={20}
-                color="#505151"
-                style={{ marginRight: 10 }}
-              />
-              <Text style={{ fontSize: 16, padding: 10, color: "#888888" }}>
-                Change Password
-              </Text>
-            </View>
+              Change Password
+            </Text>
+            {/* </View> */}
             <TouchableOpacity onPress={handlePassword}>
               {/* Button to navigate to language settings */}
               {/* <View style={{ flex: 1, alignItems: "flex-end" }}> */}
               <FontAwesomeIcon
                 icon={faChevronRight}
                 size={18}
-                style={{ marginLeft: 97 }}
+                style={{ marginLeft: 88 }}
               />
             </TouchableOpacity>
             {/* </View> */}
@@ -351,23 +375,30 @@ const handlePassword = () => {
               paddingLeft: 10,
             }}
           >
-            <View
+            {/* <View
               style={{
                 flexDirection: "row",
                 alignItems: "center",
                 paddingLeft: 10,
               }}
+            > */}
+            <Icon
+              name="info-circle"
+              size={20}
+              color="#505151"
+              style={{ marginRight: 10 }}
+            />
+            <Text
+              style={{
+                fontSize: 18,
+                padding: 10,
+                color: "#222222",
+                fontWeight: "400",
+              }}
             >
-              <Icon
-                name="info-circle"
-                size={20}
-                color="#505151"
-                style={{ marginRight: 10 }}
-              />
-              <Text style={{ fontSize: 16, padding: 10, color: "#888888" }}>
-                About Us
-              </Text>
-            </View>
+              About Us
+            </Text>
+            {/* </View> */}
             <TouchableOpacity onPress={handleAboutUs}>
               {/* Button to navigate to About Us section */}
               {/* <View style={{ flex: 1, alignItems: "flex-end" }}> */}
@@ -388,25 +419,32 @@ const handlePassword = () => {
               paddingLeft: 10,
             }}
           >
-            <View
+            {/* <View
               style={{
                 flexDirection: "row",
                 alignItems: "center",
                 paddingLeft: 10,
               }}
-            >
-              <Icon
-                name="sign-out"
-                size={20}
-                color="#F15C5C"
-                style={{ marginRight: 10 }}
-              />
-              <TouchableOpacity onPress={handleLogout}>
-                <Text style={{ fontSize: 16, padding: 10, color: "#888888" }}>
-                  Logout
-                </Text>
-              </TouchableOpacity>
-            </View>
+            > */}
+            <Icon
+              name="sign-out"
+              size={20}
+              color="#F15C5C"
+              style={{ marginRight: 10 }}
+            />
+            <TouchableOpacity onPress={handleLogout}>
+              <Text
+                style={{
+                  fontSize: 18,
+                  padding: 10,
+                  color: "#222222",
+                  fontWeight: "400",
+                }}
+              >
+                Logout
+              </Text>
+            </TouchableOpacity>
+            {/* </View> */}
           </View>
 
           <View
@@ -416,25 +454,32 @@ const handlePassword = () => {
               paddingLeft: 10,
             }}
           >
-            <View
+            {/* <View
               style={{
                 flexDirection: "row",
                 alignItems: "center",
                 paddingLeft: 10,
               }}
-            >
-              <Icon
-                name="trash"
-                size={20}
-                color="#F15C5C"
-                style={{ marginRight: 10 }}
-              />
-              <TouchableOpacity onPress={handleDeleteAccount}>
-                <Text style={{ fontSize: 16, padding: 10, color: "#888888" }}>
-                  Delete Account
-                </Text>
-              </TouchableOpacity>
-            </View>
+            > */}
+            <Icon
+              name="trash"
+              size={20}
+              color="#F15C5C"
+              style={{ marginRight: 10 }}
+            />
+            <TouchableOpacity onPress={handleDeleteAccount}>
+              <Text
+                style={{
+                  fontSize: 18,
+                  padding: 10,
+                  color: "#222222",
+                  fontWeight: "400",
+                }}
+              >
+                Delete Account
+              </Text>
+            </TouchableOpacity>
+            {/* </View> */}
           </View>
         </Surface>
       </ScrollView>
@@ -455,6 +500,7 @@ const styles = StyleSheet.create({
     width: 345,
     alignItems: "",
     justifyContent: "flexStart",
+    backgroundColor: "#fff",
   },
 
   thirdSurface: {
@@ -467,5 +513,17 @@ const styles = StyleSheet.create({
     alignItems: "",
     justifyContent: "flexStart",
     marginBottom: 30,
+    backgroundColor: "#fff",
+  },
+  nameText: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#222222",
+  },
+  longNameText: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#222222",
+    lineHeight: 20,
   },
 });

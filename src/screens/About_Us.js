@@ -139,21 +139,26 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 10,
     marginTop: 10,
+    textAlign: "center",
+    color: "#0066CC",
   },
   subheading: {
     fontSize: 20,
     fontWeight: "bold",
     marginTop: 10,
     marginBottom: 5,
+    color: "#333",
   },
   listItem: {
     fontSize: 16,
     marginBottom: 5,
+    color: "#555",
   },
   paragraph: {
     fontSize: 16,
-    marginBottom: 30,
+    marginBottom: 20,
     lineHeight: 24,
+    color: "#666",
   },
 });
 

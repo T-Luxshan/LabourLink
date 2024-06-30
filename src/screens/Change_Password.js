@@ -83,7 +83,7 @@ const Change_Password = ({ navigation }) => {
 
 
   return (
-    <View style={styles.container}>
+    <View style={styles.card}>
       <Text style={styles.title}>Change Password</Text>
       {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : null}
       <TextInput
@@ -115,16 +115,27 @@ const Change_Password = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#f5f5f5",
+  card: {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    width: "80%",
+    alignSelf: "center",
+    marginTop: 100,
   },
   title: {
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 20,
+    textAlign: "center",
   },
   input: {
     width: "80%",
@@ -134,14 +145,16 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
     marginBottom: 15,
+    alignSelf: "center",
   },
   button: {
-    backgroundColor: "#007bff",
+    backgroundColor: "#0066CC",
     borderRadius: 5,
     height: 40,
     width: "80%",
     alignItems: "center",
     justifyContent: "center",
+    marginLeft: 26,
   },
   buttonText: {
     color: "#fff",
@@ -151,6 +164,7 @@ const styles = StyleSheet.create({
   error: {
     color: "red",
     marginBottom: 10,
+    textAlign: "center",
   },
 });
 

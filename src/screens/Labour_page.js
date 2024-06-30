@@ -54,21 +54,21 @@ const Labour_page = ({ navigation, route }) => {
   useEffect(() => {
     if (labourEmail) {
       const fetchData = async () => {
-        try {
-          const labourResponse = await getLabourById(labourEmail);
-          console.log("Labour Data:", labourResponse.data);
-          setLabour(labourResponse.data);
-        } catch (error) {
-          console.log("Error fetching labour data:", error);
-        }
+        // try {
+        //   const labourResponse = await getLabourById(labourEmail);
+        //   console.log("Labour Data:", labourResponse.data);
+        //   setLabour(labourResponse.data);
+        // } catch (error) {
+        //   console.log("Error fetching labour data:", error);
+        // }
 
-        try {
-          const labourProfileResponse = await getLabourProfileById(labourEmail);
-          console.log("Labour Profile Data:", labourProfileResponse.data);
-          setLabourProfile(labourProfileResponse.data);
-        } catch (error) {
-          console.log("Error fetching labour profile data:", error);
-        }
+        // try {
+        //   const labourProfileResponse = await getLabourProfileById(labourEmail);
+        //   console.log("Labour Profile Data:", labourProfileResponse.data);
+        //   setLabourProfile(labourProfileResponse.data);
+        // } catch (error) {
+        //   console.log("Error fetching labour profile data:", error);
+        // }
 
         try {
           const ratingData = await getRating(labourEmail);
@@ -110,6 +110,34 @@ const Labour_page = ({ navigation, route }) => {
 
       fetchData();
 }}, [labourEmail]);
+
+ useFocusEffect(
+   useCallback(() => {
+     if (labourEmail) {
+       const fetchLabourData = async () => {
+         try {
+           const labourResponse = await getLabourById(labourEmail);
+           console.log("Labour Data:", labourResponse.data);
+           setLabour(labourResponse.data);
+         } catch (error) {
+           console.log("Error fetching labour data:", error);
+         }
+
+         try {
+           const labourProfileResponse = await getLabourProfileById(
+             labourEmail
+           );
+           console.log("Labour Profile Data:", labourProfileResponse.data);
+           setLabourProfile(labourProfileResponse.data);
+         } catch (error) {
+           console.log("Error fetching labour profile data:", error);
+         }
+       };
+
+       fetchLabourData();
+     }
+   }, [labourEmail])
+ );
 
  useFocusEffect(
    useCallback(() => {
@@ -450,8 +478,8 @@ const Labour_page = ({ navigation, route }) => {
                     style={{
                       marginLeft: 30,
                       marginTop: 10,
-                      backgroundColor: "#FF7600",
-                      width: 200,
+                      backgroundColor: "#0066CC",
+                      width: 150,
                     }}
                   >
                     Completed
@@ -495,7 +523,7 @@ const Labour_page = ({ navigation, route }) => {
               </Text>
               {"\t"}
               <TouchableOpacity onPress={handleViewAllPress}>
-                <Text style={{ color: "blue" }}>View All</Text>
+                <Text style={{ color: "#0066CC" }}>View All</Text>
               </TouchableOpacity>
             </Text>
 

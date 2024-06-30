@@ -176,7 +176,7 @@ const handleIgnore = async () => {
                   marginLeft: 15,
                   marginTop: 25,
                   padding: 5,
-                  height: 270,
+                  height: "auto",
                   width: 345,
                   alignItems: "flexStart",
                   justifyContent: "flexStart",
@@ -247,7 +247,7 @@ const handleIgnore = async () => {
               mode="contained"
               onPress={handleAccept}
               style={{
-                backgroundColor: "#00204A",
+                backgroundColor: "#0066CC",
                 borderRadius: 10,
                 height: 40,
                 marginTop: 10,
@@ -268,7 +268,7 @@ const handleIgnore = async () => {
               mode="contained"
               onPress={handleIgnore}
               style={{
-                backgroundColor: "#00204A",
+                backgroundColor: "#0066CC",
                 borderRadius: 10,
                 height: 40,
                 marginTop: 10,

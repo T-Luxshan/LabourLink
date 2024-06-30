@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#f5f5f5",
-    marginTop: 20,
+   
   },
   card: {
     width: "90%",
@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 5,
+    marginTop: 110,
   },
   label: {
     fontSize: 16,
@@ -145,7 +146,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   button: {
-    backgroundColor: "blue",
+    backgroundColor: "#0066CC",
     borderRadius: 20,
     height: 40,
     alignItems: "center",

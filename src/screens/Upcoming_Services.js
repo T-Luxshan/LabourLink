@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     elevation: 2,
   },
-  customerName: {
+  labourName: {
     fontSize: 15,
     fontWeight: "500",
     color: "#2F3239",
