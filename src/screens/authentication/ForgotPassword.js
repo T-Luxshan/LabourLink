@@ -31,13 +31,12 @@ const ForgotPassword = () => {
   const handleOTP = async () =>{
     const lowercasedEmail = email.toLowerCase();
     try {
-        await schema.validate({ lowercasedEmail }, { abortEarly: false });
+        await schema.validate({ email }, { abortEarly: false });
         setError('');
 
         try {
           let response = await getUserRole(lowercasedEmail);
-
-          sendOTP(response.data, lowercasedEmail)
+          sendOTP(response.data.role, lowercasedEmail)
             .then(res =>{
               console.log(res);
             })
@@ -47,7 +46,7 @@ const ForgotPassword = () => {
             })
           navigation.navigate('OTPVerification', {
             email: lowercasedEmail,
-            role: response.data
+            role: response.data.role
           })
         
         } catch (error) {
