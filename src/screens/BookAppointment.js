@@ -14,7 +14,6 @@ import LabourProfileComponent from "../components/LabourProfileComponent";
 import AppBar from "../components/AppBar";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { ScrollView } from "react-native-gesture-handler";
-import { Formik } from "formik";
 import * as Yup from "yup";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { BookingLabour } from "../services/LabourDetailsService";
@@ -33,7 +32,6 @@ const bookingSchema = Yup.object().shape({
       "Start time must be in the format HH:MM"
     ),
   jobDescription: Yup.string().required("Job description is required"),
-  // .min(10, 'Job description must be at least 10 characters long')
 });
 
 const BookAppointment = () => {
@@ -55,12 +53,14 @@ const BookAppointment = () => {
   const tempProfile =
     "https://firebasestorage.googleapis.com/v0/b/labourlink-e7ecf.appspot.com/o/ProfilePhoto%2Fboy.png?alt=media&token=b9013246-c51f-4bb8-b68b-1465e24e8583";
   const [customerId, setCustomerId] = useState("");
-  const [notifications, setNotifications] = useState([]);
+  const [jobDescription, setJobDescription] = useState("");
+  const [errors, setErrors] = useState({
+    date: "",
+    startTime: "",
+    jobDescription: "",
+  });
 
-  // const labourId = "thana@example.com";
-  // const customerId = "aruran@example.com";
   const bookingStage = "PENDING";
-  // const jobRole = "ELECTRICIAN";
 
   useEffect(() => {
     const fetchEmail = async () => {
@@ -72,7 +72,7 @@ const BookAppointment = () => {
           console.log("No email found in AsyncStorage");
         }
       } catch (error) {
-        console.log("Error fetching email from AsyncStorage:");
+        console.log("Error fetching email from AsyncStorage:", error);
       }
     };
 
@@ -96,38 +96,66 @@ const BookAppointment = () => {
     setShowTimePicker(true);
   };
 
-  const handleSubmit = async (values, { resetForm }) => {
-    // const bookingData = {
-    //   labourId,
-    //   customerId,
-    //   date: values.date,
-    //   startTime: values.startTime,
-    //   bookingStage,
-    //   jobDescription: values.jobDescription,
-    //   jobRole
-    // };
+  const validateForm = () => {
+    let formValid = true;
+    const validationErrors = {};
 
-    console.log("Submitting booking data: ", values); // Log the booking data
-    console.log(jobRole.toUpperCase(), labourId);
-    console.log(customerId);
+    // Validate job description
+    if (jobDescription.length < 10) {
+      validationErrors.jobDescription =
+        "Job description must be at least 10 characters long";
+      formValid = false;
+    }
 
-    try {
-      const response = await BookingLabour(
-        labourId,
-        customerId,
-        values.date,
-        values.startTime,
-        "PENDING",
-        values.jobDescription,
-        jobRole.toUpperCase()
+    setErrors(validationErrors);
+    return formValid;
+  };
+
+  const handleSubmit = async () => {
+    const formIsValid = validateForm();
+
+    if (formIsValid) {
+      console.log("Submitting booking data:");
+      console.log("Date:", selectedDate);
+      console.log(
+        "Start Time:",
+        selectedTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false })
       );
-      Alert.alert("Success", "Booking has been made successfully.");
-      console.log("Booking response: ", response.data);
-      handleNotification();
-      resetForm(); // Reset the form after successful submission
-    } catch (error) {
-      Alert.alert("Error", "Failed to make the booking. Please try again.");
-      console.error("Booking error: ", error);
+      console.log("Job Description:", jobDescription);
+
+      try {
+        const response = await BookingLabour(
+          labourId,
+          customerId,
+          selectedDate,
+          selectedTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false }),
+          bookingStage,
+          jobDescription,
+          jobRole.toUpperCase()
+        );
+        Alert.alert("Success", "Booking has been made successfully.");
+        console.log("Booking response:", response.data);
+        handleNotification();
+       
+        // Reset form fields
+      setSelectedDate("");
+      setSelectedTime(new Date());
+      setJobDescription("");
+      setErrors({
+        date: "",
+        startTime: "",
+        jobDescription: "",
+      });
+      
+      } catch (error) {
+        Alert.alert(
+          "Error",
+          "Failed to make the booking. Please try again."
+        );
+        console.log("Booking error:", error);
+      }
+    } else {
+      Alert("Validation Error", "Please fix the errors in the form.");
     }
   };
 
@@ -139,140 +167,76 @@ const BookAppointment = () => {
       createdAt: new Date().toISOString(),
     };
 
-    await fetch("https://app.nativenotify.com/api/indie/notification", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer dwb6dAoCmrQD8faaLyciTU`,
-      },
-      body: JSON.stringify({
-        appId: 21639,
-        appToken: "dwb6dAoCmrQD8faaLyciTU",
-        title: notification.title,
-        message: notification.message,
-        // userId: notification.recipient,
-        subID: customerId,
-        date: notification.createdAt,
-      }),
-    });
-
-    try {
-      await saveNotifications(notification);
-      setNotifications((prevNotifications) => [
-        notification,
-        ...prevNotifications,
-      ]);
-    } catch (error) {
-      console.error("Error saving notification", error);
-    }
+    // Implement your notification logic here
+    console.log("Notification:", notification);
   };
 
   return (
-    <Formik
-      initialValues={{ date: "", startTime: "", jobDescription: "" }}
-      validationSchema={bookingSchema}
-      onSubmit={handleSubmit}
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      {({
-        handleChange,
-        handleBlur,
-        handleSubmit,
-        values,
-        errors,
-        touched,
-        setFieldValue,
-      }) => (
-        <KeyboardAvoidingView
-          style={styles.container}
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-        >
-          <ScrollView style={styles.container}>
-            <AppBar Title="BookAppointment" />
+      <ScrollView style={styles.container}>
+        <AppBar Title="BookAppointment" />
 
-            <View style={styles.Labourprofile}>
-              <LabourProfileComponent
-                profileImage={{
-                  uri: profileImage ? profileImage : tempProfile,
-                }}
-                name={labourName}
-                jobTitle={labourJobTitle}
-                rating={labourRating}
-              />
-            </View>
+        <View style={styles.Labourprofile}>
+          <LabourProfileComponent
+            profileImage={{
+              uri: profileImage ? profileImage : tempProfile,
+            }}
+            name={labourName}
+            jobTitle={labourJobTitle}
+            rating={labourRating}
+          />
+        </View>
 
-            <Text style={styles.label}>Select Date:</Text>
-            <Calendar
-              onDayPress={(day) => {
-                handleDateSelect(day);
-                setFieldValue("date", day.dateString); // Set Formik field value
-              }}
-              markedDates={{
-                [selectedDate]: { selected: true, selectedColor: "blue" },
+        <Text style={styles.label}>Select Date:</Text>
+        <Calendar
+          onDayPress={(day) => setSelectedDate(day.dateString)}
+          markedDates={{
+            [selectedDate]: { selected: true, selectedColor: "blue" },
+          }}
+        />
+
+        <View style={styles.Time}>
+          <TouchableOpacity onPress={showTimePickerModal}>
+            <Text style={styles.label2}>Select Time:</Text>
+          </TouchableOpacity>
+          {showTimePicker && (
+            <DateTimePicker
+              style={styles.Timepicker}
+              value={selectedTime}
+              mode="time"
+              is24Hour={true} // Set to true for 24-hour format
+              onChange={(event, date) => {
+                handleTimeChange(event, date);
               }}
             />
-            {/* {selectedDate && (
-              <Text style={styles.selectedDateText}>
-                 Selected Date: {selectedDate} 
-              </Text>
-            )} */}
-            <View style={styles.Time}>
-              <TouchableOpacity onPress={showTimePickerModal}>
-                <Text style={styles.label2}>Select Time:</Text>
-              </TouchableOpacity>
-              {showTimePicker && (
-                <DateTimePicker
-                  style={styles.Timepicker}
-                  value={selectedTime}
-                  mode="time"
-                  is24Hour={false}
-                  // display="default"
-                  onChange={(event, date) => {
-                    handleTimeChange(event, date);
-                    setFieldValue(
-                      "startTime",
-                      date.toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })
-                    ); // Set Formik field value
-                  }}
-                />
-              )}
-            </View>
+          )}
+        </View>
 
-            {/* {timePicked && (
-              <Text style={styles.selectedTimeText}>
-                Selected Time: {selectedTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-              </Text>
-            )} */}
+        <View style={styles.jobDetailsContainer}>
+          <Text style={styles.jobDetailsHeader}>Job Detail :</Text>
+          <View style={styles.jobDetailRow}>
+            <TextInput
+              style={styles.jobDescriptionInput}
+              placeholder="Type job description here..."
+              multiline
+              value={jobDescription}
+              onChangeText={(text) => setJobDescription(text)}
+              onBlur={() => setErrors({ ...errors, jobDescription: "" })}
+            />
+          </View>
+          {errors.jobDescription && (
+            <Text style={styles.errorText}>{errors.jobDescription}</Text>
+          )}
+        </View>
 
-            <View style={styles.jobDetailsContainer}>
-              <Text style={styles.jobDetailsHeader}>Job Detail :</Text>
-              <View style={styles.jobDetailRow}>
-                <TextInput
-                  style={styles.jobDescriptionInput}
-                  placeholder="Type job description here..."
-                  multiline
-                  value={values.jobDescription}
-                  onChangeText={handleChange("jobDescription")}
-                  onBlur={handleBlur("jobDescription")}
-                />
-              </View>
-              {errors.jobDescription && touched.jobDescription && (
-                <Text style={styles.errorText}>{errors.jobDescription}</Text>
-              )}
-            </View>
-
-            <TouchableOpacity
-              style={styles.submitButton}
-              onPress={handleSubmit}
-            >
-              <Text style={styles.submitButtonText}>Booking</Text>
-            </TouchableOpacity>
-          </ScrollView>
-        </KeyboardAvoidingView>
-      )}
-    </Formik>
+        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+          <Text style={styles.submitButtonText}>Booking</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -334,14 +298,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
-  },
-  selectedTimeText: {
-    fontSize: 18,
-    marginTop: 10,
-  },
-  selectedDateText: {
-    fontSize: 18,
-    marginTop: 10,
   },
   errorText: {
     color: "red",
