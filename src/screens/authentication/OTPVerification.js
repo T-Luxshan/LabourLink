@@ -14,11 +14,6 @@ const OTPVerification = () => {
 
   const [error, setError] = useState('');
   const [otp, setOTP] = useState('');
-
-  // for testing purpose.
-  // const email = "luckybraveboys@gmail.com";
-  // const role = "CUSTOMER";  
-
   
 
   const handleOTP = async () => {

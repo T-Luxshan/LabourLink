@@ -87,7 +87,7 @@ const Customer_page = ({ navigation }) => {
             acc[review.labourName] = {
               totalRating: 0,
               reviewCount: 0,
-              labourRole: review.labourRole, // Assuming the job role is available in review data
+              labourRole: review.jobRole, // Assuming the job role is available in review data
             };
           }
           acc[review.labourName].totalRating += review.rating;
@@ -106,6 +106,7 @@ const Customer_page = ({ navigation }) => {
         );
 
         setTopRatedEmployee(topRatedLabour);
+        console.log(topRatedEmployee);
       } catch (error) {
         // console.log("Error fetching data:");
         // Handle specific error scenarios, e.g., display error message to user
@@ -247,7 +248,7 @@ const Customer_page = ({ navigation }) => {
                         color="#FF7600"
                       />
                     ))}
-                    <Text> {topRatedEmployee.totalRating}</Text>
+                    <Text> {topRatedEmployee.totalRating/topRatedEmployee.reviewCount}</Text>
                   </View>
                 </View>
 
