@@ -72,6 +72,11 @@ function CustomerStack() {
         options={{ headerBackTitle: "Back" }}
       />
       <Stack.Screen
+        name="ChatAreaScreen"
+        component={ChatAreaScreen}
+        options={{ headerBackTitle: "Back" }}
+      />
+      <Stack.Screen
         name="labour-perfomance"
         component={LabourPerformanceModel}
         options={{ headerBackTitle: "Back" }}

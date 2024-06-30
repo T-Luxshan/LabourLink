@@ -65,6 +65,7 @@ const Customer_page = ({ navigation }) => {
         const customerResponse = await getCustomerById(email);
         const customerData = customerResponse.data;
         setCustomerName(customerData.name);
+        AsyncStorage.setItem("customerName", customerData.name);
 
         // Fetch completed bookings
         const completedBookingsResponse = await getCompletedBookings(email);

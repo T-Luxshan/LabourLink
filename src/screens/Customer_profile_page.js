@@ -82,6 +82,7 @@ const [email, setEmail] = useState("");
       await AsyncStorage.removeItem("refreshToken");
       await AsyncStorage.removeItem("userEmail");
       await AsyncStorage.removeItem("userRole");
+      await AsyncStorage.removeItem("customerName");
 
       // Log to confirm removal
       console.log("After logout - tokens removed");
