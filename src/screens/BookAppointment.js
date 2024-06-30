@@ -14,6 +14,7 @@ import LabourProfileComponent from "../components/LabourProfileComponent";
 import AppBar from "../components/AppBar";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { ScrollView } from "react-native-gesture-handler";
+import { Formik } from "formik";
 import * as Yup from "yup";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { BookingLabour } from "../services/LabourDetailsService";
@@ -22,16 +23,17 @@ import { saveNotifications } from "../services/NoificationSevice";
 
 // Define Yup validation schema
 const bookingSchema = Yup.object().shape({
-  date: Yup.string()
-    .required("Date is required")
-    .matches(/^\d{4}-\d{2}-\d{2}$/, "Date must be in the format YYYY-MM-DD"),
-  startTime: Yup.string()
-    .required("Start time is required")
-    .matches(
-      /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
-      "Start time must be in the format HH:MM"
-    ),
+  // date: Yup.string()
+  //   .required("Date is required")
+  //   .matches(/^\d{4}-\d{2}-\d{2}$/, "Date must be in the format YYYY-MM-DD"),
+  // startTime: Yup.string()
+  //   .required("Start time is required")
+  //   .matches(
+  //     /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
+  //     "Start time must be in the format HH:MM"
+  //   ),
   jobDescription: Yup.string().required("Job description is required"),
+  // .min(10, 'Job description must be at least 10 characters long')
 });
 
 const BookAppointment = () => {
@@ -53,26 +55,26 @@ const BookAppointment = () => {
   const tempProfile =
     "https://firebasestorage.googleapis.com/v0/b/labourlink-e7ecf.appspot.com/o/ProfilePhoto%2Fboy.png?alt=media&token=b9013246-c51f-4bb8-b68b-1465e24e8583";
   const [customerId, setCustomerId] = useState("");
-  const [jobDescription, setJobDescription] = useState("");
-  const [errors, setErrors] = useState({
-    date: "",
-    startTime: "",
-    jobDescription: "",
-  });
+  const [customerName, setCustomerName] = useState("");
 
+  // const labourId = "thana@example.com";
+  // const customerId = "aruran@example.com";
   const bookingStage = "PENDING";
+  // const jobRole = "ELECTRICIAN";
 
   useEffect(() => {
     const fetchEmail = async () => {
       try {
         const customerId = await AsyncStorage.getItem("userEmail");
+        const customerName = await AsyncStorage.getItem("customerName");
         if (customerId) {
           setCustomerId(customerId.toLowerCase());
+          setCustomerName(customerName);
         } else {
-          console.log("No email found in AsyncStorage");
+          console.log("No email,setCustomerName found in AsyncStorage");
         }
       } catch (error) {
-        console.log("Error fetching email from AsyncStorage:", error);
+        console.log("Error fetching email,setCustomerName from AsyncStorage:");
       }
     };
 
@@ -96,70 +98,44 @@ const BookAppointment = () => {
     setShowTimePicker(true);
   };
 
-  const validateForm = () => {
-    let formValid = true;
-    const validationErrors = {};
+  const handleSubmit = async (values, { resetForm }) => {
+    // const bookingData = {
+    //   labourId,
+    //   customerId,
+    //   date: values.date,
+    //   startTime: values.startTime,
+    //   bookingStage,
+    //   jobDescription: values.jobDescription,
+    //   jobRole
+    // };
 
-    // Validate job description
-    if (jobDescription.length < 10) {
-      validationErrors.jobDescription =
-        "Job description must be at least 10 characters long";
-      formValid = false;
-    }
+    console.log("Submitting booking data: ", values); // Log the booking data
+    console.log(jobRole.toUpperCase(), labourId);
+    console.log(customerId);
 
-    setErrors(validationErrors);
-    return formValid;
-  };
-
-  const handleSubmit = async () => {
-    const formIsValid = validateForm();
-
-    if (formIsValid) {
-      console.log("Submitting booking data:");
-      console.log("Date:", selectedDate);
-      console.log(
-        "Start Time:",
-        selectedTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false })
+    try {
+      const response = await BookingLabour(
+        labourId,
+        customerId,
+        values.date,
+        values.startTime,
+        "PENDING",
+        values.jobDescription,
+        jobRole.toUpperCase()
       );
-      console.log("Job Description:", jobDescription);
-
-      try {
-        const response = await BookingLabour(
-          labourId,
-          customerId,
-          selectedDate,
-          selectedTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false }),
-          bookingStage,
-          jobDescription,
-          jobRole.toUpperCase()
-        );
-        Alert.alert("Success", "Booking has been made successfully.");
-        console.log("Booking response:", response.data);
-        handleNotification();
-       
-        // Reset form fields
-      setSelectedDate("");
-      setSelectedTime(new Date());
-      setJobDescription("");
-      setErrors({
-        date: "",
-        startTime: "",
-        jobDescription: "",
-      });
-      
-      } catch (error) {
-        Alert.alert(
-          "Error",
-          "Failed to make the booking. Please try again."
-        );
-        console.log("Booking error:", error);
-      }
-    } else {
-      Alert("Validation Error", "Please fix the errors in the form.");
+      Alert.alert("Success", "Booking has been made successfully.");
+      console.log("Booking response: ", response.data);
+      HiredNotificationToCustomer();
+      HiredNotificationToLabour();
+      console.log("Notifications generated");
+      resetForm(); // Reset the form after successful submission
+    } catch (error) {
+      Alert.alert("Error", "Failed to make the booking. Please try again.");
+      console.log("Booking error: ", error);
     }
   };
 
-  const handleNotification = async () => {
+  const HiredNotificationToCustomer = async () => {
     const notification = {
       title: `Hiring Request sent to ${labourName}`,
       message: `You have successfully hired ${labourName} for ${jobRole}`,
@@ -167,76 +143,169 @@ const BookAppointment = () => {
       createdAt: new Date().toISOString(),
     };
 
-    // Implement your notification logic here
-    console.log("Notification:", notification);
+    await fetch("https://app.nativenotify.com/api/indie/notification", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer emBddOfJLNr511DDJxUMcI`,
+      },
+      body: JSON.stringify({
+        appId: 22199,
+        appToken: 'emBddOfJLNr511DDJxUMcI',
+        title: notification.title,
+        message: notification.message,
+        // userId: notification.recipient,
+        subID: customerId,
+        date: notification.createdAt,
+      }),
+    });
+
+    try {
+      await saveNotifications(notification);
+    } catch (error) {
+      console.error("Error saving notification", error);
+    }
+  };
+
+  const HiredNotificationToLabour = async () => {
+    const notification = {
+      title: `New Job from ${customerName}`,
+      message: `You have received hiring request from ${customerName} for ${jobRole}`,
+      recipient: labourId,
+      createdAt: new Date().toISOString(),
+    };
+
+    await fetch("https://app.nativenotify.com/api/indie/notification", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer emBddOfJLNr511DDJxUMcI`,
+      },
+      body: JSON.stringify({
+        appId: 22199,
+        appToken: 'emBddOfJLNr511DDJxUMcI',
+        title: notification.title,
+        message: notification.message,
+        // userId: notification.recipient,
+        subID: labourId,
+        date: notification.createdAt,
+      }),
+    });
+
+    try {
+      await saveNotifications(notification);
+    } catch (error) {
+      console.error("Error saving notification", error);
+    }
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    <Formik
+      initialValues={{ date: "", startTime: "", jobDescription: "" }}
+      validationSchema={bookingSchema}
+      onSubmit={handleSubmit}
     >
-      <ScrollView style={styles.container}>
-        <AppBar Title="BookAppointment" />
+      {({
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        values,
+        errors,
+        touched,
+        setFieldValue,
+      }) => (
+        <KeyboardAvoidingView
+          style={styles.container}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+          <ScrollView style={styles.container}>
+            <AppBar Title="BookAppointment" />
 
-        <View style={styles.Labourprofile}>
-          <LabourProfileComponent
-            profileImage={{
-              uri: profileImage ? profileImage : tempProfile,
-            }}
-            name={labourName}
-            jobTitle={labourJobTitle}
-            rating={labourRating}
-          />
-        </View>
+            <View style={styles.Labourprofile}>
+              <LabourProfileComponent
+                profileImage={{
+                  uri: profileImage ? profileImage : tempProfile,
+                }}
+                name={labourName}
+                jobTitle={labourJobTitle}
+                rating={labourRating}
+              />
+            </View>
 
-        <Text style={styles.label}>Select Date:</Text>
-        <Calendar
-          onDayPress={(day) => setSelectedDate(day.dateString)}
-          markedDates={{
-            [selectedDate]: { selected: true, selectedColor: "blue" },
-          }}
-        />
-
-        <View style={styles.Time}>
-          <TouchableOpacity onPress={showTimePickerModal}>
-            <Text style={styles.label2}>Select Time:</Text>
-          </TouchableOpacity>
-          {showTimePicker && (
-            <DateTimePicker
-              style={styles.Timepicker}
-              value={selectedTime}
-              mode="time"
-              is24Hour={true} // Set to true for 24-hour format
-              onChange={(event, date) => {
-                handleTimeChange(event, date);
+            <Text style={styles.label}>Select Date:</Text>
+            <Calendar
+              onDayPress={(day) => {
+                handleDateSelect(day);
+                setFieldValue("date", day.dateString); // Set Formik field value
+              }}
+              markedDates={{
+                [selectedDate]: { selected: true, selectedColor: "blue" },
               }}
             />
-          )}
-        </View>
+            {/* {selectedDate && (
+              <Text style={styles.selectedDateText}>
+                 Selected Date: {selectedDate} 
+              </Text>
+            )} */}
+            <View style={styles.Time}>
+              <TouchableOpacity onPress={showTimePickerModal}>
+                <Text style={styles.label2}>Select Time:</Text>
+              </TouchableOpacity>
+              {showTimePicker && (
+                <DateTimePicker
+                  style={styles.Timepicker}
+                  value={selectedTime}
+                  mode="time"
+                  is24Hour={true}
+                  // display="default"
+                  onChange={(event, date) => {
+                    handleTimeChange(event, date);
+                    setFieldValue(
+                      "startTime",
+                      date.toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: false
+                      })
+                    ); // Set Formik field value
+                  }}
+                />
+              )}
+            </View>
 
-        <View style={styles.jobDetailsContainer}>
-          <Text style={styles.jobDetailsHeader}>Job Detail :</Text>
-          <View style={styles.jobDetailRow}>
-            <TextInput
-              style={styles.jobDescriptionInput}
-              placeholder="Type job description here..."
-              multiline
-              value={jobDescription}
-              onChangeText={(text) => setJobDescription(text)}
-              onBlur={() => setErrors({ ...errors, jobDescription: "" })}
-            />
-          </View>
-          {errors.jobDescription && (
-            <Text style={styles.errorText}>{errors.jobDescription}</Text>
-          )}
-        </View>
+            {/* {timePicked && (
+              <Text style={styles.selectedTimeText}>
+                Selected Time: {selectedTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              </Text>
+            )} */}
 
-        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-          <Text style={styles.submitButtonText}>Booking</Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </KeyboardAvoidingView>
+            <View style={styles.jobDetailsContainer}>
+              <Text style={styles.jobDetailsHeader}>Job Detail :</Text>
+              <View style={styles.jobDetailRow}>
+                <TextInput
+                  style={styles.jobDescriptionInput}
+                  placeholder="Type job description here..."
+                  multiline
+                  value={values.jobDescription}
+                  onChangeText={handleChange("jobDescription")}
+                  onBlur={handleBlur("jobDescription")}
+                />
+              </View>
+              {errors.jobDescription && touched.jobDescription && (
+                <Text style={styles.errorText}>{errors.jobDescription}</Text>
+              )}
+            </View>
+
+            <TouchableOpacity
+              style={styles.submitButton}
+              onPress={handleSubmit}
+            >
+              <Text style={styles.submitButtonText}>Booking</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      )}
+    </Formik>
   );
 };
 
@@ -298,6 +367,14 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  selectedTimeText: {
+    fontSize: 18,
+    marginTop: 10,
+  },
+  selectedDateText: {
+    fontSize: 18,
+    marginTop: 10,
   },
   errorText: {
     color: "red",
