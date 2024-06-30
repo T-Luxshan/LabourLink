@@ -133,6 +133,7 @@ const BookAppointment = () => {
       console.error("Booking error: ", error);
     }
   };
+  
 
   const HiredNotificationToCustomer = async () => {
     const notification = {
