@@ -44,7 +44,7 @@ const OnlineUsersScreen = ({ navigation }) => {
       };
       fetchConnectedUsers();
     }
-  }, [userRole]);
+  }, [connectedUsers]);
 
   const handleUserClick = (user) => {
     navigation.navigate("ChatAreaScreen", {
