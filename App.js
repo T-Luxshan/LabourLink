@@ -15,7 +15,7 @@ import LoginProvider from "./src/context/LoginProvider";
 
 
 export default function App() {
-  registerNNPushToken(21639, 'dwb6dAoCmrQD8faaLyciTU');
+  registerNNPushToken(22199, 'emBddOfJLNr511DDJxUMcI');
   return (
     <LoginProvider>
       <NavigationContainer>
