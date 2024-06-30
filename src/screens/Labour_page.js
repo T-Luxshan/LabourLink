@@ -19,6 +19,9 @@ import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getProfilePicture } from "../services/ProfilePhotoService";
 import { saveNotifications } from '../services/NoificationSevice';
+import * as Location from "expo-location";
+import { addLabourLocation } from "../services/LabourDetailsService";
+
 
 // Functional component definition
 const Labour_page = ({ navigation, route }) => {
@@ -30,7 +33,7 @@ const Labour_page = ({ navigation, route }) => {
   const [completedBookings, setCompletedBookings] = useState([]);
   const [acceptedAppointments, setAcceptedAppointments] = useState([]);
   const [image, setImage] = useState("");
-
+  const [location, setLocation] = useState(null);
   const [labourEmail, setLabourEmail] = useState(""); // State to hold labour email
 
   // Fetch labour email from AsyncStorage on component mount
@@ -39,7 +42,7 @@ const Labour_page = ({ navigation, route }) => {
       try {
         const email = await AsyncStorage.getItem("userEmail");
         if (email) {
-          setLabourEmail(email);
+          setLabourEmail(email.toLowerCase());
         } else {
           console.log("No email found in AsyncStorage");
         }
@@ -50,6 +53,28 @@ const Labour_page = ({ navigation, route }) => {
 
     fetchLabourEmail();
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        // setErrorMsg("Permission to access location was denied");
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+      console.log(location);
+
+      addLabourLocation(location.coords.latitude, location.coords.longitude, labourEmail)
+      .then(res=>{
+        console.log(res.data);
+      })
+      .catch(err=>{
+        console.log("failed to add location", err)
+      })
+    })();
+  }, [labourEmail]);
 
   useFocusEffect(
     useCallback(() => {
@@ -111,6 +136,8 @@ const Labour_page = ({ navigation, route }) => {
       fetchData();
     }, [labourEmail])
   );
+
+  
 
   const totalServices = completedBookings.length;
 

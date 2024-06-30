@@ -1,5 +1,6 @@
 import axios from "axios";
 import { IP } from "./BASE_IP";
+import axiosAuthInstance from "./AuthService";
 
 const BASE_URL = `http://${IP}:8080/api/labour`;
 const REVIEW_BASE_URL = `http://${IP}:8080/api/v1/labourReview`;
@@ -47,4 +48,10 @@ export const getLabourByJobRole = (jobRole) =>{
 // export const ProfileImageByEmail = (email)  =>{
 //     return axios.get(`${LABOUR_PROFILE_URL}/${email}`)
 // }
+
+export const addLabourLocation = (latitude, longitude, labourId) => {
+    return axiosAuthInstance.post(`${LABOUR_LOCATION_URL}`,{
+        latitude, longitude, labourId
+    })
+}
  
