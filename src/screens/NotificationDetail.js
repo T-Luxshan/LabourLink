@@ -1,14 +1,32 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { Button } from "react-native-paper";
+import {deleteNotification} from "../services/NoificationSevice"
 
 const NotificationDetail = ({ route }) => {
   const { notification } = route.params;
 
+  const handleDeleteNotification = async (id) => {
+    try {
+      await deleteNotification(notification.id);
+    } catch (error) {
+      console.error("Error deleting notification", error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{notification.title}</Text>
+      <Text style={styles.title}>{notification.id}</Text>
       <Text style={styles.message}>{notification.message}</Text>
       <Text style={styles.date}>{new Date(notification.createdAt).toLocaleString()}</Text>
+      <Button
+            mode="contained"
+            onPress={handleDeleteNotification}
+            style={styles.button2}
+          >
+            Delete
+          </Button>
     </View>
   );
 };
