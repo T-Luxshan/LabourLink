@@ -220,7 +220,7 @@ const Notification = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
-        <Button title="Click to Notify" onPress={handleNotification} />
+        {/* <Button title="Click to Notify" onPress={handleNotification} /> */}
         <Text style={styles.heading}>Notifications</Text>
       </View>
       <ScrollView
