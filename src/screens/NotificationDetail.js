@@ -1,14 +1,17 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Button } from "react-native-paper";
-import {deleteNotification} from "../services/NoificationSevice"
+import {deleteNotification} from "../services/NoificationSevice";
+import { useNavigation } from "@react-navigation/native";
 
 const NotificationDetail = ({ route }) => {
   const { notification } = route.params;
+  const navigation = useNavigation(); 
 
   const handleDeleteNotification = async (id) => {
     try {
       await deleteNotification(notification.id);
+      navigation.navigate("Notification");
     } catch (error) {
       console.error("Error deleting notification", error);
     }
@@ -17,7 +20,6 @@ const NotificationDetail = ({ route }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{notification.title}</Text>
-      <Text style={styles.title}>{notification.id}</Text>
       <Text style={styles.message}>{notification.message}</Text>
       <Text style={styles.date}>{new Date(notification.createdAt).toLocaleString()}</Text>
       <Button
