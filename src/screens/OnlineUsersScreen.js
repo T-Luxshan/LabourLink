@@ -35,7 +35,7 @@ const OnlineUsersScreen = ({ navigation }) => {
           }
         } else {
           try {
-            const response = await findConnectedLabours ();
+            const response = await findConnectedCustomers ();
             setConnectedUsers(response.data);
           } catch (error) {
             console.log("Error fetching connected users:", error);
@@ -44,7 +44,7 @@ const OnlineUsersScreen = ({ navigation }) => {
       };
       fetchConnectedUsers();
     }
-  }, [userRole]);
+  }, [userRole,connectedUsers]);
 
   const handleUserClick = (user) => {
     navigation.navigate("ChatAreaScreen", {

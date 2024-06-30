@@ -21,8 +21,6 @@ export const updateBookingStage = async (id, bookingStage) => {
   }
 };
 
-
-
 export const getPendingAppointments = async (labourEmail) => {
   try {
     const response = await axiosAuthInstance.get(

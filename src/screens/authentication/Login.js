@@ -13,7 +13,7 @@ import SignInWithGoogle from "../../components/SignInWithGoogle";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { registerIndieID, unregisterIndieDevice } from 'native-notify';
+import { registerIndieID } from 'native-notify';
 
 import * as yup from "yup";
 import {
@@ -263,14 +263,14 @@ const Login = () => {
           </TouchableRipple>
         </View>
         {/* remember me checkbox */}
-        <View style={styles.checkboxContainer}>
+        {/* <View style={styles.checkboxContainer}>
           <Checkbox
             status={rememberMe ? "checked" : "unchecked"}
             onPress={() => setRememberMe(!rememberMe)}
             color="#F97300"
           />
           <Text>Remember me</Text>
-        </View>
+        </View> */}
         {/* Login button */}
         {/* {errors.general && <Text style={styles.error}>{errors.general}</Text>}   */}
         {logError && <Text style={styles.error}>{logError}</Text>}

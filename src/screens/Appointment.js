@@ -53,6 +53,7 @@ const Appointment = ({ navigation }) => {
   const handleViewAppointment = (appointment) => {
     navigation.navigate("Appointment_page", {
       appointmentId: appointment.id,
+      
       removeAppointment: handleRemoveAppointment,
     });
   };

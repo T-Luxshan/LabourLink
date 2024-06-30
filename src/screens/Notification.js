@@ -114,6 +114,15 @@ const Notification = ({ navigation }) => {
     return () => clearInterval(interval);
   }, [email]);
 
+  // const count = notifications.length;
+  // const readCount = notifications.filter(
+  //   (notification) => notification.read
+  // ).length;
+  // const unreadNotificationCount = count - readCount;
+  // AsyncStorage.setItem("unreadNotifications",unreadNotificationCount);
+  // console.log("No of Unread Notifications",unreadNotificationCount);
+
+
   const handleNotification = async () => {
     const notification = {
       title: 'First Personal Notification',
@@ -179,7 +188,7 @@ const Notification = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.buttonContainer}>
-        <Button title="Click to Notify" onPress={handleNotification} />
+        {/* <Button title="Click to Notify" onPress={handleNotification} /> */}
         <Text style={styles.heading}>Notifications</Text>
       </View>
       <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent}>
@@ -204,11 +213,13 @@ const Notification = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   heading: {
-    fontSize: 24,
+    fontSize: 32,
     fontWeight: 'bold',
     textAlign: 'center',
     marginVertical: 10,
-    color: '#00204A',
+    color: '#1679AB',
+    marginBottom:2,
+    marginTop:50
   },
   buttonContainer: {
     marginVertical: 20,
@@ -231,7 +242,7 @@ const styles = StyleSheet.create({
   scrollContainer: {
     width: '100%',
     // Added height and flexGrow to enable scrolling
-    maxHeight: '80%',
+    maxHeight: '90%',
     flexGrow: 1,
   },
   scrollContent: {
@@ -266,7 +277,7 @@ const styles = StyleSheet.create({
   },
   date: {
     fontSize: 14,
-    color: '#888',
+    color: 'green',
   },
   accent: {
     color: '#F97300',

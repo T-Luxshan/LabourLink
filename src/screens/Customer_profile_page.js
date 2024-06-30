@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { getCustomerById, deleteCustomer } from "../services/CustomerService";
 import { useLogin } from "../context/LoginProvider";
+import { unregisterIndieDevice } from 'native-notify';
 
 
 const Customer_profile_page = ({ navigation, route }) => {
@@ -74,9 +75,14 @@ const [email, setEmail] = useState("");
         refreshTokenValue
       );
 
+      unregisterIndieDevice(email, 21639, "dwb6dAoCmrQD8faaLyciTU");
+
       // Clear tokens from AsyncStorage
       await AsyncStorage.removeItem("token");
       await AsyncStorage.removeItem("refreshToken");
+      await AsyncStorage.removeItem("userEmail");
+      await AsyncStorage.removeItem("userRole");
+      await AsyncStorage.removeItem("customerName");
 
       // Log to confirm removal
       console.log("After logout - tokens removed");

@@ -6,7 +6,7 @@ import {
   updateBookingStage,
 } from "../services/BookingService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { saveNotifications } from '../services/NoificationSevice';
 
 const Appointment_page = ({ route, navigation }) => {
   const { appointmentId, removeAppointment } = route.params;
@@ -70,8 +70,8 @@ const Appointment_page = ({ route, navigation }) => {
   const handleAccept = async () => {
     try {
       await updateBookingStage(appointmentId, "ACCEPTED");
-
-      
+      handleAcceptNotificationToLabour();      
+      handleAcceptNotificationToCustomer();      
       removeAppointment(appointmentId);
       navigation.navigate("Appointment"); // Navigate back to Appointment screen
     } catch (error) {
@@ -84,6 +84,8 @@ const Appointment_page = ({ route, navigation }) => {
 const handleIgnore = async () => {
   try {
     await updateBookingStage(appointmentId, "DECLINED");
+    handleIgnoreNotificationToLabour();
+    handleIgnoreNotificationToCustomer();
     removeAppointment(appointmentId);
     navigation.navigate("Appointment"); // Navigate back to Appointment screen
   } catch (error) {
@@ -105,6 +107,134 @@ const handleIgnore = async () => {
       options
     );
     return formattedDate;
+  };
+
+  const handleAcceptNotificationToLabour = async () => {
+    const notification = {
+      title: `Request from ${bookingDetails.customerName} is accepted`,
+      message: `You have successfully accepted ${bookingDetails.jobRole} request from ${bookingDetails.customerName}`,
+      recipient: labourEmail,
+      createdAt: new Date().toISOString(),
+    };
+
+    await fetch('https://app.nativenotify.com/api/indie/notification', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer dwb6dAoCmrQD8faaLyciTU`,
+      },
+      body: JSON.stringify({
+        appId: 21639,
+        appToken: 'dwb6dAoCmrQD8faaLyciTU',
+        title: notification.title,
+        message: notification.message,
+        // userId: notification.recipient,
+        subID:labourEmail,
+        date: notification.createdAt,
+      }),
+    });
+
+    try {
+      await saveNotifications(notification);
+    } catch (error) {
+      console.error('Error saving notification', error);
+    }
+  };
+
+  const handleAcceptNotificationToCustomer = async () => {
+    const notification = {
+      title: `Your Request For ${bookingDetails.jobRole} is accepted By ${bookingDetails.labourName}`,
+      message: `The hiring request you sent to ${bookingDetails.labourName} for ${bookingDetails.jobRole} has been successfully accepted by him`,
+      recipient: `${bookingDetails.customerEmail}`,
+      createdAt: new Date().toISOString(),
+    };
+
+    await fetch('https://app.nativenotify.com/api/indie/notification', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer dwb6dAoCmrQD8faaLyciTU`,
+      },
+      body: JSON.stringify({
+        appId: 21639,
+        appToken: 'dwb6dAoCmrQD8faaLyciTU',
+        title: notification.title,
+        message: notification.message,
+        // userId: notification.recipient,
+        subID:`${bookingDetails.customerEmail}`,
+        date: notification.createdAt,
+      }),
+    });
+
+    try {
+      await saveNotifications(notification);
+    } catch (error) {
+      console.error('Error saving notification', error);
+    }
+  };
+
+  const handleIgnoreNotificationToLabour = async () => {
+    const notification = {
+      title: `Request from ${bookingDetails.customerName} is rejected`,
+      message: `You have successfully rejected ${bookingDetails.jobRole} request from ${bookingDetails.customerName}`,
+      recipient: labourEmail,
+      createdAt: new Date().toISOString(),
+    };
+
+    await fetch('https://app.nativenotify.com/api/indie/notification', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer dwb6dAoCmrQD8faaLyciTU`,
+      },
+      body: JSON.stringify({
+        appId: 21639,
+        appToken: 'dwb6dAoCmrQD8faaLyciTU',
+        title: notification.title,
+        message: notification.message,
+        // userId: notification.recipient,
+        subID:labourEmail,
+        date: notification.createdAt,
+      }),
+    });
+
+    try {
+      await saveNotifications(notification);
+    } catch (error) {
+      console.error('Error saving notification', error);
+    }
+  };
+
+  const handleIgnoreNotificationToCustomer = async () => {
+    const notification = {
+      title: `${bookingDetails.jobRole} Request is rejected By ${bookingDetails.labourName}`,
+      message: `The hiring request you sent to ${bookingDetails.labourName} for ${bookingDetails.jobRole} has been rejected by him`,
+      recipient: `${bookingDetails.customerEmail}`,
+      createdAt: new Date().toISOString(),
+    };
+
+    await fetch('https://app.nativenotify.com/api/indie/notification', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer dwb6dAoCmrQD8faaLyciTU`,
+      },
+      body: JSON.stringify({
+        appId: 21639,
+        appToken: 'dwb6dAoCmrQD8faaLyciTU',
+        title: notification.title,
+        message: notification.message,
+        // userId: notification.recipient,
+        subID:`${bookingDetails.customerEmail}`,
+        date: notification.createdAt,
+      }),
+    });
+
+    try {
+      await saveNotifications(notification);
+    } catch (error) {
+      console.error('Error saving notification', error);
+    }
   };
 
   return (
