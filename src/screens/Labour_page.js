@@ -18,6 +18,7 @@ import {
 import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getProfilePicture } from "../services/ProfilePhotoService";
+import { saveNotifications } from '../services/NoificationSevice';
 
 // Functional component definition
 const Labour_page = ({ navigation, route }) => {
@@ -113,10 +114,12 @@ const Labour_page = ({ navigation, route }) => {
 
   const totalServices = completedBookings.length;
 
-  const handleMarkAsCompleted = async (appointmentId) => {
+  const handleMarkAsCompleted = async (appointment) => {
+    const appointmentId=appointment.id
     try {
       await updateBookingStage(appointmentId, "COMPLETED");
-
+      handleCompletedNotificationToLabour(appointment);
+      handleCompletedNotificationToCustomer(appointment);
       // Update acceptedAppointments state after marking appointment as completed
       setAcceptedAppointments((prevAppointments) =>
         prevAppointments.filter(
@@ -154,6 +157,71 @@ const Labour_page = ({ navigation, route }) => {
   const handleEdit = () => {
     navigation.navigate("Edit");
   };
+
+  const handleCompletedNotificationToLabour = async (appointment) => {
+    const notification = {
+      title: `Appointment for ${appointment.customerName} is completed`,
+      message: `You have successfully completed ${appointment.jobRole} work for ${appointment.customerName}`,
+      recipient: labourEmail,
+      createdAt: new Date().toISOString(),
+    };
+
+    await fetch('https://app.nativenotify.com/api/indie/notification', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer dwb6dAoCmrQD8faaLyciTU`,
+      },
+      body: JSON.stringify({
+        appId: 21639,
+        appToken: 'dwb6dAoCmrQD8faaLyciTU',
+        title: notification.title,
+        message: notification.message,
+        // userId: notification.recipient,
+        subID:labourEmail,
+        date: notification.createdAt,
+      }),
+    });
+
+    try {
+      await saveNotifications(notification);
+    } catch (error) {
+      console.error('Error saving notification', error);
+    }
+  };
+
+  const handleCompletedNotificationToCustomer = async (appointment) => {
+    const notification = {
+      title: `Appointment for ${appointment.jobRole} is completed By ${appointment.labourName}`,
+      message: `The appointment fixed ${appointment.labourName} for ${appointment.jobRole} has been successfully completed by him`,
+      recipient: `${appointment.customerEmail}`,
+      createdAt: new Date().toISOString(),
+    };
+
+    await fetch('https://app.nativenotify.com/api/indie/notification', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer dwb6dAoCmrQD8faaLyciTU`,
+      },
+      body: JSON.stringify({
+        appId: 21639,
+        appToken: 'dwb6dAoCmrQD8faaLyciTU',
+        title: notification.title,
+        message: notification.message,
+        // userId: notification.recipient,
+        subID:`${appointment.customerEmail}`,
+        date: notification.createdAt,
+      }),
+    });
+
+    try {
+      await saveNotifications(notification);
+    } catch (error) {
+      console.error('Error saving notification', error);
+    }
+  };
+
 
   // Component rendering
   return (
@@ -425,7 +493,7 @@ const Labour_page = ({ navigation, route }) => {
                   </Text>
                   <Button
                     mode="contained"
-                    onPress={() => handleMarkAsCompleted(appointment.id)}
+                    onPress={() => handleMarkAsCompleted(appointment)}
                     style={{
                       marginLeft: 30,
                       marginTop: 10,

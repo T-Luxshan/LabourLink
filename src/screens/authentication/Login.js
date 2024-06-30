@@ -13,7 +13,7 @@ import SignInWithGoogle from "../../components/SignInWithGoogle";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { registerIndieID, unregisterIndieDevice } from 'native-notify';
+import { registerIndieID } from 'native-notify';
 
 import * as yup from "yup";
 import {

@@ -8,39 +8,30 @@ import {
   Alert,
 } from "react-native";
 import { Button, Surface, Avatar } from "react-native-paper";
-import Icon from "react-native-vector-icons/FontAwesome"; 
+import Icon from "react-native-vector-icons/FontAwesome";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import {
-  faChevronRight,
-} from "@fortawesome/free-solid-svg-icons";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { getLabourProfileById } from "../services/LabourProfileService";
 import { getLabourById, deleteLabour } from "../services/LabourService";
 import { useLogin } from "../context/LoginProvider";
 import { getProfilePicture } from "../services/ProfilePhotoService";
-
-
+import { unregisterIndieDevice } from 'native-notify';
 
 const Labour_profile_page = ({ navigation, route }) => {
-    
   // Function to handle press event for the "Languages" section
- const [labour, setLabour] = useState("");
- const [labourProfile, setLabourProfile] = useState("");
- const [image, setImage] = useState(null);
- const [name, setName] = useState("");
- const { setIsLoggedIn } = useLogin();
- const [userEmail, setUserEmail] = useState('');
+  const [labour, setLabour] = useState("");
+  const [labourProfile, setLabourProfile] = useState("");
+  const [image, setImage] = useState(null);
+  const [name, setName] = useState("");
+  const { setIsLoggedIn } = useLogin();
+  const [userEmail, setUserEmail] = useState("");
 
-//  const email = AsyncStorage.getItem('userEmail');
+  //  const email = AsyncStorage.getItem('userEmail');
   // const email = "lehaan@example.com";
 
+  // const labourEmail = "aruran@example.com"; // Replace with dynamic value if needed
 
-
-// const labourEmail = "aruran@example.com"; // Replace with dynamic value if needed
-
-  
-
-  
   // getLabourProfileById(email)
   //   .then((response) => {
   //     const data = response.data;
@@ -55,57 +46,54 @@ const Labour_profile_page = ({ navigation, route }) => {
     getEmail();
   }, []);
 
-const getEmail = async () => {
+  const getEmail = async () => {
+    try {
+      const email = await AsyncStorage.getItem("userEmail");
+      console.log("This is the email", email);
+      setUserEmail(email);
+      fetchLabourByEmail(email);
+      fetchProfilePhoto(email);
 
-  try {
-    const email = await AsyncStorage.getItem('userEmail');
-    console.log("This is the email", email)
-    setUserEmail(email);
-    fetchLabourByEmail(email);
-    fetchProfilePhoto(email);
+      // alert(userEmail);
 
+      return email;
+    } catch (error) {
+      console.log("Error retrieving email from AsyncStorage:");
+    }
+  };
+
+  const fetchLabourByEmail = (userEmail) => {
     // alert(userEmail);
 
+    getLabourById(userEmail)
+      .then((response) => {
+        const data = response.data;
+        setLabour(data);
+        // setJobRole(data.jobRole);
+        // console.log(response.data);
+      })
+      .catch((error) => {
+        // console.error("Error fetching labour by id data:");
+      });
+  };
 
-    return email;
-  } catch (error) {
-    console.log('Error retrieving email from AsyncStorage:');
-  }
-};
+  const fetchProfilePhoto = (userEmail) => {
+    getProfilePicture()
+      .then((res) => setImage(res.data.profileUri))
+      .catch((err) => console.log("failed to fetch profile pic"));
+  };
+  // useEffect(() => {
+  //   if (route.params?.name) {
+  //     setName(route.params.name);
+  //   }
+  //   if (route.params?.image) {
+  //     setImage(route.params.image);
+  //   }
+  // }, [route.params?.name, route.params?.image]);
 
- const fetchLabourByEmail = (userEmail) => {
-  // alert(userEmail);
-   
-  getLabourById(userEmail)
-    .then((response) => {
-      const data = response.data;
-      setLabour(data);
-      // setJobRole(data.jobRole);
-      // console.log(response.data);
-    })
-    .catch((error) => {
-      // console.error("Error fetching labour by id data:");
-    });
- }
-
- const fetchProfilePhoto = (userEmail) => {
-   getProfilePicture()
-    .then(res=>setImage(res.data.profileUri))
-    .catch(err=>console.log("failed to fetch profile pic"));
- }
-// useEffect(() => {
-//   if (route.params?.name) {
-//     setName(route.params.name);
-//   }
-//   if (route.params?.image) {
-//     setImage(route.params.image);
-//   }
-// }, [route.params?.name, route.params?.image]);
-
-const handleEditProfile = () => {
-  navigation.navigate("Edit_Profile", { userEmail: userEmail });
-};
-
+  const handleEditProfile = () => {
+    navigation.navigate("Edit_Profile", { userEmail: userEmail });
+  };
 
   const handleSelectLanguages = () => {
     navigation.navigate("Languages");
@@ -115,10 +103,8 @@ const handleEditProfile = () => {
     navigation.navigate("About_Us");
   };
 
-
   const handleLogout = async () => {
     try {
-      unregisterIndieDevice(userEmail, 21639, 'dwb6dAoCmrQD8faaLyciTU');
       // Log current AsyncStorage values
       const tokenValue = await AsyncStorage.getItem("token");
       const refreshTokenValue = await AsyncStorage.getItem("refreshToken");
@@ -129,10 +115,12 @@ const handleEditProfile = () => {
         refreshTokenValue
       );
 
+      unregisterIndieDevice(userEmail, 21639, "dwb6dAoCmrQD8faaLyciTU");
+
       // Clear tokens from AsyncStorage
       await AsyncStorage.removeItem("token");
       await AsyncStorage.removeItem("refreshToken");
-      
+      await AsyncStorage.removeItem("userEmail");
 
       // Log to confirm removal
       console.log("After logout - tokens removed");
@@ -146,64 +134,65 @@ const handleEditProfile = () => {
     }
   };
 
-   const handlePersonalDetails = () => {
-  navigation.navigate("Personal_Details");
-};
 
-const handlePassword = () => {
-  navigation.navigate("Labour_Change_Password");
-};
+  const handlePersonalDetails = () => {
+    navigation.navigate("Personal_Details");
+  };
 
-    const deleteAccountConfirmed = async () => {
-      try {
-        // Delete account using service function
-        await deleteLabour(email);
+  const handlePassword = () => {
+    navigation.navigate("Labour_Change_Password");
+  };
 
-          const tokenValue = await AsyncStorage.getItem("token");
-          const refreshTokenValue = await AsyncStorage.getItem("refreshToken");
-          console.log(
-            "Before logout - token:",
-            tokenValue,
-            "refreshToken:",
-            refreshTokenValue
-          );
+  const deleteAccountConfirmed = async () => {
+    try {
+      // Delete account using service function
+      await deleteLabour(email);
 
-          // Clear tokens from AsyncStorage
-          await AsyncStorage.removeItem("token");
-          await AsyncStorage.removeItem("refreshToken");
-
-          // Log to confirm removal
-          console.log("After logout - tokens removed");
-
-        setIsLoggedIn(false);
-        // Navigate to Login screen
-        // navigation.navigate("Login");
-      } catch (error) {
-        console.error("Error deleting account:", error);
-        // Handle error gracefully
-        // You can add specific error handling based on different error scenarios here
-        // For example, displaying an alert to the user or logging more details
-        Alert.alert("Error", "Failed to delete account. Please try again.");
-      }
-    };
-
-    const handleDeleteAccount = () => {
-      Alert.alert(
-        "Delete Account",
-        "Are you sure you want to delete your account?",
-        [
-          {
-            text: "No",
-            style: "cancel",
-          },
-          {
-            text: "Yes",
-            onPress: deleteAccountConfirmed,
-          },
-        ]
+      const tokenValue = await AsyncStorage.getItem("token");
+      const refreshTokenValue = await AsyncStorage.getItem("refreshToken");
+      console.log(
+        "Before logout - token:",
+        tokenValue,
+        "refreshToken:",
+        refreshTokenValue
       );
-    };
-   
+
+      // Clear tokens from AsyncStorage
+      await AsyncStorage.removeItem("token");
+      await AsyncStorage.removeItem("refreshToken");
+
+      // Log to confirm removal
+      console.log("After logout - tokens removed");
+
+      setIsLoggedIn(false);
+      // Navigate to Login screen
+      // navigation.navigate("Login");
+    } catch (error) {
+      console.error("Error deleting account:", error);
+      // Handle error gracefully
+      // You can add specific error handling based on different error scenarios here
+      // For example, displaying an alert to the user or logging more details
+      Alert.alert("Error", "Failed to delete account. Please try again.");
+    }
+  };
+
+  const handleDeleteAccount = () => {
+    Alert.alert(
+      "Delete Account",
+      "Are you sure you want to delete your account?",
+      [
+        {
+          text: "No",
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: deleteAccountConfirmed,
+        },
+      ]
+    );
+  };
+
   return (
     <View>
       <ScrollView>
@@ -294,7 +283,6 @@ const handlePassword = () => {
 
         {/* Surface for settings */}
         <Surface style={styles.surface} elevation={1}>
-          
           <View
             style={{
               flexDirection: "row",
