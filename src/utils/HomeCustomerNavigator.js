@@ -155,6 +155,7 @@ function CustomBottomNavigationBar() {
   const [refreshingChatCount, setRefreshingChatCount] = useState(false);
   const [receivedMessagesCount, setReceivedMessagesCount] = useState({});
 
+  
   useEffect(() => {
     const fetchEmail = async () => {
       try {
