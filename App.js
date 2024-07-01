@@ -1,4 +1,8 @@
 
+import { LogBox } from 'react-native';
+
+// Ignore all log notifications
+LogBox.ignoreAllLogs(true);
 // import { StatusBar } from "expo-status-bar";
 // import React, { useState, useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
@@ -15,7 +19,7 @@ import LoginProvider from "./src/context/LoginProvider";
 
 
 export default function App() {
-  registerNNPushToken(21639, 'dwb6dAoCmrQD8faaLyciTU');
+  registerNNPushToken(22199, 'emBddOfJLNr511DDJxUMcI');
   return (
     <LoginProvider>
       <NavigationContainer>

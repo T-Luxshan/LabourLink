@@ -246,11 +246,11 @@ const Labour_page = ({ navigation, route }) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer dwb6dAoCmrQD8faaLyciTU`,
+        Authorization: `Bearer emBddOfJLNr511DDJxUMcI`,
       },
       body: JSON.stringify({
-        appId: 21639,
-        appToken: 'dwb6dAoCmrQD8faaLyciTU',
+        appId: 22199,
+        appToken: 'emBddOfJLNr511DDJxUMcI',
         title: notification.title,
         message: notification.message,
         // userId: notification.recipient,
@@ -278,11 +278,11 @@ const Labour_page = ({ navigation, route }) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer dwb6dAoCmrQD8faaLyciTU`,
+        Authorization: `Bearer emBddOfJLNr511DDJxUMcI`,
       },
       body: JSON.stringify({
-        appId: 21639,
-        appToken: 'dwb6dAoCmrQD8faaLyciTU',
+        appId: 22199,
+        appToken: 'emBddOfJLNr511DDJxUMcI',
         title: notification.title,
         message: notification.message,
         // userId: notification.recipient,

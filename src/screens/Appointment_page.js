@@ -6,7 +6,7 @@ import {
   updateBookingStage,
 } from "../services/BookingService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { saveNotifications } from '../services/NoificationSevice';
+import { saveNotifications } from "../services/NoificationSevice";
 
 const Appointment_page = ({ route, navigation }) => {
   const { appointmentId, removeAppointment } = route.params;
@@ -38,8 +38,10 @@ const Appointment_page = ({ route, navigation }) => {
 
 
 
+ 
+
   useEffect(() => {
-    if(labourEmail){
+    if (labourEmail) {
       const fetchBookingDetails = async () => {
         try {
           const response = await getBookingDetailsByLabourEmail(labourEmail);
@@ -63,15 +65,14 @@ const Appointment_page = ({ route, navigation }) => {
       };
 
       fetchBookingDetails();
-    }}, [labourEmail, appointmentId]); // Dependency array ensures useEffect runs when labourEmail or appointmentId changes
-
-  
+    }
+  }, [labourEmail, appointmentId]); // Dependency array ensures useEffect runs when labourEmail or appointmentId changes
 
   const handleAccept = async () => {
     try {
       await updateBookingStage(appointmentId, "ACCEPTED");
-      handleAcceptNotificationToLabour();      
-      handleAcceptNotificationToCustomer();      
+      handleAcceptNotificationToLabour();
+      handleAcceptNotificationToCustomer();
       removeAppointment(appointmentId);
       navigation.navigate("Appointment"); // Navigate back to Appointment screen
     } catch (error) {
@@ -80,20 +81,18 @@ const Appointment_page = ({ route, navigation }) => {
     }
   };
 
-  
-const handleIgnore = async () => {
-  try {
-    await updateBookingStage(appointmentId, "DECLINED");
-    handleIgnoreNotificationToLabour();
-    handleIgnoreNotificationToCustomer();
-    removeAppointment(appointmentId);
-    navigation.navigate("Appointment"); // Navigate back to Appointment screen
-  } catch (error) {
-    // console.log("Error accepting appointment:", error);
-    // Handle error state or notify user accordingly
-  }
-};
-  
+  const handleIgnore = async () => {
+    try {
+      await updateBookingStage(appointmentId, "DECLINED");
+      handleIgnoreNotificationToLabour();
+      handleIgnoreNotificationToCustomer();
+      removeAppointment(appointmentId);
+      navigation.navigate("Appointment"); // Navigate back to Appointment screen
+    } catch (error) {
+      // console.log("Error accepting appointment:", error);
+      // Handle error state or notify user accordingly
+    }
+  };
 
   const formatDate = (dateString) => {
     const options = {
@@ -117,27 +116,29 @@ const handleIgnore = async () => {
       createdAt: new Date().toISOString(),
     };
 
-    await fetch('https://app.nativenotify.com/api/indie/notification', {
-      method: 'POST',
+    await fetch("https://app.nativenotify.com/api/indie/notification", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer dwb6dAoCmrQD8faaLyciTU`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer emBddOfJLNr511DDJxUMcI`,
       },
       body: JSON.stringify({
-        appId: 21639,
-        appToken: 'dwb6dAoCmrQD8faaLyciTU',
+        appId: 22199,
+      appToken: 'emBddOfJLNr511DDJxUMcI',
         title: notification.title,
         message: notification.message,
         // userId: notification.recipient,
-        subID:labourEmail,
+        subID: labourEmail,
         date: notification.createdAt,
       }),
     });
 
+    
+
     try {
       await saveNotifications(notification);
     } catch (error) {
-      console.error('Error saving notification', error);
+      console.error("Error saving notification", error);
     }
   };
 
@@ -149,19 +150,19 @@ const handleIgnore = async () => {
       createdAt: new Date().toISOString(),
     };
 
-    await fetch('https://app.nativenotify.com/api/indie/notification', {
-      method: 'POST',
+    await fetch("https://app.nativenotify.com/api/indie/notification", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer dwb6dAoCmrQD8faaLyciTU`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer emBddOfJLNr511DDJxUMcI`,
       },
       body: JSON.stringify({
-        appId: 21639,
-        appToken: 'dwb6dAoCmrQD8faaLyciTU',
+        appId: 22199,
+        appToken: 'emBddOfJLNr511DDJxUMcI',
         title: notification.title,
         message: notification.message,
         // userId: notification.recipient,
-        subID:`${bookingDetails.customerEmail}`,
+        subID: `${bookingDetails.customerEmail}`,
         date: notification.createdAt,
       }),
     });
@@ -169,7 +170,7 @@ const handleIgnore = async () => {
     try {
       await saveNotifications(notification);
     } catch (error) {
-      console.error('Error saving notification', error);
+      console.error("Error saving notification", error);
     }
   };
 
@@ -181,19 +182,19 @@ const handleIgnore = async () => {
       createdAt: new Date().toISOString(),
     };
 
-    await fetch('https://app.nativenotify.com/api/indie/notification', {
-      method: 'POST',
+    await fetch("https://app.nativenotify.com/api/indie/notification", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer dwb6dAoCmrQD8faaLyciTU`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer emBddOfJLNr511DDJxUMcI`,
       },
       body: JSON.stringify({
-        appId: 21639,
-        appToken: 'dwb6dAoCmrQD8faaLyciTU',
+        appId: 22199,
+        appToken: 'emBddOfJLNr511DDJxUMcI',
         title: notification.title,
         message: notification.message,
         // userId: notification.recipient,
-        subID:labourEmail,
+        subID: labourEmail,
         date: notification.createdAt,
       }),
     });
@@ -201,7 +202,7 @@ const handleIgnore = async () => {
     try {
       await saveNotifications(notification);
     } catch (error) {
-      console.error('Error saving notification', error);
+      console.error("Error saving notification", error);
     }
   };
 
@@ -213,19 +214,19 @@ const handleIgnore = async () => {
       createdAt: new Date().toISOString(),
     };
 
-    await fetch('https://app.nativenotify.com/api/indie/notification', {
-      method: 'POST',
+    await fetch("https://app.nativenotify.com/api/indie/notification", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer dwb6dAoCmrQD8faaLyciTU`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer emBddOfJLNr511DDJxUMcI`,
       },
       body: JSON.stringify({
-        appId: 21639,
-        appToken: 'dwb6dAoCmrQD8faaLyciTU',
+        appId: 22199,
+        appToken: 'emBddOfJLNr511DDJxUMcI',
         title: notification.title,
         message: notification.message,
         // userId: notification.recipient,
-        subID:`${bookingDetails.customerEmail}`,
+        subID: `${bookingDetails.customerEmail}`,
         date: notification.createdAt,
       }),
     });
@@ -233,7 +234,7 @@ const handleIgnore = async () => {
     try {
       await saveNotifications(notification);
     } catch (error) {
-      console.error('Error saving notification', error);
+      console.error("Error saving notification", error);
     }
   };
 
@@ -455,4 +456,3 @@ const styles = StyleSheet.create({
 });
 
 export default Appointment_page;
-
