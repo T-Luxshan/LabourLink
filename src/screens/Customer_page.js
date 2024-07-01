@@ -21,6 +21,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import { getProfilePicture } from "../services/ProfilePhotoService";
 import { FontAwesome5 } from "@expo/vector-icons";
+import { getLabourProfilePicture } from "../services/ProfilePhotoService";
 
 // Functional component definition
 const Customer_page = ({ navigation }) => {
@@ -31,7 +32,7 @@ const Customer_page = ({ navigation }) => {
   const [topRatedEmployee, setTopRatedEmployee] = useState(null);
    const [completedBookings, setCompletedBookings] = useState([]);
    const [upcomingServices, setUpcomingServices] = useState([]);
-    const [image, setImage] = useState("");
+   const [profilePic, setProfilePic] = useState("");
 
    const[email, setEmail] = useState(""); 
 
@@ -85,42 +86,13 @@ const Customer_page = ({ navigation }) => {
         const reviewsResponse = await getAllReviews();
         const reviewsData = reviewsResponse.data;
 
-        // Calculate total sum of ratings for each labour
-    //     const labourRatings = reviewsData.reduce((acc, review) => {
-    //       if (!acc[review.labourName]) {
-    //         acc[review.labourName] = {
-    //           totalRating: 0,
-    //           reviewCount: 0,
-    //           labourRole: review.labourRole, // Assuming the job role is available in review data
-    //         };
-    //       }
-    //       acc[review.labourName].totalRating += review.rating;
-    //       acc[review.labourName].reviewCount += 1;
-    //       return acc;
-    //     }, {});
-
-    //     // Find the labour with the highest total sum of ratings
-    //     const topRatedLabour = Object.entries(labourRatings).reduce(
-    //       (topLabour, [labourName, currentLabour]) => {
-    //         return currentLabour.totalRating > (topLabour.totalRating || 0)
-    //           ? { labourName, ...currentLabour }
-    //           : topLabour;
-    //       },
-    //       {}
-    //     );
-
-    //     setTopRatedEmployee(topRatedLabour);
-    //   } catch (error) {
-    //     // console.log("Error fetching data:");
-    //     // Handle specific error scenarios, e.g., display error message to user
-    //   }
-    // };
     const labourRatings = reviewsData.reduce((acc, review) => {
               if (!acc[review.labourName]) {
                 acc[review.labourName] = {
                   totalRating: 0,
                   reviewCount: 0,
                   labourRole: review.labourRole, // Assuming the job role is available in review data
+                  labourId: review.labourId,
                 };
               }
               acc[review.labourName].totalRating += review.rating;
@@ -148,12 +120,15 @@ const Customer_page = ({ navigation }) => {
             );
 
             setTopRatedEmployee(topRatedLabour);
-          }
-         catch (error) {
-          console.log("Error fetching data:", error);
-          // Handle specific error scenarios, e.g., display error message to user
-        }
-      }
+             fetchProfilePhoto(topRatedLabour.labourId);
+        // console.log(topRatedLabour);
+        // console.log(topRatedEmployee);
+          // }
+        //  catch (error) {
+        //   console.log("Error fetching data:", error);
+        //   // Handle specific error scenarios, e.g., display error message to user
+        // }
+       
       getProfilePicture()
         .then((res) => {
           setImage(res.data.profileUri);
@@ -163,7 +138,10 @@ const Customer_page = ({ navigation }) => {
           console.log("Failed to fetch profile photo", error);
         });
       
-
+      } catch (error) {
+            console.log("Error fetching data:", error);
+          }
+        };
 
     fetchCustomerAndLabourData();
 }}, [email]));
@@ -174,6 +152,13 @@ const Customer_page = ({ navigation }) => {
   const handleLanguagesPress = () => {
     console.log("Languages section pressed");
   };
+
+  const fetchProfilePhoto = (email) => {
+    getLabourProfilePicture(email)
+    .then(res=>{
+      setProfilePic(res.data.profileUri)})
+    .catch(err=>console.log("Failed to fetch profile pic"));
+  }
 
   const handleJobPress = (jobCategory) => {
     console.log(`Job category pressed: ${jobCategory}`);
@@ -301,7 +286,7 @@ const Customer_page = ({ navigation }) => {
               >
                 <Avatar.Image
                   size={90}
-                  source={image ? { uri: image } :require("../assets/Images/boy.png")}
+                  source={profilePic? { uri: profilePic }: require("../assets/Images/boy.png")}
                   style={{ marginLeft: 25 }}
                 />
 

@@ -17,3 +17,7 @@ export const deleteProfilePicture = () => {
 export const getProfilePicture = () => {
     return axiosAuthInstance.get(`${baseURL}`);
 };
+
+export const getLabourProfilePicture = (email) => {
+    return axiosAuthInstance.get(`${baseURL}/${email}`);
+};
