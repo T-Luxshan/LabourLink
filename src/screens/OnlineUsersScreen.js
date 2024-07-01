@@ -3,7 +3,7 @@ import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { List, Avatar } from "react-native-paper";
 import { findConnectedUsers } from "../services/userService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { unreadMessageCount } from "../services/ChatService";
+import { unreadMessageCount,markAsRead } from "../services/ChatService";
 
 
 const OnlineUsersScreen = ({ navigation }) => {
@@ -74,7 +74,17 @@ const OnlineUsersScreen = ({ navigation }) => {
     }
   }
 
+  async function handleMarkAsRead(receiverEmail, senderEmail) {
+    try {
+      await markAsRead(receiverEmail, senderEmail);
+      console.log("Messages marked as read successfully.");
+    } catch (error) {
+      console.error("Failed to mark messages as read:", error);
+    }
+  }
+
   const handleUserClick = (user) => {
+    handleMarkAsRead(user.email, email);
     navigation.navigate("ChatAreaScreen", {
       SelectedUserName: user.name,
       SelectedUserEmail: user.email,
