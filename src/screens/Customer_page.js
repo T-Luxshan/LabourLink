@@ -19,6 +19,7 @@ import {
 } from "../services/CustomerBookingService";
 import { AntDesign } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
+import { getLabourProfilePicture } from "../services/ProfilePhotoService";
 
 // Functional component definition
 const Customer_page = ({ navigation }) => {
@@ -29,6 +30,7 @@ const Customer_page = ({ navigation }) => {
   const [topRatedEmployee, setTopRatedEmployee] = useState(null);
    const [completedBookings, setCompletedBookings] = useState([]);
    const [upcomingServices, setUpcomingServices] = useState([]);
+   const [profilePic, setProfilePic] = useState("");
 
    const[email, setEmail] = useState(""); 
 
@@ -89,6 +91,7 @@ const Customer_page = ({ navigation }) => {
               totalRating: 0,
               reviewCount: 0,
               labourRole: review.jobRole, // Assuming the job role is available in review data
+              labourId: review.labourId,
             };
           }
           acc[review.labourName].totalRating += review.rating;
@@ -107,7 +110,11 @@ const Customer_page = ({ navigation }) => {
         );
 
         setTopRatedEmployee(topRatedLabour);
+        fetchProfilePhoto(topRatedLabour.labourId);
+        console.log(topRatedLabour);
         console.log(topRatedEmployee);
+        
+       
       } catch (error) {
         // console.log("Error fetching data:");
         // Handle specific error scenarios, e.g., display error message to user
@@ -121,6 +128,13 @@ const Customer_page = ({ navigation }) => {
   const handleLanguagesPress = () => {
     console.log("Languages section pressed");
   };
+
+  const fetchProfilePhoto = (email) => {
+    getLabourProfilePicture(email)
+    .then(res=>{
+      setProfilePic(res.data.profileUri)})
+    .catch(err=>console.log("Failed to fetch profile pic"));
+  }
 
   const handleJobPress = (jobCategory) => {
     console.log(`Job category pressed: ${jobCategory}`);
@@ -200,7 +214,7 @@ const Customer_page = ({ navigation }) => {
               >
                 <Avatar.Image
                   size={90}
-                  source={require("../assets/Images/boy.png")}
+                  source={profilePic? { uri: profilePic }: require("../assets/Images/boy.png")}
                   style={{ marginLeft: 25 }}
                 />
 
