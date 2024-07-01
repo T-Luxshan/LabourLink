@@ -1,50 +1,79 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { List, Avatar } from "react-native-paper";
-import { findConnectedLabours,findConnectedCustomers } from "../services/userService";
+import { findConnectedUsers } from "../services/userService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const OnlineUsersScreen = ({ navigation }) => {
+  const [email, setEmail] = useState("");
   const [connectedUsers, setConnectedUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [userRole, setUserRole] = useState("");
 
   useEffect(() => {
-    const fetchRole = async () => {
+    const fetchEmail = async () => {
       try {
-        const storedRole = await AsyncStorage.getItem("userRole");
-        setUserRole(storedRole);
-        console.log("Fetched role: " + storedRole);
+        const storedEmail = await AsyncStorage.getItem("userEmail");
+        setEmail(storedEmail);
+        console.log("Fetched Email: " + storedEmail);
       } catch (error) {
-        console.error("Failed to fetch user role from storage", error);
+        console.error("Failed to fetch email from storage", error);
       }
     };
 
-    fetchRole();
+    fetchEmail();
   }, []);
 
+  // useEffect(() => {
+  //   const fetchRole = async () => {
+  //     try {
+  //       const storedRole = await AsyncStorage.getItem("userRole");
+  //       setUserRole(storedRole);
+  //       console.log("Fetched role: " + storedRole);
+  //     } catch (error) {
+  //       console.error("Failed to fetch user role from storage", error);
+  //     }
+  //   };
+
+  //   fetchRole();
+  // }, []);
+
+  // useEffect(() => {
+  //   if (userRole) {
+  //     const fetchConnectedUsers = async () => {
+  //       if (userRole == "CUSTOMER") {
+  //         try {
+  //           const response = await findConnectedLabours();
+  //           setConnectedUsers(response.data);
+  //         } catch (error) {
+  //           console.log("Error fetching connected users:", error);
+  //         }
+  //       } else {
+  //         try {
+  //           const response = await findConnectedCustomers ();
+  //           setConnectedUsers(response.data);
+  //         } catch (error) {
+  //           console.log("Error fetching connected users:", error);
+  //         }
+  //       }
+  //     };
+  //     fetchConnectedUsers();
+  //   }
+  // }, [userRole,connectedUsers]);
+
   useEffect(() => {
-    if (userRole) {
+    if (email) {
       const fetchConnectedUsers = async () => {
-        if (userRole == "CUSTOMER") {
-          try {
-            const response = await findConnectedLabours();
-            setConnectedUsers(response.data);
-          } catch (error) {
-            console.log("Error fetching connected users:", error);
-          }
-        } else {
-          try {
-            const response = await findConnectedCustomers ();
-            setConnectedUsers(response.data);
-          } catch (error) {
-            console.log("Error fetching connected users:", error);
-          }
+        try {
+          const response = await findConnectedUsers(email);
+          setConnectedUsers(response.data);
+        } catch (error) {
+          console.log("Error fetching connected users:", error);
         }
       };
       fetchConnectedUsers();
     }
-  }, [userRole,connectedUsers]);
+  }, [userRole, connectedUsers]);
 
   const handleUserClick = (user) => {
     navigation.navigate("ChatAreaScreen", {

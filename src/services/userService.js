@@ -7,12 +7,16 @@ export const getUserByEmail = (email) => {
   return axios.get(REST_API_BASE_URL + "/" + email);
 };
 
-export const findConnectedLabours = () => {
-  return axios.get(REST_API_BASE_URL + "/connectedLabours");
-};
+// export const findConnectedLabours = () => {
+//   return axios.get(REST_API_BASE_URL + "/connectedLabours");
+// };
 
-export const findConnectedCustomers = () => {
-  return axios.get(REST_API_BASE_URL + "/connectedCustomers");
+// export const findConnectedCustomers = () => {
+//   return axios.get(REST_API_BASE_URL + "/connectedCustomers");
+// };
+
+export const findConnectedUsers = (email) => {
+  return axios.get(REST_API_BASE_URL + "/connectedUsers/"+ email);
 };
 
 export const updateUserStatus = (email, newUser) => {
