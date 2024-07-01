@@ -1,4 +1,8 @@
 
+import { LogBox } from 'react-native';
+
+// Ignore all log notifications
+LogBox.ignoreAllLogs(true);
 // import { StatusBar } from "expo-status-bar";
 // import React, { useState, useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
