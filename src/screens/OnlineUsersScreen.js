@@ -42,7 +42,7 @@ const OnlineUsersScreen = ({ navigation }) => {
       };
       fetchConnectedUsers();
     }
-  }, [email]);
+  }, [email,connectedUsers]);
 
   useEffect(() => {
     const interval = setInterval(async () => {
