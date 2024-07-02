@@ -26,7 +26,7 @@ const Personal_Details = ({ navigation }) => {
        try {
          const email = await AsyncStorage.getItem("userEmail");
          if (email) {
-           setLabourEmail(email);
+           setLabourEmail(email.toLowerCase());
          } else {
            console.log("No email found in AsyncStorage");
          }
@@ -134,6 +134,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 5,
+    marginTop: 110,
   },
   label: {
     fontSize: 16,
@@ -150,7 +151,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   button: {
-    backgroundColor: "#007bff",
+    backgroundColor: "#0066CC",
     borderRadius: 20,
     height: 40,
     alignItems: "center",

@@ -7,6 +7,8 @@ import { IP } from './BASE_IP';
 // const BASE_URL = "http://172.20.10.3:8080/api/bookings";
 const BASE_URL = `http://${IP}:8080/api/bookings`;
 
+
+
 export const updateBookingStage = async (id, bookingStage) => {
   try {
     const response = await axiosAuthInstance.patch(`${BASE_URL}/updateStage/${id}`, {

@@ -21,7 +21,7 @@ const Appointment = ({ navigation }) => {
       try {
         const email = await AsyncStorage.getItem("userEmail");
         if (email) {
-          setLabourEmail(email);
+          setLabourEmail(email.toLowerCase());
         } else {
           console.log("No email found in AsyncStorage");
         }
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     right: 10,
   },
   viewText: {
-    color: "blue",
+    color: "#0066CC",
     fontSize: 14,
   },
   noPendingText: {

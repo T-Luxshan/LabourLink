@@ -14,24 +14,31 @@ const Appointment_page = ({ route, navigation }) => {
   const [error, setError] = useState(null);
   // const labourEmail = "lehaan@example.com"; // Replace with dynamic value if needed
 
-  const [labourEmail, setLabourEmail] = useState("");
 
-  useEffect(() => {
-    const fetchLabourEmail = async () => {
-      try {
-        const email = await AsyncStorage.getItem("userEmail");
-        if (email) {
-          setLabourEmail(email);
-        } else {
-          console.log("No email found in AsyncStorage");
-        }
-      } catch (error) {
-        console.log("Error fetching email from AsyncStorage:", error);
-      }
-    };
+   const [labourEmail, setLabourEmail] = useState("");
 
-    fetchLabourEmail();
-  }, []);
+
+
+   useEffect(() => {
+     const fetchLabourEmail = async () => {
+       try {
+         const email = await AsyncStorage.getItem("userEmail");
+         if (email) {
+           setLabourEmail(email.toLowerCase());
+         } else {
+           console.log("No email found in AsyncStorage");
+         }
+       } catch (error) {
+         console.log("Error fetching email from AsyncStorage:", error);
+       }
+     };
+
+     fetchLabourEmail();
+   }, []);
+
+
+
+ 
 
   useEffect(() => {
     if (labourEmail) {
@@ -300,7 +307,7 @@ const Appointment_page = ({ route, navigation }) => {
                   marginLeft: 15,
                   marginTop: 25,
                   padding: 5,
-                  height: 270,
+                  height: "auto",
                   width: 345,
                   alignItems: "flexStart",
                   justifyContent: "flexStart",
@@ -371,7 +378,7 @@ const Appointment_page = ({ route, navigation }) => {
               mode="contained"
               onPress={handleAccept}
               style={{
-                backgroundColor: "#00204A",
+                backgroundColor: "#0066CC",
                 borderRadius: 10,
                 height: 40,
                 marginTop: 10,
@@ -392,7 +399,7 @@ const Appointment_page = ({ route, navigation }) => {
               mode="contained"
               onPress={handleIgnore}
               style={{
-                backgroundColor: "#00204A",
+                backgroundColor: "#0066CC",
                 borderRadius: 10,
                 height: 40,
                 marginTop: 10,

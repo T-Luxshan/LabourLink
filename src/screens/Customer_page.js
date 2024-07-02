@@ -19,6 +19,8 @@ import {
 } from "../services/CustomerBookingService";
 import { AntDesign } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
+import { getProfilePicture } from "../services/ProfilePhotoService";
+import { FontAwesome5 } from "@expo/vector-icons";
 import { getLabourProfilePicture } from "../services/ProfilePhotoService";
 
 // Functional component definition
@@ -59,7 +61,8 @@ const Customer_page = ({ navigation }) => {
 
 
   // Updated useEffect with error handling
-  useEffect(() => {
+  useFocusEffect(
+     useCallback(() => {
     if (email) {
     const fetchCustomerAndLabourData = async () => {
       try {
@@ -67,7 +70,6 @@ const Customer_page = ({ navigation }) => {
         const customerResponse = await getCustomerById(email);
         const customerData = customerResponse.data;
         setCustomerName(customerData.name);
-        AsyncStorage.setItem("customerName", customerData.name);
 
         // Fetch completed bookings
         const completedBookingsResponse = await getCompletedBookings(email);
@@ -84,45 +86,67 @@ const Customer_page = ({ navigation }) => {
         const reviewsResponse = await getAllReviews();
         const reviewsData = reviewsResponse.data;
 
-        // Calculate total sum of ratings for each labour
-        const labourRatings = reviewsData.reduce((acc, review) => {
-          if (!acc[review.labourName]) {
-            acc[review.labourName] = {
-              totalRating: 0,
-              reviewCount: 0,
-              labourRole: review.jobRole, // Assuming the job role is available in review data
-              labourId: review.labourId,
-            };
-          }
-          acc[review.labourName].totalRating += review.rating;
-          acc[review.labourName].reviewCount += 1;
-          return acc;
-        }, {});
+    const labourRatings = reviewsData.reduce((acc, review) => {
+              if (!acc[review.labourName]) {
+                acc[review.labourName] = {
+                  totalRating: 0,
+                  reviewCount: 0,
+                  labourRole: review.labourRole, // Assuming the job role is available in review data
+                  labourId: review.labourId,
+                };
+              }
+              acc[review.labourName].totalRating += review.rating;
+              acc[review.labourName].reviewCount += 1;
+              return acc;
+            }, {});
 
-        // Find the labour with the highest total sum of ratings
-        const topRatedLabour = Object.entries(labourRatings).reduce(
-          (topLabour, [labourName, currentLabour]) => {
-            return currentLabour.totalRating > (topLabour.totalRating || 0)
-              ? { labourName, ...currentLabour }
-              : topLabour;
-          },
-          {}
-        );
+            // Calculate average rating and find the labour with the highest average rating
+            const topRatedLabour = Object.entries(labourRatings).reduce(
+              (topLabour, [labourName, currentLabour]) => {
+                const averageRating =
+                  currentLabour.totalRating / currentLabour.reviewCount;
+                if (!topLabour || averageRating > topLabour.averageRating) {
+                  return {
+                    labourName,
+                    averageRating,
+                    totalRating: currentLabour.totalRating,
+                    reviewCount: currentLabour.reviewCount,
+                    labourRole: currentLabour.labourRole,
+                  };
+                }
+                return topLabour;
+              },
+              null
+            );
 
-        setTopRatedEmployee(topRatedLabour);
-        fetchProfilePhoto(topRatedLabour.labourId);
-        console.log(topRatedLabour);
-        console.log(topRatedEmployee);
-        
+            setTopRatedEmployee(topRatedLabour);
+             fetchProfilePhoto(topRatedLabour.labourId);
+        // console.log(topRatedLabour);
+        // console.log(topRatedEmployee);
+          // }
+        //  catch (error) {
+        //   console.log("Error fetching data:", error);
+        //   // Handle specific error scenarios, e.g., display error message to user
+        // }
        
+      getProfilePicture()
+        .then((res) => {
+          setImage(res.data.profileUri);
+          console.log(res.data.profileUri);
+        })
+        .catch((error) => {
+          console.log("Failed to fetch profile photo", error);
+        });
+      
       } catch (error) {
-        // console.log("Error fetching data:");
-        // Handle specific error scenarios, e.g., display error message to user
-      }
-    };
+            console.log("Error fetching data:", error);
+          }
+        };
 
     fetchCustomerAndLabourData();
-}}, [email]);
+}}, [email]));
+
+
 
   // Function to handle languages press
   const handleLanguagesPress = () => {
@@ -155,6 +179,54 @@ const Customer_page = ({ navigation }) => {
     });
    
   };
+
+ const renderStars = (rating) => {
+   const fullStars = Math.floor(rating); // Full stars
+   const decimalPart = rating - fullStars; // Decimal part of rating
+
+   let halfStar = false;
+   let emptyStars = 5 - Math.ceil(rating); // Remaining empty stars
+
+   // Determine if there should be a half-star
+   if (decimalPart >= 0.25 && decimalPart < 0.75) {
+     halfStar = true;
+   } else if (decimalPart >= 0.75) {
+     halfStar = true;
+     emptyStars -= 1;
+   }
+
+   // Render stars based on calculated values
+   return (
+     <View style={{ flexDirection: "row", alignItems: "center" }}>
+       {[...Array(fullStars)].map((_, index) => (
+         <FontAwesome5
+           key={`full-${index}`}
+           name="star"
+           solid
+           size={24}
+           color="#FF7600"
+         />
+       ))}
+       {halfStar && (
+         <FontAwesome5
+           key="half"
+           name="star-half-alt"
+           size={24}
+           color="#FF7600"
+         />
+       )}
+       {[...Array(emptyStars)].map((_, index) => (
+         <FontAwesome5
+           key={`empty-${index}`}
+           name="star"
+           size={24}
+           color="#D3D3D3"
+         />
+       ))}
+     </View>
+   );
+ };
+
 
   // Component rendering
   return (
@@ -249,25 +321,19 @@ const Customer_page = ({ navigation }) => {
                       alignItems: "center",
                     }}
                   >
-                    {Array.from({ length: 5 }, (_, index) => (
-                      <AntDesign
-                        key={index}
-                        name={
-                          index <
-                          topRatedEmployee.totalRating /
-                            topRatedEmployee.reviewCount
-                            ? "star"
-                            : "star"
-                        }
-                        size={24}
-                        color="#FF7600"
-                      />
-                    ))}
-                    <Text> {topRatedEmployee.totalRating/topRatedEmployee.reviewCount}</Text>
+                    {renderStars(
+                      topRatedEmployee.averageRating
+                    )}
+                    <Text>
+                      {(
+                        topRatedEmployee.totalRating /
+                        topRatedEmployee.reviewCount
+                      ).toFixed(1)}
+                    </Text>
                   </View>
                 </View>
 
-                <View style={{ marginRight: 15, marginTop: 50 }}>
+                <View style={{ marginRight: 15, marginTop: 0 }}>
                   <Icon source="heart" size={20} color="#FF0000" />
                 </View>
               </View>
@@ -419,7 +485,7 @@ const Customer_page = ({ navigation }) => {
               </Text>
               {"\t"}
               <TouchableOpacity onPress={handleViewPress}>
-                <Text style={{ color: "blue" }}>View All</Text>
+                <Text style={{ color: "#0066CC" }}>View All</Text>
               </TouchableOpacity>
             </Text>
 
@@ -495,7 +561,7 @@ const Customer_page = ({ navigation }) => {
               </Text>
               {"\t"}
               <TouchableOpacity onPress={handleViewAllPress}>
-                <Text style={{ color: "blue" }}>View All</Text>
+                <Text style={{ color: "#0066CC" }}>View All</Text>
               </TouchableOpacity>
             </Text>
 
@@ -593,3 +659,5 @@ const styles = StyleSheet.create({
     borderRadius: 25,
   },
 });
+
+

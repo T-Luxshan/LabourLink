@@ -31,7 +31,7 @@ const [email, setEmail] = useState("");
       try {
         const email = await AsyncStorage.getItem("userEmail");
         if (email) {
-          setEmail(email);
+          setEmail(email.toLowerCase());
         } else {
           console.log("No email found in AsyncStorage");
         }
@@ -175,21 +175,24 @@ const [email, setEmail] = useState("");
           </Text>
         </View>
 
-       
-        
-
         <Surface style={styles.surface} elevation={1}>
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
-              paddingLeft: 0,
+              paddingLeft: 10,
             }}
           >
+            <Icon
+              name="user"
+              size={20}
+              color="#505151"
+              style={{ marginRight: 10 }}
+            />
             <Text
               style={{
                 fontSize: 18,
-                fontWeight: "600",
+                fontWeight: "400",
                 padding: 10,
                 color: "#222222",
               }}
@@ -202,7 +205,7 @@ const [email, setEmail] = useState("");
               <FontAwesomeIcon
                 icon={faChevronRight}
                 size={18}
-                style={{ marginLeft: 135 }}
+                style={{ marginLeft: 102 }}
               />
             </TouchableOpacity>
           </View>
@@ -210,18 +213,8 @@ const [email, setEmail] = useState("");
 
         {/* Surface for settings */}
         <Surface style={styles.surface} elevation={1}>
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: "600",
-              padding: 10,
-              color: "#222222",
-            }}
-          >
-            Settings
-          </Text>
-
          
+
           <View
             style={{
               flexDirection: "row",
@@ -229,30 +222,30 @@ const [email, setEmail] = useState("");
               paddingLeft: 10,
             }}
           >
-            <View
+            {/* <View
               style={{
                 flexDirection: "row",
                 alignItems: "center",
                 paddingLeft: 10,
               }}
-            >
+            > */}
               <Icon
                 name="lock"
                 size={20}
                 color="#505151"
                 style={{ marginRight: 10 }}
               />
-              <Text style={{ fontSize: 16, padding: 10, color: "#888888" }}>
+              <Text style={{ fontSize: 18, padding: 10, color: "#222222", fontWeight: "400", }}>
                 Change Password
               </Text>
-            </View>
+            {/* </View> */}
             <TouchableOpacity onPress={handlePassword}>
               {/* Button to navigate to language settings */}
               {/* <View style={{ flex: 1, alignItems: "flex-end" }}> */}
               <FontAwesomeIcon
                 icon={faChevronRight}
                 size={18}
-                style={{ marginLeft: 97 }}
+                style={{ marginLeft: 88 }}
               />
             </TouchableOpacity>
             {/* </View> */}
@@ -280,30 +273,30 @@ const [email, setEmail] = useState("");
               paddingLeft: 10,
             }}
           >
-            <View
+            {/* <View
               style={{
                 flexDirection: "row",
                 alignItems: "center",
                 paddingLeft: 10,
               }}
-            >
+            > */}
               <Icon
                 name="info-circle"
                 size={20}
                 color="#505151"
                 style={{ marginRight: 10 }}
               />
-              <Text style={{ fontSize: 16, padding: 10, color: "#888888" }}>
+              <Text style={{ fontSize: 16, padding: 10, color: "#222222", fontWeight: "400", }}>
                 About Us
               </Text>
-            </View>
+            {/* </View> */}
             <TouchableOpacity onPress={handleAboutUs}>
               {/* Button to navigate to About Us section */}
               {/* <View style={{ flex: 1, alignItems: "flex-end" }}> */}
               <FontAwesomeIcon
                 icon={faChevronRight}
                 size={18}
-                style={{ marginLeft: 154 }}
+                style={{ marginLeft: 160 }}
               />
             </TouchableOpacity>
             {/* </View> */}
@@ -317,13 +310,13 @@ const [email, setEmail] = useState("");
               paddingLeft: 10,
             }}
           >
-            <View
+            {/* <View
               style={{
                 flexDirection: "row",
                 alignItems: "center",
                 paddingLeft: 10,
               }}
-            >
+            > */}
               <Icon
                 name="sign-out"
                 size={20}
@@ -331,11 +324,11 @@ const [email, setEmail] = useState("");
                 style={{ marginRight: 10 }}
               />
               <TouchableOpacity onPress={handleLogout}>
-                <Text style={{ fontSize: 16, padding: 10, color: "#888888" }}>
+                <Text style={{ fontSize: 16, padding: 10, color: "#222222", fontWeight: "400", }}>
                   Logout
                 </Text>
               </TouchableOpacity>
-            </View>
+            {/* </View> */}
           </View>
 
           <View
@@ -345,13 +338,13 @@ const [email, setEmail] = useState("");
               paddingLeft: 10,
             }}
           >
-            <View
+            {/* <View
               style={{
                 flexDirection: "row",
                 alignItems: "center",
                 paddingLeft: 10,
               }}
-            >
+            > */}
               <Icon
                 name="trash"
                 size={20}
@@ -359,11 +352,11 @@ const [email, setEmail] = useState("");
                 style={{ marginRight: 10 }}
               />
               <TouchableOpacity onPress={handleDeleteAccount}>
-                <Text style={{ fontSize: 16, padding: 10, color: "#888888" }}>
+                <Text style={{ fontSize: 16, padding: 10, color: "#222222", fontWeight: "400", }}>
                   Delete Account
                 </Text>
               </TouchableOpacity>
-            </View>
+            {/* </View> */}
           </View>
         </Surface>
       </ScrollView>

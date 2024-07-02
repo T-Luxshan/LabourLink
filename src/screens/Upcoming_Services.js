@@ -22,7 +22,7 @@ const [email, setEmail] = useState("");
        try {
          const email = await AsyncStorage.getItem("userEmail");
          if (email) {
-           setEmail(email);
+           setEmail(email.toLowerCase());
          } else {
            console.log("No email found in AsyncStorage");
          }
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     elevation: 2,
   },
-  customerName: {
+  labourName: {
     fontSize: 15,
     fontWeight: "500",
     color: "#2F3239",
