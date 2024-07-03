@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { List, Avatar } from "react-native-paper";
 import { findConnectedUsers } from "../services/userService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { unreadMessageCount,markAsRead } from "../services/ChatService";
-
+import { unreadMessageCount, markAsRead } from "../services/ChatService";
 
 const OnlineUsersScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -13,13 +12,16 @@ const OnlineUsersScreen = ({ navigation }) => {
   const [userRole, setUserRole] = useState("");
   const [receivedMessagesCount, setReceivedMessagesCount] = useState({});
   const [refreshing, setRefreshing] = useState(false);
+  const intervalRef = useRef(null);
 
   useEffect(() => {
     const fetchEmail = async () => {
       try {
         const storedEmail = await AsyncStorage.getItem("userEmail");
-        setEmail(storedEmail);
-        console.log("Fetched Email: " + storedEmail);
+        if (storedEmail) {
+          setEmail(storedEmail);
+          console.log("Fetched Email: " + storedEmail);
+        }
       } catch (error) {
         console.error("Failed to fetch email from storage", error);
       }
@@ -28,43 +30,45 @@ const OnlineUsersScreen = ({ navigation }) => {
     fetchEmail();
   }, []);
 
-  useEffect(() => {
-    if (email) {
-      const fetchConnectedUsers = async () => {
-        try {
-          const response = await findConnectedUsers(email);
-          if (response.data) {
-            setConnectedUsers(response.data);
-          }
-        } catch (error) {
-          console.log("Error fetching connected users:", error);
+  const fetchConnectedUsers = useCallback(async () => {
+    try {
+      if (email) {
+        const response = await findConnectedUsers(email);
+        if (response.data) {
+          setConnectedUsers(response.data);
         }
-      };
-      fetchConnectedUsers();
+      }
+    } catch (error) {
+      console.log("Error fetching connected users:", error);
     }
-  }, [email,connectedUsers]);
+  }, [email]);
+
+  useEffect(() => {
+    fetchConnectedUsers();
+  }, [email, fetchConnectedUsers]);
 
   useEffect(() => {
     const interval = setInterval(async () => {
-    if (connectedUsers.length > 0 && email) {
-      setRefreshing(true);
-      try{
-      connectedUsers.forEach(user => {
-        getUnreadCount(user.email, email);
-      })}catch (error) {
-        console.error('Error refreshing notifications', error);
-      } finally {
-        setRefreshing(false);
-      }}
-    }, 1000); // Refresh every 1 second
+      if (connectedUsers.length > 0 && email) {
+        setRefreshing(true);
+        try {
+          await Promise.all(
+            connectedUsers.map(user => getUnreadCount(user.email, email))
+          );
+        } catch (error) {
+          console.error('Error refreshing notifications', error);
+        } finally {
+          setRefreshing(false);
+        }
+      }
+    }, 5000); // Refresh every 5 seconds
 
     return () => clearInterval(interval);
-  }, [connectedUsers,email]);
+  }, [connectedUsers, email]);
 
-  async function getUnreadCount(receiverEmail, senderEmail) {
+  const getUnreadCount = useCallback(async (receiverEmail, senderEmail) => {
     try {
       const count = await unreadMessageCount(receiverEmail, senderEmail);
-      // console.log('Unread Messages for ' + receiverEmail + ': ' + count.data);
       setReceivedMessagesCount(prevState => ({
         ...prevState,
         [receiverEmail]: count.data
@@ -72,18 +76,18 @@ const OnlineUsersScreen = ({ navigation }) => {
     } catch (error) {
       console.error(`Failed to get unread messages count for ${receiverEmail}:`, error);
     }
-  }
+  }, []);
 
-  async function handleMarkAsRead(receiverEmail, senderEmail) {
+  const handleMarkAsRead = useCallback(async (receiverEmail, senderEmail) => {
     try {
       await markAsRead(receiverEmail, senderEmail);
       console.log("Messages marked as read successfully.");
     } catch (error) {
       console.error("Failed to mark messages as read:", error);
     }
-  }
+  }, []);
 
-  const handleUserClick = (user) => {
+  const handleUserClick = useCallback((user) => {
     handleMarkAsRead(user.email, email);
     navigation.navigate("ChatAreaScreen", {
       SelectedUserName: user.name,
@@ -91,7 +95,7 @@ const OnlineUsersScreen = ({ navigation }) => {
     });
     console.log("user selected: " + user.name);
     setSelectedUser(user);
-  };
+  }, [email, handleMarkAsRead, navigation]);
 
   return (
     <View style={styles.container}>
@@ -110,9 +114,9 @@ const OnlineUsersScreen = ({ navigation }) => {
             right={() => (
               <Text style={styles.unreadCount}>
                 {receivedMessagesCount[user.email] > 0
-                ? receivedMessagesCount[user.email]
-                : null // Default text for 0 count
-              }
+                  ? receivedMessagesCount[user.email]
+                  : null // Default text for 0 count
+                }
               </Text>
             )}
           />
