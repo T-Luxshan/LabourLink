@@ -201,7 +201,7 @@ const handlePassword = () => {
     const deleteAccountConfirmed = async () => {
       try {
         // Delete account using service function
-        await deleteLabour(email);
+        await deleteLabour(userEmail);
 
           const tokenValue = await AsyncStorage.getItem("token");
           const refreshTokenValue = await AsyncStorage.getItem("refreshToken");
