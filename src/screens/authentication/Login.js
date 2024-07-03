@@ -78,6 +78,7 @@ const Login = () => {
           //  navigation.navigate('GettingStarted');
           setIsLoggedIn(true);
           setUserRole("CUSTOMER");
+          registerIndieID(email, 22199, 'emBddOfJLNr511DDJxUMcI');
         } else {
           response = await loginLabour(role, lowercasedEmail, password);
           AsyncStorage.setItem("token", response.data.accessToken);
@@ -87,6 +88,7 @@ const Login = () => {
             // navigation.navigate('GettingStarted');
             setIsLoggedIn(true);
             setUserRole("LABOUR");
+            registerIndieID(email, 22199, 'emBddOfJLNr511DDJxUMcI');
           } else navigation.navigate("WaitingPage");
         }
 
@@ -96,7 +98,7 @@ const Login = () => {
         await AsyncStorage.setItem("userEmail", email);
         await AsyncStorage.setItem("userRole", userRole);
 
-        registerIndieID(email, 22199, 'emBddOfJLNr511DDJxUMcI');
+
 
       } catch (e) {
         console.log(e);
