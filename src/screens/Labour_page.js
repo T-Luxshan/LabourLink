@@ -341,7 +341,7 @@ const Labour_page = ({ navigation, route }) => {
               style={{
                 fontSize: 20,
                 fontWeight: 200,
-                marginLeft: 50,
+                marginLeft: 10,
                 justifyContent: "center",
                 textAlign: "center",
               }}
