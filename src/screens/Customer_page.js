@@ -129,9 +129,9 @@ const Customer_page = ({ navigation }) => {
         //   // Handle specific error scenarios, e.g., display error message to user
         // }
        
-      getProfilePicture()
+      getLabourProfilePicture()
         .then((res) => {
-          setImage(res.data.profileUri);
+          setProfilePic(res.data.profileUri);
           console.log(res.data.profileUri);
         })
         .catch((error) => {

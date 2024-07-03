@@ -24,9 +24,11 @@ import { findNotifications } from "../services/NoificationSevice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Badge, withBadge } from "react-native-elements";
 import WaitingPage from '../screens/authentication/WaitingPage';
+import {totalUnreadMessageCount} from "../services/ChatService";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+
 
 function LabourStack() {
   return (
@@ -133,6 +135,9 @@ function CustomBottomNavigationBar() {
   const [notifications, setNotifications] = useState([]);
   const [email, setEmail] = useState("");
   const [refreshing, setRefreshing] = useState(false);
+  const [refreshingChatCount, setRefreshingChatCount] = useState(false);
+  const [receivedMessagesCount, setReceivedMessagesCount] = useState({});
+
 
   useEffect(() => {
     const fetchEmail = async () => {
@@ -167,6 +172,24 @@ function CustomBottomNavigationBar() {
     return () => clearInterval(interval);
   }, [email]);
 
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      if (email) {
+        setRefreshingChatCount(true);
+        try {
+          const response = await totalUnreadMessageCount( email);
+          setReceivedMessagesCount(response.data)
+        } catch (error) {
+          console.error("Error refreshing notifications", error);
+        } finally {
+          setRefreshingChatCount(false);
+        }
+      }
+    }, 1000); // Refresh every 1 second
+
+    return () => clearInterval(interval);
+  }, [email]);
+
   const unreadNotificationCount = notifications.filter(
     (notification) => !notification.read
   ).length;
@@ -188,9 +211,10 @@ function CustomBottomNavigationBar() {
               iconName = "bell";
               badgeCount = unreadNotificationCount;
               break;
-            case "Chat":
-              iconName = "comment";
-              break;
+              case "Chat":
+                iconName = "comment";
+                badgeCount = receivedMessagesCount;
+                break;
             case "Profile":
               iconName = "user";
               break;
