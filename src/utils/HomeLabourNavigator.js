@@ -23,6 +23,7 @@ import NotificationDetail from "../screens/NotificationDetail";
 import { findNotifications } from "../services/NoificationSevice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Badge, withBadge } from "react-native-elements";
+import WaitingPage from '../screens/authentication/WaitingPage';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -58,6 +59,11 @@ function LabourStack() {
       <Stack.Screen
         name="Edit"
         component={Edit}
+        options={{ headerBackTitle: "Back" }}
+      />
+      <Stack.Screen
+        name="waiting-page"
+        component={WaitingPage}
         options={{ headerBackTitle: "Back" }}
       />
     </Stack.Navigator>
