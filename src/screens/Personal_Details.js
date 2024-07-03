@@ -64,7 +64,7 @@ const Personal_Details = ({ navigation }) => {
   const handleSave = async () => {
     try {
       const response = await updateLabour(
-        email,
+        labourEmail,
         nic,
         mobileNumber,
         name,

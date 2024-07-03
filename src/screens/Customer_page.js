@@ -131,7 +131,7 @@ const Customer_page = ({ navigation }) => {
        
       getProfilePicture()
         .then((res) => {
-          setImage(res.data.profileUri);
+          setProfilePic(res.data.profileUri);
           console.log(res.data.profileUri);
         })
         .catch((error) => {
