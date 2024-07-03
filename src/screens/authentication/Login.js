@@ -74,28 +74,28 @@ const Login = () => {
           response = await loginCustomer(role, lowercasedEmail, password);
           AsyncStorage.setItem("token", response.data.accessToken);
           AsyncStorage.setItem("refreshToken", response.data.refreshToken);
-          AsyncStorage.setItem("userEmail", email);
+          AsyncStorage.setItem("userEmail", lowercasedEmail);
           //  navigation.navigate('GettingStarted');
           setIsLoggedIn(true);
           setUserRole("CUSTOMER");
-          registerIndieID(email, 22199, 'emBddOfJLNr511DDJxUMcI');
+          registerIndieID(lowercasedEmail, 22199, 'emBddOfJLNr511DDJxUMcI');
         } else {
           response = await loginLabour(role, lowercasedEmail, password);
           AsyncStorage.setItem("token", response.data.accessToken);
           AsyncStorage.setItem("refreshToken", response.data.refreshToken);
-          AsyncStorage.setItem("userEmail", email);
+          AsyncStorage.setItem("userEmail", lowercasedEmail);
           if (userRoleStatus) {
             // navigation.navigate('GettingStarted');
             setIsLoggedIn(true);
             setUserRole("LABOUR");
-            registerIndieID(email, 22199, 'emBddOfJLNr511DDJxUMcI');
+            registerIndieID(lowercasedEmail, 22199, 'emBddOfJLNr511DDJxUMcI');
           } else navigation.navigate("WaitingPage");
         }
 
         setLogError("");
         console.log(response);
         console.log(response.data.accessToken);
-        await AsyncStorage.setItem("userEmail", email);
+        await AsyncStorage.setItem("userEmail", lowercasedEmail);
         await AsyncStorage.setItem("userRole", userRole);
 
 
