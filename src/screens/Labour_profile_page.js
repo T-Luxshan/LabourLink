@@ -16,7 +16,7 @@ import { getLabourProfileById } from "../services/LabourProfileService";
 import { getLabourById, deleteLabour } from "../services/LabourService";
 import { useLogin } from "../context/LoginProvider";
 import { getProfilePicture } from "../services/ProfilePhotoService";
-import { unregisterIndieDevice } from 'native-notify';
+import { registerIndieID, unregisterIndieDevice } from 'native-notify';
 
 const Labour_profile_page = ({ navigation, route }) => {
   // Function to handle press event for the "Languages" section
@@ -117,6 +117,7 @@ const Labour_profile_page = ({ navigation, route }) => {
       );
 
       unregisterIndieDevice(userEmail, 21639, "dwb6dAoCmrQD8faaLyciTU");
+      unregisterIndieDevice(userEmail, 22199, 'emBddOfJLNr511DDJxUMcI');
 
       // Clear tokens from AsyncStorage
       await AsyncStorage.removeItem("token");
