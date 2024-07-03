@@ -13,11 +13,12 @@ import UploadDocument from '../../components/UploadDocument';
 import DocumentModel from '../../components/DocumentModel';
 import JobRoleModel from '../../components/JobRoleModel';
 import PasswordModel from '../../components/PasswordModel';
-
+import { useLogin } from '../../context/LoginProvider';
 const LabourSignUpForm = () => {
 
   const navigation = useNavigation(); 
-
+  const { setIsLoggedIn } = useLogin();
+  const { setUserRole } = useLogin();
   const [name, setName] = useState(''); // state for name field.
   const [email, setEmail] = useState(''); // state for email field.
   const [password, setPassword] = useState(''); // state for password field.
@@ -106,10 +107,10 @@ const LabourSignUpForm = () => {
       // Implement login logic here
       try {
         await schema.validate({ email, password, confirmPassword, name, mobileNumber, nic }, { abortEarly: false });
-        const lowercasedEmail = email.toLowerCase();
         setErrors({});
         
         try {
+          const lowercasedEmail = email.toLowerCase();
           console.log("Document URI is : ", fileURI);
           console.log("These are the job roles : ", jobRoles)
           const response = await registerLabour(name, lowercasedEmail, password, mobileNumber, nic, fileURI, jobRoles);
@@ -124,10 +125,13 @@ const LabourSignUpForm = () => {
           // localStorage.setItem('refreshToken', response.data.refreshToken);
           AsyncStorage.setItem("token", response.data.accessToken);
           AsyncStorage.setItem("refreshToken", response.data.refreshToken);
+          AsyncStorage.setItem("userEmail", lowercasedEmail);
+          // setIsLoggedIn(true);
+          setUserRole("LABOUR");
        
        
           //  Navigate to the next page to the sign up.
-          navigation.navigate('WaitingPage')
+          navigation.navigate('waiting-page')
 
 
         } catch (e) {

@@ -112,6 +112,7 @@ const Customer_page = ({ navigation }) => {
                     totalRating: currentLabour.totalRating,
                     reviewCount: currentLabour.reviewCount,
                     labourRole: currentLabour.labourRole,
+                    labourId: currentLabour.labourId
                   };
                 }
                 return topLabour;
@@ -120,7 +121,7 @@ const Customer_page = ({ navigation }) => {
             );
 
             setTopRatedEmployee(topRatedLabour);
-             fetchProfilePhoto(topRatedLabour.labourId);
+            fetchProfilePhoto(topRatedLabour.labourId);
         // console.log(topRatedLabour);
         // console.log(topRatedEmployee);
           // }
@@ -129,7 +130,7 @@ const Customer_page = ({ navigation }) => {
         //   // Handle specific error scenarios, e.g., display error message to user
         // }
        
-      getProfilePicture()
+      getLabourProfilePicture()
         .then((res) => {
           setProfilePic(res.data.profileUri);
           console.log(res.data.profileUri);
@@ -154,6 +155,7 @@ const Customer_page = ({ navigation }) => {
   };
 
   const fetchProfilePhoto = (email) => {
+    console.log('this is the email :',email);
     getLabourProfilePicture(email)
     .then(res=>{
       setProfilePic(res.data.profileUri)})

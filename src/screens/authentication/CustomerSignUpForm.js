@@ -20,10 +20,12 @@ import * as yup from "yup";
 
 import { registerCustomer } from "../../services/AuthService";
 import PasswordModel from "../../components/PasswordModel";
+import { useLogin } from "../../context/LoginProvider";
 
 const CustomerSignUpForm = () => {
   const navigation = useNavigation();
-
+  const { setIsLoggedIn } = useLogin();
+  const { setUserRole } = useLogin();
   const [name, setName] = useState(""); // state for name field.
   const [email, setEmail] = useState(""); // state for email field.
   const [password, setPassword] = useState(""); // state for password field.
@@ -89,14 +91,15 @@ const CustomerSignUpForm = () => {
     // Try block for validate the user inputs.
 
     try {
-      const lowercasedEmail = email.toLowerCase();
+      console.log(email);
       await schema.validate(
-        { lowercasedEmail, password, confirmPassword, name, mobileNumber, address },
+        { email, password, confirmPassword, name, mobileNumber, address },
         { abortEarly: false }
       );
       setErrors({});
-
       try {
+        const lowercasedEmail = email.toLowerCase();
+        console.log(lowercasedEmail);
         const response = await registerCustomer(
           name,
           lowercasedEmail,
@@ -112,9 +115,11 @@ const CustomerSignUpForm = () => {
         // Store the tokens in localStorage or secure cookie for later use
         AsyncStorage.setItem("token", response.data.accessToken);
         AsyncStorage.setItem("refreshToken", response.data.refreshToken);
-        
+        AsyncStorage.setItem("userEmail", lowercasedEmail);
+        setIsLoggedIn(true);
+        setUserRole("CUSTOMER");
 
-        navigation.navigate("AuthTestSignup");
+        // navigation.navigate("AuthTestSignup");
       } catch (e) {
         console.log("The error is ", e);
         setRegError(
@@ -165,8 +170,8 @@ const CustomerSignUpForm = () => {
                 outlineColor="transparent"
                 underlineColor="transparent"
                 placeholder="example@gmail.com"
-                value={email} // Need to change into email name.
-                onChangeText={setEmail}
+                value={email} 
+                onChangeText={(value) => setEmail(value)}
                 style={[styles.input,  mState && { backgroundColor: 'rgba(0, 0, 0, 0.1)'  }]}
               />
               {errors.email && <Text style={styles.error}>{errors.email}</Text>}

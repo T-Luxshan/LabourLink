@@ -67,7 +67,7 @@ const AuthNavigator = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="WaitingPage"
+          name="waiting-page"
           component={WaitingPage}
           options={{ headerShown: false }}
         /> 
