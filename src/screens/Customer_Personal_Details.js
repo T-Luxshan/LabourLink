@@ -60,6 +60,11 @@ const Customer_Personal_Details = ({ navigation }) => {
 
   const handleSave = async () => {
     try {
+
+        if (!validateInputs()) {
+          return; // Exit if validation fails
+        }
+
       const response = await updateCustomer(name, address, email, mobileNumber);
       console.log("Customer updated:", response.data);
       Alert.alert("Success", "Customer details updated successfully.");
@@ -71,6 +76,26 @@ const Customer_Personal_Details = ({ navigation }) => {
   };
   
 
+  const validateInputs = () => {
+    // Validate mobile number (only numbers)
+    const mobileRegex = /^[0-9]+$/;
+    if (!mobileRegex.test(mobileNumber)) {
+      Alert.alert(
+        "Invalid Input",
+        "Mobile number should contain only numbers."
+      );
+      return false;
+    }
+
+    // Validate name (only letters)
+    const nameRegex = /^[a-zA-Z ]+$/;
+    if (!nameRegex.test(name)) {
+      Alert.alert("Invalid Input", "Name should contain only letters.");
+      return false;
+    }
+
+    return true;
+  };
 
 
 

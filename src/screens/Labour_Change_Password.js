@@ -37,10 +37,37 @@ const Labour_Change_Password = ({ navigation }) => {
     fetchLabourEmail();
   }, []);
 
+  const validatePassword = (password) => {
+    const minLength = /.{5,}/;
+    const upperCase = /[A-Z]/;
+    const lowerCase = /[a-z]/;
+    const number = /\d/;
+
+     console.log("Password validation check:");
+     console.log("minLength:", minLength.test(password));
+     console.log("upperCase:", upperCase.test(password));
+     console.log("lowerCase:", lowerCase.test(password));
+     console.log("number:", number.test(password));
+
+    return (
+      minLength.test(password) &&
+      upperCase.test(password) &&
+      lowerCase.test(password) &&
+      number.test(password)
+    );
+  };
+
  const handleChangePassword = () => {
    // Basic validation
    if (!currentPassword || !newPassword || !confirmPassword) {
      setErrorMessage("Please fill in all fields.");
+     return;
+   }
+
+   if (!validatePassword(newPassword)) {
+     setErrorMessage(
+       "Password must be at least 5 characters long and include one uppercase letter, one lowercase letter, and one number."
+     );
      return;
    }
 

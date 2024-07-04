@@ -63,8 +63,13 @@ const Personal_Details = ({ navigation }) => {
 
   const handleSave = async () => {
     try {
+
+       if (!validateInputs()) {
+         return; // Exit if validation fails
+       }
+
       const response = await updateLabour(
-        email,
+        labourEmail,
         nic,
         mobileNumber,
         name,
@@ -79,6 +84,38 @@ const Personal_Details = ({ navigation }) => {
     }
   };
   
+   const validateInputs = () => {
+     // Validate NIC number
+     const oldNicRegex = /^[0-9]{9}[a-zA-Z]$/; // 9 numbers followed by 1 letter
+     const newNicRegex = /^[0-9]{17}$/; // Exactly 17 numbers
+
+     if (!oldNicRegex.test(nic) && !newNicRegex.test(nic)) {
+       Alert.alert(
+         "Invalid Input",
+         "NIC should be either 9 numbers followed by 1 letter (old format) or exactly 17 numbers (new format)."
+       );
+       return false;
+     }
+     
+     // Validate mobile number (only numbers)
+     const mobileRegex = /^[0-9]+$/;
+     if (!mobileRegex.test(mobileNumber)) {
+       Alert.alert(
+         "Invalid Input",
+         "Mobile number should contain only numbers."
+       );
+       return false;
+     }
+
+     // Validate name (only letters)
+     const nameRegex = /^[a-zA-Z ]+$/;
+     if (!nameRegex.test(name)) {
+       Alert.alert("Invalid Input", "Name should contain only letters.");
+       return false;
+     }
+
+     return true;
+   };
 
   return (
     <ScrollView>
