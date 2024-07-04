@@ -37,10 +37,31 @@ const Change_Password = ({ navigation }) => {
    }, []);
 
 
+    const validatePassword = (password) => {
+      const minLength = /.{5,}/;
+      const upperCase = /[A-Z]/;
+      const lowerCase = /[a-z]/;
+      const number = /\d/;
+
+      return (
+        minLength.test(password) &&
+        upperCase.test(password) &&
+        lowerCase.test(password) &&
+        number.test(password)
+      );
+    };
+
   const handleChangePassword = () => {
     // Basic validation
     if (!currentPassword || !newPassword || !confirmPassword) {
       setErrorMessage("Please fill in all fields.");
+      return;
+    }
+
+    if (!validatePassword(newPassword)) {
+      setErrorMessage(
+        "Password must be at least 5 characters long and include one uppercase letter, one lowercase letter, and one number."
+      );
       return;
     }
 
