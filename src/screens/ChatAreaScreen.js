@@ -127,6 +127,7 @@ const ChatAreaScreen = ({ route }) => {
     if (chatAreaRef.current) {
       chatAreaRef.current.scrollToEnd({ animated: true });
     }
+    fetchAndDisplayUserChat(SelectedUserEmail);
   }, [messages]);
 
   return (
