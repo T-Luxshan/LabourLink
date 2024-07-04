@@ -11,7 +11,7 @@ import { updateLabourPassword, getLabourById } from "../services/LabourService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Labour_Change_Password = ({ navigation }) => {
-  const [currentPassword, setCurrentPassword] = useState("");
+  // const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -37,10 +37,37 @@ const Labour_Change_Password = ({ navigation }) => {
     fetchLabourEmail();
   }, []);
 
+  const validatePassword = (password) => {
+    const minLength = /.{5,}/;
+    const upperCase = /[A-Z]/;
+    const lowerCase = /[a-z]/;
+    const number = /\d/;
+
+     console.log("Password validation check:");
+     console.log("minLength:", minLength.test(password));
+     console.log("upperCase:", upperCase.test(password));
+     console.log("lowerCase:", lowerCase.test(password));
+     console.log("number:", number.test(password));
+
+    return (
+      minLength.test(password) &&
+      upperCase.test(password) &&
+      lowerCase.test(password) &&
+      number.test(password)
+    );
+  };
+
  const handleChangePassword = () => {
    // Basic validation
-   if (!currentPassword || !newPassword || !confirmPassword) {
+   if (!newPassword || !confirmPassword) {
      setErrorMessage("Please fill in all fields.");
+     return;
+   }
+
+   if (!validatePassword(newPassword)) {
+     setErrorMessage(
+       "Password must be at least 5 characters long and include one uppercase letter, one lowercase letter, and one number."
+     );
      return;
    }
 
@@ -66,7 +93,7 @@ const Labour_Change_Password = ({ navigation }) => {
            console.error("Error fetching updated user data:", error);
          });
 
-       setCurrentPassword("");
+      //  setCurrentPassword("");
        setNewPassword("");
        setConfirmPassword("");
        setErrorMessage("");
@@ -87,13 +114,13 @@ const Labour_Change_Password = ({ navigation }) => {
     <View style={styles.card}>
       <Text style={styles.title}>Change Password</Text>
       {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : null}
-      <TextInput
+      {/* <TextInput
         style={styles.input}
         value={currentPassword}
         onChangeText={setCurrentPassword}
         placeholder="Current Password"
         secureTextEntry={true}
-      />
+      /> */}
       <TextInput
         style={styles.input}
         value={newPassword}

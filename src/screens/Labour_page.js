@@ -77,7 +77,8 @@ const Labour_page = ({ navigation, route }) => {
   }, [labourEmail]);
 
  
-  useEffect(() => {
+ useFocusEffect(
+   useCallback(() => {
     if (labourEmail) {
       const fetchData = async () => {
         // try {
@@ -135,7 +136,7 @@ const Labour_page = ({ navigation, route }) => {
       };
 
       fetchData();
-}}, [labourEmail]);
+}}, [labourEmail]));
 
  useFocusEffect(
    useCallback(() => {
@@ -341,7 +342,7 @@ const Labour_page = ({ navigation, route }) => {
               style={{
                 fontSize: 20,
                 fontWeight: 200,
-                marginLeft: 50,
+                marginLeft: 10,
                 justifyContent: "center",
                 textAlign: "center",
               }}
