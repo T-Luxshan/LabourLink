@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -17,6 +17,7 @@ import { getLabourById, deleteLabour } from "../services/LabourService";
 import { useLogin } from "../context/LoginProvider";
 import { getProfilePicture } from "../services/ProfilePhotoService";
 import { registerIndieID, unregisterIndieDevice } from 'native-notify';
+import { useFocusEffect } from "@react-navigation/native";
 
 const Labour_profile_page = ({ navigation, route }) => {
   // Function to handle press event for the "Languages" section
@@ -42,9 +43,11 @@ const Labour_profile_page = ({ navigation, route }) => {
   //     console.error("Error fetching labourProfile name data:", error);
   //   });
 
-  useEffect(() => {
+  
+   useFocusEffect(
+   useCallback(() => {
     getEmail();
-  }, []);
+  }, []));
 
   const getEmail = async () => {
     
