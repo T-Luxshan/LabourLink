@@ -11,7 +11,7 @@ import { updateLabourPassword, getLabourById } from "../services/LabourService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Labour_Change_Password = ({ navigation }) => {
-  const [currentPassword, setCurrentPassword] = useState("");
+  // const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -59,7 +59,7 @@ const Labour_Change_Password = ({ navigation }) => {
 
  const handleChangePassword = () => {
    // Basic validation
-   if (!currentPassword || !newPassword || !confirmPassword) {
+   if (!newPassword || !confirmPassword) {
      setErrorMessage("Please fill in all fields.");
      return;
    }
@@ -93,7 +93,7 @@ const Labour_Change_Password = ({ navigation }) => {
            console.error("Error fetching updated user data:", error);
          });
 
-       setCurrentPassword("");
+      //  setCurrentPassword("");
        setNewPassword("");
        setConfirmPassword("");
        setErrorMessage("");
@@ -114,13 +114,13 @@ const Labour_Change_Password = ({ navigation }) => {
     <View style={styles.card}>
       <Text style={styles.title}>Change Password</Text>
       {errorMessage ? <Text style={styles.error}>{errorMessage}</Text> : null}
-      <TextInput
+      {/* <TextInput
         style={styles.input}
         value={currentPassword}
         onChangeText={setCurrentPassword}
         placeholder="Current Password"
         secureTextEntry={true}
-      />
+      /> */}
       <TextInput
         style={styles.input}
         value={newPassword}

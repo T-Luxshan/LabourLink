@@ -87,16 +87,16 @@ const Personal_Details = ({ navigation }) => {
    const validateInputs = () => {
      // Validate NIC number
      const oldNicRegex = /^[0-9]{9}[a-zA-Z]$/; // 9 numbers followed by 1 letter
-     const newNicRegex = /^[0-9]{17}$/; // Exactly 17 numbers
+     const newNicRegex = /^[0-9]{12}$/; // Exactly 12 numbers
 
      if (!oldNicRegex.test(nic) && !newNicRegex.test(nic)) {
        Alert.alert(
          "Invalid Input",
-         "NIC should be either 9 numbers followed by 1 letter (old format) or exactly 17 numbers (new format)."
+         "NIC should be either 9 numbers followed by 1 letter (old format) or exactly 12 numbers (new format)."
        );
        return false;
      }
-     
+
      // Validate mobile number (only numbers)
      const mobileRegex = /^[0-9]+$/;
      if (!mobileRegex.test(mobileNumber)) {
